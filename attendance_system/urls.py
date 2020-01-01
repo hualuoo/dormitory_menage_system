@@ -16,16 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
-from users.views import UsersListView
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework.routers import DefaultRouter
 
-from users.views import UserViewset
+from users.views import UserViewset, UserInfoViewset
 
 
 router = DefaultRouter()
 router.register(r'users', UserViewset, basename="users")
-
+router.register(r'userinfo', UserInfoViewset, basename="userinfo")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

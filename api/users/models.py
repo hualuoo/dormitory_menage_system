@@ -8,10 +8,6 @@ class UserModel(AbstractUser):
     """
     用户
     """
-    realname = models.CharField(max_length=30, null=True, blank=True, verbose_name="姓名")
-    birthday = models.DateField(null=True, blank=True, verbose_name="出生年月")
-    gender = models.CharField(max_length=6, choices=(("male", u"男"), ("female", "女")), default="female", verbose_name="性别")
-    mobile = models.CharField(null=True, blank=True, max_length=11, verbose_name="电话")
     email = models.EmailField(max_length=100, null=True, blank=True, verbose_name="邮箱")
 
     class Meta:
@@ -20,3 +16,22 @@ class UserModel(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class UserInfo(models.Model):
+    """
+    用户详情信息
+    """
+    realname = models.CharField(max_length=30, null=True, blank=True, verbose_name="姓名")
+    birthday = models.DateField(null=True, blank=True, verbose_name="出生年月")
+    gender = models.CharField(max_length=6, choices=(("male", u"男"), ("female", "女")), default="female",
+                              verbose_name="性别")
+    mobile = models.CharField(null=True, blank=True, max_length=11, verbose_name="电话")
+    user = models.ForeignKey(UserModel, verbose_name="用户", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "用户详情信息"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.user.username

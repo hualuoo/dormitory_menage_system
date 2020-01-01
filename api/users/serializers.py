@@ -1,32 +1,18 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import UserModel
+from .models import UserModel, UserInfo
 
 
-class UsersSerializer(serializers.ModelSerializer):
-    """
-    用户详情序列化类
-    """
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
-        fields = ("username", "gender", "birthday", "email", "mobile")
-
-
-class UserLoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=True,
-                                     error_messages={
-                                         "blank": "请输入验证码",
-                                         "required": "请输入验证码",
-                                         "max_length": "验证码格式错误",
-                                         "min_length": "验证码格式错误"
-                                     },
-                                     help_text="验证码")
+        fields = ("username", "email")
 
 
 class UserRegSerializer(serializers.ModelSerializer):
     """
-    用户详情序列化类
+    用户注册序列化类
     """
     username = serializers.CharField(label="用户名", help_text="用户名", required=True, allow_blank=False,
                                      validators=[UniqueValidator(queryset=UserModel.objects.all(), message="用户已经存在")])
@@ -43,3 +29,14 @@ class UserRegSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ("username", "password")
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    """
+    用户详情序列化类
+    """
+    user = UserSerializer()
+    class Meta:
+        model = UserInfo
+        fields = "__all__"
+        #fields = ("user", "gender", "birthday", "email", "mobile")

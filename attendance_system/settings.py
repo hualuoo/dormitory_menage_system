@@ -155,14 +155,14 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'utils.jwt_setting.CustomBackend',
+    'utils.jwt_custom.CustomBackend',
 )
 
 import datetime
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
-    'JWT_RESPONSE_PAYLOAD_HANDLER': 'utils.jwt_setting.jwt_response_payload_handler'
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'utils.jwt_custom.jwt_response_payload_handler'
 }
 
 """
@@ -193,3 +193,14 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',
 )
+
+"""
+SMTP
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = False
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'i@hualuoo.com'
+EMAIL_HOST_PASSWORD = 'dlsdykhqebzpbdba'
+EMAIL_FROM = 'hualuo<i@hualuoo.com>'
