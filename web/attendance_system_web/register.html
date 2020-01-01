@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>注册</title>
+	<script src="js/jquery-latest.js"></script>
+	<script type="text/javascript" src="js/layer_mobile/layer.js"></script>
+</head>
+
+<body>
+
+	<input type="text" style="text-align: center;" name="regname" id="regname" value="" placeholder="账户" /><br/>
+	<input type="password" style="text-align: center;" name="regpass" id="regpass" value="" placeholder="密码" /><br/>
+	<input type="password" style="text-align: center;" name="regpass2" id="regpass2" value="" placeholder="重复输入密码" /><br/>
+	<input id="register_button" type="button" data-role="button" data-theme="b" value="注册">
+
+	<script>
+		$('#register_button').click(function() { //点击登录按钮事件，执行登录验证
+
+			var regname = $('#regname').val();
+			var regpass = $('#regpass').val();
+			var regpass2 = $('#regpass2').val();
+
+			if(regname == "") {
+				layer.open({
+					content: '抱歉，用户名不能为空',
+					btn: '我知道了'
+				});
+				$("[name='regname']").focus();
+				return;
+			}
+
+			if(regpass == "") {
+				layer.open({
+					content: '抱歉，密码不能为空',
+					btn: '我知道了'
+				});
+				$("[name='regpass']").focus();
+				return;
+			}
+			
+			if(regpass2 == "") {
+				layer.open({
+					content: '抱歉，请重复输入一次密码',
+					btn: '我知道了'
+				});
+				$("[name='regpass2']").focus();
+				return;
+			}
+			
+			if(regpass != regpass2) {
+				layer.open({
+					content: '抱歉，重复输入的密码与第一次输入的不同',
+					btn: '我知道了'
+				});
+				$("[name='regpass2']").focus();
+				return;
+			}
+
+			$.ajax({
+				url: "http://127.0.0.1:8000/users/",
+				type: "post",
+				dataType: "json",
+				data: {
+					"username": regname,
+					"password": regpass
+				}, //数据为登录名和登录密码
+
+				beforeSend: function() {
+					document.getElementById("register_button").value = "注册中";
+				},
+
+				success: function(data) { 
+					alert(data.username + '已注册 成功');
+				},
+				
+				error: function(jqXHR) {
+					var json_responseText = JSON.parse(jqXHR.responseText);
+					if(json_responseText.username_error_field != null) {
+						alert(json_responseText.username_error_field);
+					}
+					if(json_responseText.password_error_field != null) {
+						alert(json_responseText.password_error_field);
+					}
+					document.getElementById("login_button").value = "登录";
+				}
+				/*
+					layer.open({
+						content: '消息：' + data.msg,
+						skin: 'msg',
+						time: 2 //2秒后自动关闭
+					});
+					if(data.state == true) {
+						sessionStorage.setItem("loginname", logname);
+						setTimeout(function() {
+							window.location.href = 'manage-info.html';
+						}, 2000);
+						//document.body.scrollTop=document.body.scrollHeight;
+					}
+					*/
+				/*
+					if(date.state == "false"){
+						alert(data.msg);
+					}
+					/*
+					if(data.state==true){
+						alert(data.msg);
+					}
+					
+					/*
+					var obj = JSON.parse(data);
+					if(obj.state==false){
+						alert(obj.msg);
+					}
+					/*
+					if(data == false) {
+												//$("[name='logpass']").val("");
+						//$("[name='logpass']").attr('placeholder', "密码错误");
+						//$('#logbot').val("登录");
+					} else {
+						window.location.href = 'login.html';
+					}
+				*/
+			});
+		});
+	</script>
+</body>
