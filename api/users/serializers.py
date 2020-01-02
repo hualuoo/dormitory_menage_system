@@ -4,12 +4,6 @@ from rest_framework.validators import UniqueValidator
 from .models import UserModel, UserInfo
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ("username", "email")
-
-
 class UserRegSerializer(serializers.ModelSerializer):
     """
     用户注册序列化类
@@ -31,11 +25,18 @@ class UserRegSerializer(serializers.ModelSerializer):
         fields = ("username", "password")
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ("username", "email")
+
+
 class UserInfoSerializer(serializers.ModelSerializer):
     """
     用户详情序列化类
     """
     user = UserSerializer()
+
     class Meta:
         model = UserInfo
         fields = "__all__"
