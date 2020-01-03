@@ -50,8 +50,15 @@
 				},
 
 				success: function(data) {
-					alert(data.token);
-					window.location.href='register.html';
+					//alert(data.token);
+					sessionStorage.setItem("user_id", data.id);
+					sessionStorage.setItem("username", data.username);
+					sessionStorage.setItem("token", 'JWT ' + data.token);
+					if(data.is_staff == false){
+						alert()
+						return;
+					}
+					window.location.href='manage/information.html';
 				},
 
 				error: function(jqXHR) {

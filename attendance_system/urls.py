@@ -19,12 +19,13 @@ from django.conf.urls import url, include
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework.routers import DefaultRouter
 
-from users.views import UserViewset, UserInfoViewset
+from users.views import UserViewset, UserInfoViewset, VerifyCodeViewset
 
 
 router = DefaultRouter()
 router.register(r'users', UserViewset, basename="users")
 router.register(r'userinfo', UserInfoViewset, basename="userinfo")
+router.register(r'code', VerifyCodeViewset, basename="code")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

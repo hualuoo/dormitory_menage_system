@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-
-from .models import UserModel, UserInfo
+from datetime import datetime, timedelta
+from .models import UserModel, UserInfo, VerifyCodeModel
 
 
 class UserRegSerializer(serializers.ModelSerializer):
@@ -40,4 +40,25 @@ class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInfo
         fields = "__all__"
-        #fields = ("user", "gender", "birthday", "email", "mobile")
+
+
+class VerifyCodeSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, email):
+        """
+        验证邮箱是否已被使用
+        """
+
+        # 邮箱是否注册
+        if UserModel.objects.filter(email=email).count():
+            raise serializers.ValidationError("该邮箱已被使用")
+
+        # 验证邮箱是否合法
+        # EmailField自带验证，无需另外写
+
+        # 验证码发送频率
+        one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+        if VerifyCodeModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
+            raise serializers.ValidationError("距离上一次发送未超过一分钟")
+        return email

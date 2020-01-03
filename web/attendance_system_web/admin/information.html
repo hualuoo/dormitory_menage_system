@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>个人信息</title>
+		<script src="../js/jquery-latest.js"></script>
+		<script type="text/javascript" src="../js/layer_mobile/layer.js"></script>
+	</head>
+
+	<body>
+		<table border="1" id="table">
+			<tr>
+				<th>用户ID</th>
+				<th>用户名</th>
+				<th>邮箱</th>
+				<th>真实姓名</th>
+				<th>生日</th>
+				<th>性别</th>
+				<th>手机</th>
+				<th>管理</th>
+			</tr>
+		</table>
+		<script type="text/javascript">
+			token = sessionStorage.getItem("token");
+			if(token != null) {
+				$.ajax({
+					url: "http://127.0.0.1:8000/userinfo/",
+					type: "get",
+					headers: {
+						"Authorization": sessionStorage.getItem("token")
+					},
+					success: function(data) {
+						var str = "";
+						for(var i = 0; i < data.length; i++)
+							str += "<tr><td>" + data[i].id + "</td>" +
+							"<td>" + data[i].user.username + "</td>" +
+							"<td>" + data[i].user.email + "</td>" +
+							"<td>" + data[i].realname + "</td>" +
+							"<td>" + data[i].birthday + "</td>" +
+							"<td>" + data[i].gender + "</td>" +
+							"<td>" + data[i].mobile + "</td></tr>";
+						//alert(data.length);
+						//将表格添加到comment中
+						$('#table').append(str);
+						//解决CSS样式不生效
+						$("#table").trigger("create");
+					}
+				})
+			}
+		</script>
+	</body>
+
+</html>

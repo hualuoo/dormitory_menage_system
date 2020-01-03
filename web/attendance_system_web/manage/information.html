@@ -4,11 +4,88 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>个人信息</title>
-		<script src="js/jquery-latest.js"></script>
-		<script type="text/javascript" src="js/layer_mobile/layer.js"></script>
+		<script src="../js/jquery-latest.js"></script>
+		<script type="text/javascript" src="../js/layer_mobile/layer.js"></script>
 	</head>
 
 	<body>
+		用户ID：<input type="text" style="text-align: left;" id="userid_text" value="" placeholder="用户ID" disabled="true" /><br/> 用户名：
+		<input type="text" style="text-align: left;" id="username_text" value="" placeholder="用户名" disabled="true" /><br/> 用户邮箱：
+		<input type="text" style="text-align: left;" id="useremail_text" value="" placeholder="用户邮箱" disabled="true" /><input id="email_button" type="button" onclick="edit_email()" value="修改"><br/> 验证码：
+		<input type="text" style="text-align: left;" id="verifycode_text" value="" placeholder="验证码" disabled="true" /><input id="email_button" type="button" onclick="update_newemail()" value="确定"><br/>
+		<script type="text/javascript">
+			//初始化网页加载用户信息
+			token = sessionStorage.getItem("token");
+			if(token == null) {
+				window.location.href = '../index.html';
+			} else {
+				$.ajax({
+					url: "http://127.0.0.1:8000/userinfo/" + sessionStorage.getItem("user_id") + "/",
+					type: "get",
+					headers: {
+						"Authorization": sessionStorage.getItem("token")
+					},
+					success: function(data) {
+						document.getElementById("userid_text").value = data.id;
+						document.getElementById("username_text").value = data.user.username;
+						document.getElementById("useremail_text").value = data.user.email;
+					}
+				})
+			}
+
+			//点击邮箱"修改"按钮
+			function edit_email() {
+				document.getElementById("useremail_text").disabled = false;
+				document.getElementById("email_button").value = "发送验证码";
+				document.getElementById("email_button").onclick = function() {
+					send_code();
+				}
+			}
+
+			//点击邮箱"发送验证码"按钮
+			function send_code() {
+				var new_email = document.getElementById("useremail_text").value;
+				$.ajax({
+					url: "http://127.0.0.1:8000/code/",
+					type: "post",
+					headers: {
+						"Authorization": sessionStorage.getItem("token")
+					},
+					data: {
+						"email": new_email
+					},
+					success: function(data) {
+						alert(data.msg);
+						document.getElementById("email_button").disabled = true;
+						var num = 60;
+						var timer = setInterval(function() {
+							num--;
+							document.getElementById("email_button").value = "发送成功(" + num + "s)"
+							if(num == 0) {
+								clearInterval(timer); //到时间取消执行
+								document.getElementById("email_button").disabled = false;
+								document.getElementById("email_button").value = "重新发送";
+							}
+						}, 1000); //每1000毫秒执行一次
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						alert(json_responseText.email[0]);
+					}
+				})
+			}
+			
+			//点击"确认"修改邮箱按钮
+			function update_newemail() {
+				var useremail_text = $('#useremail_text').val();
+				var verifycode_text = $('#verifycode_text').val();
+				$.ajax({
+					url: "http://127.0.0.1:8000/code/",
+					type: "post",
+				})
+			}
+		</script>
+
 	</body>
 
 </html>

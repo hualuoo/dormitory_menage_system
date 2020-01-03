@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
@@ -35,3 +36,19 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class VerifyCodeModel(models.Model):
+    """
+    邮件验证码
+    """
+    email = models.EmailField(max_length=100, null=True, blank=True, verbose_name="邮箱")
+    code = models.CharField(max_length=10, verbose_name="验证码")
+    create_time = models.DateTimeField(default=datetime.now, verbose_name="创建时间")
+
+    class Meta:
+        verbose_name = "邮件验证码"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.__str__()

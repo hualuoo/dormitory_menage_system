@@ -72,17 +72,15 @@
 
 				success: function(data) { 
 					alert(data.username + '已注册 成功');
+					window.location.href='index.html';
 				},
 				
 				error: function(jqXHR) {
 					var json_responseText = JSON.parse(jqXHR.responseText);
-					if(json_responseText.username_error_field != null) {
-						alert(json_responseText.username_error_field);
+					if(json_responseText.username != null) {
+						alert(json_responseText.username);
 					}
-					if(json_responseText.password_error_field != null) {
-						alert(json_responseText.password_error_field);
-					}
-					document.getElementById("login_button").value = "登录";
+					document.getElementById("register_button").value = "注册";
 				}
 				/*
 					layer.open({
