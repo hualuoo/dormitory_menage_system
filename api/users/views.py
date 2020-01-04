@@ -2,16 +2,15 @@ from rest_framework import mixins
 from random import choice
 from .models import UserModel, UserInfo, VerifyCodeModel
 from utils import smtp
-from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer
+from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, UserEmailUpdateSerializer
 
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 from rest_framework import status
-from utils.permission import IsOwnerOrReadOnly
+from utils.permission import UserIsOwner, UserInfoIsOwner
 
 # Create your views here.
 
@@ -20,7 +19,7 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
     """
     用户详细信息
     """
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    permission_classes = (IsAuthenticated, UserInfoIsOwner, )
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
@@ -33,15 +32,34 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
         return UserInfo.objects.filter(user=self.request.user)
 
 
-class UserViewset(CreateModelMixin, viewsets.GenericViewSet):
+class UserViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     用戶
     """
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = UserRegSerializer
     queryset = UserModel.objects.all()
 
+    def get_permissions(self):
+        if self.action == "create":
+            return []
+        elif self.action == "update":
+            return [IsAuthenticated(), UserIsOwner(), ]
 
-class VerifyCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
+        return []
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return UserRegSerializer
+        elif self.action == "update":
+            return UserEmailUpdateSerializer
+        return UserRegSerializer
+
+    def put(self, request, pk, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+
+class VerifyCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     发送短信验证码
     """
@@ -69,9 +87,9 @@ class VerifyCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
 
         code = self.generate_code()
 
-        #smtp.code_smtp(email, code)
-        #code_record = VerifyCodeModel(email=email, code=code)
-        #code_record.save()
+        smtp.code_smtp(email, code)
+        code_record = VerifyCodeModel(email=email, code=code)
+        code_record.save()
         return Response({
             "msg": "发送成功"
         }, status=status.HTTP_201_CREATED)

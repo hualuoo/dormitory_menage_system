@@ -25,6 +25,37 @@ class UserRegSerializer(serializers.ModelSerializer):
         fields = ("username", "password")
 
 
+class UserEmailUpdateSerializer(serializers.ModelSerializer):
+    """
+    用户邮箱修改序列化类
+    """
+    code = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, label="验证码",
+                                 error_messages={
+                                     "blank": "请输入验证码",
+                                     "required": "请输入验证码",
+                                     "max_length": "验证码格式错误",
+                                     "min_length": "验证码格式错误"
+                                 },
+                                 help_text="验证码")
+    email = serializers.EmailField()
+
+    def validate_code(self, code):
+        verify_records = VerifyCodeModel.objects.filter(email=self.initial_data["email"]).order_by("-create_time")
+        if verify_records:
+            last_record = verify_records[0]
+            five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+            if five_mintes_ago > last_record.create_time:
+                raise serializers.ValidationError("验证码过期")
+            if last_record.code != code:
+                raise serializers.ValidationError("验证码错误")
+        else:
+            raise serializers.ValidationError("验证码错误")
+
+    class Meta:
+        model = UserModel
+        fields = ("email", "code", )
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
@@ -58,7 +89,7 @@ class VerifyCodeSerializer(serializers.Serializer):
         # EmailField自带验证，无需另外写
 
         # 验证码发送频率
-        one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+        one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=1, seconds=0)
         if VerifyCodeModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
             raise serializers.ValidationError("距离上一次发送未超过一分钟")
         return email

@@ -12,7 +12,7 @@
 		用户ID：<input type="text" style="text-align: left;" id="userid_text" value="" placeholder="用户ID" disabled="true" /><br/> 用户名：
 		<input type="text" style="text-align: left;" id="username_text" value="" placeholder="用户名" disabled="true" /><br/> 用户邮箱：
 		<input type="text" style="text-align: left;" id="useremail_text" value="" placeholder="用户邮箱" disabled="true" /><input id="email_button" type="button" onclick="edit_email()" value="修改"><br/> 验证码：
-		<input type="text" style="text-align: left;" id="verifycode_text" value="" placeholder="验证码" disabled="true" /><input id="email_button" type="button" onclick="update_newemail()" value="确定"><br/>
+		<input type="text" style="text-align: left;" id="verifycode_text" value="" placeholder="验证码" disabled="true" /><input id="update_button" type="button" onclick="update_newemail()" value="确定" disabled="true"><br/>
 		<script type="text/javascript">
 			//初始化网页加载用户信息
 			token = sessionStorage.getItem("token");
@@ -48,6 +48,7 @@
 				$.ajax({
 					url: "http://127.0.0.1:8000/code/",
 					type: "post",
+					dataType: "json",
 					headers: {
 						"Authorization": sessionStorage.getItem("token")
 					},
@@ -57,6 +58,8 @@
 					success: function(data) {
 						alert(data.msg);
 						document.getElementById("email_button").disabled = true;
+						document.getElementById("verifycode_text").disabled = false;
+						document.getElementById("update_button").disabled = false;
 						var num = 60;
 						var timer = setInterval(function() {
 							num--;
@@ -77,11 +80,32 @@
 			
 			//点击"确认"修改邮箱按钮
 			function update_newemail() {
-				var useremail_text = $('#useremail_text').val();
-				var verifycode_text = $('#verifycode_text').val();
+				var code = $('#verifycode_text').val();
+				var new_email = document.getElementById("useremail_text").value;
+				
 				$.ajax({
-					url: "http://127.0.0.1:8000/code/",
-					type: "post",
+					url: "http://127.0.0.1:8000/users/" + sessionStorage.getItem("user_id") + "/",
+					type: "put",
+					dataType: "json",
+					headers: {
+						"Authorization": sessionStorage.getItem("token")
+					},
+					data: {
+						"code": code,
+						"email": new_email
+					},
+					success: function(data) {
+						document.getElementById("useremail_text").disabled = true;
+						document.getElementById("verifycode_text").disabled = true;
+						document.getElementById("verifycode_text").value = "";
+						document.getElementById("update_button").disabled = true;
+						alert("修改成功");
+						window.location.reload();
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						alert(json_responseText.code[0]);
+					}
 				})
 			}
 		</script>
