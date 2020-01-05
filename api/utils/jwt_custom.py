@@ -18,7 +18,7 @@ class CustomBackend(ModelBackend):
             raise serializers.ValidationError({'user_error_field': '用户已被禁用'})
             return None
         if user[0].check_password(password):
-            if user[0].email != None and user[0].email != "":
+            if user[0].email is not None:
                 # login_smtp(user)
                 return user[0]
             return user[0]

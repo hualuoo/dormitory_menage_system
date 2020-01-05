@@ -2,7 +2,7 @@ from rest_framework import mixins
 from random import choice
 from .models import UserModel, UserInfo, VerifyCodeModel
 from utils import smtp
-from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, UserEmailUpdateSerializer
+from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
 
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
@@ -43,20 +43,29 @@ class UserViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Retri
     def get_permissions(self):
         if self.action == "create":
             return []
-        elif self.action == "update":
+        if self.action == "update":
             return [IsAuthenticated(), UserIsOwner(), ]
-
         return []
 
     def get_serializer_class(self):
         if self.action == "create":
             return UserRegSerializer
-        elif self.action == "update":
-            return UserEmailUpdateSerializer
+        if self.action == "update":
+            return ChangeEmailSerializer
         return UserRegSerializer
 
     def put(self, request, pk, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+
+
+class ChangePasswordViewset(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """
+    修改密码
+    """
+    permission_classes = (IsAuthenticated, UserIsOwner,)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = ChangePasswordSerializer
+    queryset = UserModel.objects.all()
 
 
 class VerifyCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):

@@ -9,10 +9,15 @@
 	</head>
 
 	<body>
-		用户ID：<input type="text" style="text-align: left;" id="userid_text" value="" placeholder="用户ID" disabled="true" /><br/> 用户名：
-		<input type="text" style="text-align: left;" id="username_text" value="" placeholder="用户名" disabled="true" /><br/> 用户邮箱：
-		<input type="text" style="text-align: left;" id="useremail_text" value="" placeholder="用户邮箱" disabled="true" /><input id="email_button" type="button" onclick="edit_email()" value="修改"><br/> 验证码：
-		<input type="text" style="text-align: left;" id="verifycode_text" value="" placeholder="验证码" disabled="true" /><input id="update_button" type="button" onclick="update_newemail()" value="确定" disabled="true"><br/>
+		<a>用户ID：</a><input type="text" style="text-align: left;" id="userid_text" value="" placeholder="用户ID" disabled="true" /><br/>
+		<a>用户名：</a><input type="text" style="text-align: left;" id="username_text" value="" placeholder="用户名" disabled="true" /><br/>
+		<a>绑定邮箱：</a><input type="text" style="text-align: left;" id="useremail_text" value="" placeholder="用户邮箱" disabled="true" /><input id="email_button" type="button" onclick="edit_email()" value="修改"><br/>
+		<a>验证码：</a><input type="text" style="text-align: left;" id="verifycode_text" value="" placeholder="验证码" disabled="true" /><input id="update_button" type="button" onclick="update_newemail()" value="确定" disabled="true"><br/>
+		<a>真实姓名：</a><input type="text" style="text-align: left;" id="userrealname_text" value="" placeholder="真实姓名" /><br/>
+		<a>出生日期：</a><input type="text" style="text-align: left;" id="userbirthday_text" value="" placeholder="出生日期" /><br/>
+		<a>性别：</a><input type="text" style="text-align: left;" id="usergender_text" value="" placeholder="性别" /><br/>
+		<a>联系方式：</a><input type="text" style="text-align: left;" id="usermobile_text" value="" placeholder="联系方式" /><br/>
+		<input id="update_button" type="button" onclick="update_userinfo()" value="提交修改"><br/>
 		<script type="text/javascript">
 			//初始化网页加载用户信息
 			token = sessionStorage.getItem("token");
@@ -29,6 +34,10 @@
 						document.getElementById("userid_text").value = data.id;
 						document.getElementById("username_text").value = data.user.username;
 						document.getElementById("useremail_text").value = data.user.email;
+						document.getElementById("userrealname_text").value = data.realname;
+						document.getElementById("userbirthday_text").value = data.birthday;
+						document.getElementById("usergender_text").value = data.gender;
+						document.getElementById("usermobile_text").value = data.mobile;
 					}
 				})
 			}
@@ -77,12 +86,12 @@
 					}
 				})
 			}
-			
+
 			//点击"确认"修改邮箱按钮
 			function update_newemail() {
 				var code = $('#verifycode_text').val();
 				var new_email = document.getElementById("useremail_text").value;
-				
+
 				$.ajax({
 					url: "http://127.0.0.1:8000/users/" + sessionStorage.getItem("user_id") + "/",
 					type: "put",
