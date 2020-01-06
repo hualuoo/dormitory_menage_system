@@ -15,7 +15,7 @@ from utils.permission import UserIsOwner, UserInfoIsOwner
 # Create your views here.
 
 
-class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class UserInfoViewset(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     用户详细信息
     """

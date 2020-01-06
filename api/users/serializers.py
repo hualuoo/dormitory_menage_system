@@ -122,7 +122,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserModel
-        fields = ("email", "code", )
+        fields = ("email", "code",)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -135,7 +135,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
     """
     用户详情序列化类
     """
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = UserInfo
