@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>个人中心</title>
+		<script src="../js/jquery-latest.js"></script>
+		<script type="text/javascript" src="../js/layer_mobile/layer.js"></script>
+	</head>
+
+	<body>
+		<a href="information.html">补充个人资料</a>
+		<a href="information.html">修改绑定邮箱</a>
+		<a href="information.html">修改用户密码</a>
+		<script type="text/javascript">
+			//初始化网页加载用户信息
+			token = sessionStorage.getItem("token");
+			if(token == null) {
+				window.location.href = '../index.html';
+			}
+		</script>
+	</body>
+
+</html>

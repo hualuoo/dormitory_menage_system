@@ -2,7 +2,7 @@ from rest_framework import mixins
 from random import choice
 from .models import UserModel, UserInfo, VerifyCodeModel
 from utils import smtp
-from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
+from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer, getUserOldMailSerializer
 
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
@@ -32,7 +32,7 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Ret
         return UserInfo.objects.filter(user=self.request.user)
 
 
-class UserViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     用戶
     """
@@ -102,3 +102,13 @@ class VerifyCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
         return Response({
             "msg": "发送成功"
         }, status=status.HTTP_201_CREATED)
+
+
+class getUserOldMailViewser(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """
+    获取用户邮箱
+    """
+    permission_classes = (IsAuthenticated, UserIsOwner,)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = getUserOldMailSerializer
+    queryset = UserModel.objects.all()

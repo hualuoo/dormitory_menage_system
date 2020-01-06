@@ -144,6 +144,8 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = "/media/"
+
 AUTH_USER_MODEL = 'users.UserModel'
 
 REST_FRAMEWORK = {

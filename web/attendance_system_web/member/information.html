@@ -14,13 +14,20 @@
 		<a>绑定邮箱：</a><input type="text" style="text-align: left;" id="useremail_text" value="" placeholder="用户邮箱" disabled="true" /><input id="email_button" type="button" onclick="edit_email()" value="修改"><br/>
 		<a>验证码：</a><input type="text" style="text-align: left;" id="verifycode_text" value="" placeholder="验证码" disabled="true" /><input id="update_button" type="button" onclick="update_newemail()" value="确定" disabled="true"><br/>
 		<a>真实姓名：</a><input type="text" style="text-align: left;" id="userrealname_text" value="" placeholder="真实姓名" /><br/>
-		<a>出生日期：</a><input type="text" style="text-align: left;" id="userbirthday_text" value="" placeholder="出生日期" /><br/>
-		<a>性别：</a><input type="text" style="text-align: left;" id="usergender_text" value="" placeholder="性别" /><br/>
+		<a>出生日期：</a><input type="date" style="text-align: left;" id="userbirthday_text" value="" placeholder="出生日期" /><br/>
+		<a>性别：</a>
+		<select id="usergender_select">
+			<option value="male">男</option>
+			<option value="female">女</option>
+		</select>
+		<br/>
 		<a>联系方式：</a><input type="text" style="text-align: left;" id="usermobile_text" value="" placeholder="联系方式" /><br/>
 		<input id="update_button" type="button" onclick="update_userinfo()" value="提交修改"><br/>
 		<script type="text/javascript">
 			//初始化网页加载用户信息
 			token = sessionStorage.getItem("token");
+			document.getElementById("userid_text").value = sessionStorage.getItem("user_id");
+			document.getElementById("username_text").value = sessionStorage.getItem("username");
 			if(token == null) {
 				window.location.href = '../index.html';
 			} else {
@@ -31,12 +38,18 @@
 						"Authorization": sessionStorage.getItem("token")
 					},
 					success: function(data) {
-						document.getElementById("userid_text").value = data.id;
-						document.getElementById("username_text").value = data.user.username;
+						
+						
 						document.getElementById("useremail_text").value = data.user.email;
 						document.getElementById("userrealname_text").value = data.realname;
 						document.getElementById("userbirthday_text").value = data.birthday;
-						document.getElementById("usergender_text").value = data.gender;
+						var usergender_select = document.getElementById("usergender_select");
+						for(var i = 0; i < usergender_select.options.length; i++) {
+							if(usergender_select.options[i].value == data.gender) {
+								usergender_select.options[i].selected = true;
+								break;
+							}
+						}
 						document.getElementById("usermobile_text").value = data.mobile;
 					}
 				})
@@ -89,7 +102,7 @@
 
 			//点击"确认"修改邮箱按钮
 			function update_newemail() {
-				var code = $('#verifycode_text').val();
+				var code = document.getElementById("verifycode_text").value;
 				var new_email = document.getElementById("useremail_text").value;
 
 				$.ajax({
@@ -114,6 +127,36 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						alert(json_responseText.code[0]);
+					}
+				})
+			}
+
+			//点击"提交"修改信息按钮
+			function update_userinfo() {
+				var realname = document.getElementById("userrealname_text").value;
+				var birthday = document.getElementById("userbirthday_text").value;
+				var gender = document.getElementById("usergender_select").value;
+				var mobile = document.getElementById("usermobile_text").value;
+				$.ajax({
+					url: "http://127.0.0.1:8000/userinfo/" + sessionStorage.getItem("user_id") + "/",
+					type: "put",
+					dataType: "json",
+					headers: {
+						"Authorization": sessionStorage.getItem("token")
+					},
+					data: {
+						"realname": realname,
+						"birthday": birthday,
+						"gender": gender,
+						"mobile": mobile
+					},
+					success: function(data) {
+						alert(data.user.username + "信息修改成功");
+						window.location.reload();
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						alert(json_responseText);
 					}
 				})
 			}

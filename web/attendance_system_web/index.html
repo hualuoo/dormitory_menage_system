@@ -55,10 +55,11 @@
 					sessionStorage.setItem("username", data.username);
 					sessionStorage.setItem("token", 'JWT ' + data.token);
 					if(data.is_staff == false){
-						alert()
+						alert("未通过审核")
+						window.location.href='member/index.html';
 						return;
 					}
-					window.location.href='manage/information.html';
+					window.location.href='member/index.html';
 				},
 
 				error: function(jqXHR) {

@@ -98,10 +98,10 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
                                      "min_length": "验证码格式错误"
                                  },
                                  help_text="验证码")
-    email = serializers.EmailField()
+    email = serializers.EmailField(max_length=100, help_text="邮箱")
 
     def validate_email(self, email):
-        if UserModel.objects.filter(email=self.initial_data["email"]).count():
+        if UserModel.objects.filter(email=email).count():
             raise serializers.ValidationError("该邮箱已被其他账户使用")
 
     def validate_code(self, code):
@@ -117,6 +117,8 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("验证码错误")
 
     def validate(self, attrs):
+        if attrs["email"] is None:
+            attrs["email"] = self.initial_data["email"]
         del attrs["code"]
         return attrs
 
@@ -162,3 +164,11 @@ class VerifyCodeSerializer(serializers.Serializer):
         if VerifyCodeModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
             raise serializers.ValidationError("距离上一次发送未超过一分钟")
         return email
+
+
+class getUserOldMailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    class Meta:
+        model = UserModel
+        fields = ("email", )
