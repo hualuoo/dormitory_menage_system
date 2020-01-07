@@ -2,9 +2,11 @@ from rest_framework import mixins
 from random import choice
 from .models import UserModel, UserInfo, VerifyCodeModel
 from utils import smtp
-from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer, getUserOldMailSerializer
+from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
+from .serializers import getUserFuzzyMailSerializer, checkUserMailSerializer, sendOldEmailCaptchaSerializer, confirmOldEmailCaptchaSerializer
 
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -79,13 +81,11 @@ class VerifyCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def generate_code(self):
         """
         生成六位数字的验证码
-        :return:
         """
         seeds = "1234567890"
         random_str = []
         for i in range(6):
             random_str.append(choice(seeds))
-
         return "".join(random_str)
 
     def create(self, request, *args, **kwargs):
@@ -104,11 +104,41 @@ class VerifyCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
         }, status=status.HTTP_201_CREATED)
 
 
-class getUserOldMailViewser(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class getUserFuzzyMailViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
-    获取用户邮箱
+    获取模糊用户邮箱
     """
     permission_classes = (IsAuthenticated, UserIsOwner,)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = getUserOldMailSerializer
+    serializer_class = getUserFuzzyMailSerializer
+    queryset = UserModel.objects.all()
+
+
+class checkUserMailViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """
+    检查用户邮箱
+    """
+    permission_classes = (IsAuthenticated, UserIsOwner,)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = checkUserMailSerializer
+    queryset = UserModel.objects.all()
+
+
+class sendOldEmailCaptchaViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """
+    向旧邮箱发送验证码
+    """
+    permission_classes = (IsAuthenticated, UserIsOwner,)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = sendOldEmailCaptchaSerializer
+    queryset = UserModel.objects.all()
+
+
+class confirmOldEmailCaptchaViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """
+    确认旧邮箱验证码
+    """
+    permission_classes = (IsAuthenticated, UserIsOwner,)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = confirmOldEmailCaptchaSerializer
     queryset = UserModel.objects.all()
