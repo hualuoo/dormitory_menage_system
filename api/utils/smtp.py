@@ -21,5 +21,5 @@ def code_smtp(email, code):
     receiver = [email]  # 目标邮箱
     now_time = datetime.datetime.now()
     now_time_str = datetime.datetime.strftime(now_time, '%Y-%m-%d %H:%M:%S')
-    html_message = '您的验证码为：' + code + '，该验证码有效期为1分钟。'   # 发送html格式
-    send_mail(subject, message, sender, receiver, html_message=html_message)
+    html_message = '您的验证码为：' + code + '，该验证码有效期为5分钟。'   # 发送html格式
+    return send_mail(subject, message, sender, receiver, html_message=html_message)

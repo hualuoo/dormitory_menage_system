@@ -38,7 +38,7 @@ class UserInfo(models.Model):
         return self.user.username
 
 
-class VerifyCodeModel(models.Model):
+class CaptchaModel(models.Model):
     """
     邮件验证码
     """

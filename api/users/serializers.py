@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from utils import smtp
-from .models import UserModel, UserInfo, VerifyCodeModel
+from .models import UserModel, UserInfo, CaptchaModel
 
 
 class UserRegSerializer(serializers.ModelSerializer):
@@ -60,7 +60,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     def validate_code(self, code):
         verify_user = self.context['request'].user
-        verify_records = VerifyCodeModel.objects.filter(email=verify_user.email).order_by("-create_time")
+        verify_records = CaptchaModel.objects.filter(email=verify_user.email).order_by("-create_time")
         if verify_records:
             last_record = verify_records[0]
             five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
@@ -108,7 +108,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("该邮箱已被其他账户使用")
 
     def validate_code(self, code):
-        verify_records = VerifyCodeModel.objects.filter(email=self.initial_data["email"]).order_by("-create_time")
+        verify_records = CaptchaModel.objects.filter(email=self.initial_data["email"]).order_by("-create_time")
         if verify_records:
             last_record = verify_records[0]
             five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
@@ -164,42 +164,83 @@ class VerifyCodeSerializer(serializers.Serializer):
 
         # 验证码发送频率
         one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=1, seconds=0)
-        if VerifyCodeModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
+        if CaptchaModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
             raise serializers.ValidationError("距离上一次发送未超过一分钟")
         return email
 
 
-class getUserFuzzyMailSerializer(serializers.Serializer):
+class checkUserMailSerializer(serializers.Serializer):
+    check_mail = serializers.EmailField(max_length=100, help_text="邮箱")
+
+    class Meta:
+        model = UserModel
+        fields = ("email", )
+
+
+class sendOldMailCaptchaSerializer(serializers.Serializer):
     """
-    获取模糊用户邮箱 序列类
+        向旧邮箱发送验证码 序列类
     """
+    email = serializers.EmailField(max_length=100, help_text="邮箱")
+
+    def validate_email(self, email):
+        one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=1, seconds=0)
+        if CaptchaModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
+            raise serializers.ValidationError("距离上一次发送未超过一分钟")
+        return email
+
+    class Meta:
+        model = UserModel
+        fields = ("email", )
+
+
+class confirmOldMailCaptchaSerializer(serializers.Serializer):
+    """
+        确认旧邮箱验证码 序列类
+    """
+    def validate_code(self, code):
+        if len(code) == 0:
+            raise serializers.ValidationError({'detail': '请输入验证码'})
+        if len(code) != 6:
+            raise serializers.ValidationError({'detail': '验证码格式错误'})
+
     def to_representation(self, obj):
-        email = obj.email
-        end = email.index("@")
-        if end % 2 == 1:
-            start = int((end-1)/2)
+        code = self.context['view'].request.GET.get("code")
+        self.validate_code(code)
+
+        verify_records = CaptchaModel.objects.filter(email=obj.email).order_by("-create_time")
+        if verify_records:
+            last_record = verify_records[0]
+            five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+            if five_mintes_ago > last_record.create_time:
+                raise serializers.ValidationError({'detail': '验证码过期'})
+            if last_record.code != code:
+                raise serializers.ValidationError({'detail': '验证码错误'})
         else:
-            start = int(end/2)
-        fuzzyEmail = email.replace(email[start:end], "****")
+            raise serializers.ValidationError({'detail': '验证码不存在'})
         return {
-            'email': fuzzyEmail
+            "msg": "旧邮箱验证通过"
         }
 
 
-class checkUserMailSerializer(serializers.Serializer):
+class sendNewEmailCaptchaSerializer(serializers.Serializer):
     """
-        检查用户邮箱 序列类
+    向新邮箱发送验证码 序列类
     """
-    def to_representation(self, obj):
-        if self.context['view'].request.data["email"] == obj.email:
-            return {
-                'msg': "邮箱校验正确"
-            }
-        else:
-            raise serializers.ValidationError({'detail': '邮箱校验不正确'})
+    email = serializers.EmailField(max_length=100, help_text="邮箱")
 
-
-class sendOldEmailCaptchaSerializer(serializers.Serializer):
+    def validate_email(self, email):
+        """
+        验证邮箱
+        """
+        # 验证码是否被使用
+        if UserModel.objects.filter(email=email).count():
+            raise serializers.ValidationError({'detail': '该邮箱已被使用'})
+        # 验证码发送频率
+        one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=1, seconds=0)
+        if CaptchaModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
+            raise serializers.ValidationError({'detail': '距离上一次发送未超过一分钟'})
+        return email
 
     def generate_code(self):
         """
@@ -213,39 +254,13 @@ class sendOldEmailCaptchaSerializer(serializers.Serializer):
 
     def to_representation(self, obj):
         code = self.generate_code()
-        smtp.code_smtp(obj.email, code)
-        code_record = VerifyCodeModel(email=obj.email, code=code)
+        #smtp.code_smtp(obj.email, code)
+        code_record = CaptchaModel(email=obj.email, code=code)
         code_record.save()
         return {
             "msg": "发送成功"
         }
 
-
-class confirmOldEmailCaptchaSerializer(serializers.Serializer):
-    code = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, label="验证码",
-                                 error_messages={
-                                     "blank": "请输入验证码",
-                                     "required": "请输入验证码",
-                                     "max_length": "验证码格式错误",
-                                     "min_length": "验证码格式错误"
-                                 },
-                                 help_text="验证码")
-
-    def to_representation(self, obj):
-        verify_records = VerifyCodeModel.objects.filter(email=obj.email).order_by("-create_time")
-        if verify_records:
-            last_record = verify_records[0]
-            five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
-            if five_mintes_ago > last_record.create_time:
-                raise serializers.ValidationError({'detail': '验证码过期'})
-            if last_record.code != self.context['view'].request.data["code"]:
-                raise serializers.ValidationError({'detail': '验证码错误'})
-        else:
-            raise serializers.ValidationError({'detail': '验证码不存在'})
-        return {
-            "msg": "旧邮箱验证通过"
-        }
-
     class Meta:
-        model = UserModel
-        fields = ("email", )
+        model = CaptchaModel
+        fields = ("email", "code")
