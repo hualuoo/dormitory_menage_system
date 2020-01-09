@@ -9,7 +9,16 @@
 	</head>
 
 	<body>
-		<div id="fuzzy_mail"></div><div>您可以使用邮箱来保障您的帐号安全</div><div><a href="changeemail.html">修改邮箱</a></div>
+		<div>为了您的帐号安全，请输入您绑定的完整邮箱 </div>
+		<div id="fuzzy_mail"></div>
+		<div>
+			<a>旧邮箱</a>
+			<input type="text" name="old_mail" id="old_mail" value="" placeholder="请输入完整的邮箱的地址" /><br/>
+		</div>
+		<div>
+			<input id="step1_button" type="button" data-role="button" data-theme="b" onclick="" value="下一步">
+		</div>
+
 		<script type="text/javascript">
 			//初始化网页加载用户信息
 			token = sessionStorage.getItem("token");
@@ -25,11 +34,10 @@
 					"Authorization": localStorage.getItem("token")
 				},
 				success: function(data) {
-					document.getElementById("fuzzy_mail").innerHTML = data.email;
+					document.getElementById("fuzzy_mail").innerHTML = "提示：" + data.email;
 				},
 				error: function(jqXHR) {
-					var json_errorText = JSON.parse(jqXHR.responseText);
-					document.getElementById("fuzzy_mail").innerHTML = json_errorText.detail;
+					
 				}
 			})
 		</script>

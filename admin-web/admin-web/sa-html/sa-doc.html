@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>文档</title>
+		<style type="text/css">
+			body{background-color: #EEE;}
+			
+			
+			#md-content{
+				padding: 1em;
+			}
+			
+			pre{background-color: #282C34; padding: 1em; color: #98C363;}
+			
+			blockquote{
+				margin-left: 0px;
+				padding: 0.1em 0em;
+				border-left: 4px #aaa solid;
+				background-color: #CCC;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div id="md-content">
+			加载中...
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script type="text/javascript">
+			
+			$.ajax({
+				url : 'sa-doc.md',
+				success: function(res) {
+					document.getElementById('md-content').innerHTML = marked(res);	
+				}
+			})
+			
+		</script>
+	</body>
+</html>

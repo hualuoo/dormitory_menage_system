@@ -20,7 +20,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework.routers import DefaultRouter
 
 from users.views import UsersViewset, UserInfoViewset, VerifyCodeViewset, ChangePasswordViewset
-from users.views import getUserFuzzyMailViewset, checkUserMailViewset, sendOldMailCaptchaViewset, confirmOldMailCaptchaViewset, sendNewEmailCaptchaViewset
+from users.views import getUserFuzzyMailViewset, checkUserMailViewset, sendOldMailCaptchaViewset, confirmOldMailCaptchaViewset, sendNewMailCaptchaViewset, confirmNewMailCaptchaViewset
 
 
 router = DefaultRouter()
@@ -28,11 +28,14 @@ router.register(r'users', UsersViewset, basename="users")
 router.register(r'userinfo', UserInfoViewset, basename="userinfo")
 router.register(r'code', VerifyCodeViewset, basename="code")
 router.register(r'changepassword', ChangePasswordViewset, basename="changepassword")
+
 router.register(r'member/security/getUserFuzzyMail', getUserFuzzyMailViewset, basename="getUserFuzzyMail")
 router.register(r'member/security/checkUserMail', checkUserMailViewset, basename="checkUserMail")
 router.register(r'member/security/sendOldMailCaptcha', sendOldMailCaptchaViewset, basename="sendOldMailCaptcha")
 router.register(r'member/security/confirmOldMailCaptcha', confirmOldMailCaptchaViewset, basename="confirmOldMailCaptcha")
-router.register(r'member/security/sendNewEmailCaptcha', sendNewEmailCaptchaViewset, basename="sendNewEmailCaptcha")
+router.register(r'member/security/sendNewMailCaptcha', sendNewMailCaptchaViewset, basename="sendNewMailCaptcha")
+router.register(r'member/security/confirmNewMailCaptcha', confirmNewMailCaptchaViewset, basename="confirmNewMailCaptcha")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,5 +45,5 @@ urlpatterns = [
     url(r'^', include(router.urls)),
 
     # jwt的认证接口
-    url(r'^jwt_login/', obtain_jwt_token),
+    url(r'^login/', obtain_jwt_token),
 ]

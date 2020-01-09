@@ -13,7 +13,7 @@ class CustomBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):# 重写这个函数
         user = UserModel.objects.filter(Q(username=username) | Q(email=username))
         if user.count() == 0:
-            raise serializers.ValidationError({'username_error_field': '用户名不存在，请检查是否用户名是否输入正确'})
+            raise serializers.ValidationError({'username_error_field': '用户名不存在'})
             return None
         if user[0].is_active == 0:
             raise serializers.ValidationError({'user_error_field': '用户已被禁用'})
@@ -24,7 +24,7 @@ class CustomBackend(ModelBackend):
                 return user[0]
             return user[0]
         else:
-            raise serializers.ValidationError({'password_error_field': '密码错误，请检查密码是否是输入正确'})
+            raise serializers.ValidationError({'password_error_field': '密码错误'})
             return None
 
 
@@ -33,8 +33,7 @@ def jwt_response_payload_handler(token, user=None, request=None):
         登录成功后自定义返回
     """
     return {
-        "id": user.id,
         "username": user.username,
-        "is_staff": user.is_staff,
+        "is_superuser": user.is_superuser,
         "token": token
     }

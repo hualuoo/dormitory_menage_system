@@ -51,9 +51,9 @@
 
 				success: function(data) {
 					//alert(data.token);
-					sessionStorage.setItem("user_id", data.id);
-					sessionStorage.setItem("username", data.username);
-					sessionStorage.setItem("token", 'JWT ' + data.token);
+					localStorage.setItem("user_id", data.id);
+					localStorage.setItem("username", data.username);
+					localStorage.setItem("token", 'JWT ' + data.token);
 					if(data.is_staff == false){
 						alert("未通过审核")
 						window.location.href='member/index.html';

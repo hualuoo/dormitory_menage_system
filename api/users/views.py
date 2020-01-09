@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from .models import UserModel, UserInfo, CaptchaModel
 from utils import smtp
 from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
-from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmOldMailCaptchaSerializer, sendNewEmailCaptchaSerializer
+from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -35,7 +35,7 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Ret
         return UserInfo.objects.filter(user=self.request.user)
 
 
-class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     用戶
     """
@@ -73,7 +73,7 @@ class ChangePasswordViewset(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 
 class VerifyCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
-    发送短信验证码
+    发送邮箱验证码
     """
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
@@ -147,7 +147,7 @@ class checkUserMailViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
             POST
         JSON:
             {
-                "check_mail": "<check_mail>"
+                "email": "<email>"
             }
     """
     permission_classes = (IsAuthenticated, )
@@ -164,7 +164,7 @@ class checkUserMailViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
             return Response({
                 'detail': '未绑定邮箱'
             }, status=status.HTTP_400_BAD_REQUEST)
-        if user.email == self.request.data["check_mail"]:
+        if user.email == serializer.validated_data["email"]:
             return Response({
                 "msg": "邮箱校验正确"
             }, status=status.HTTP_200_OK)
@@ -234,13 +234,12 @@ class confirmOldMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericView
             POST
         JSON:
         {
-            "captcha_code": "<captcha_code>"
+            "code": "<code>"
         }
     """
     permission_classes = (IsAuthenticated, UserIsOwner,)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = confirmOldMailCaptchaSerializer
-    #queryset = UserModel.objects.all()
+    serializer_class = confirmMailCaptchaSerializer
 
     def create(self, request, *args, **kwargs):
         user = self.request.user
@@ -250,39 +249,83 @@ class confirmOldMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericView
                 'detail': '未绑定邮箱'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        captcha = CaptchaModel.objects.filter(email=user.email).order_by("-create_time")
-        confirm_captcha = request.data["captcha_code"]
+        data = request.data.copy()
+        data['email'] = user.email
 
-        if captcha:
-            last_captcha = captcha[0]
-            five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
-            if five_mintes_ago > last_captcha.create_time:
-                return Response({
-                    'detail': '验证码过期'
-                }, status=status.HTTP_400_BAD_REQUEST)
-            if last_captcha.code != confirm_captcha:
-                return Response({
-                    'detail': '验证码错误'
-                }, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response({
-                    'msg': '验证码正确'
-                }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                'detail': '验证码不存在'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        return Response({
+            'msg': '验证码正确'
+        }, status=status.HTTP_200_OK)
 
 
-class sendNewEmailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class sendNewMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
-    向新邮箱发送验证码
-    /member/security/sendNewEmailCaptcha/
-    json:{"new_email": "<new_email>"}
+        向新邮箱发送验证码
+        URL:
+            /member/security/sendNewMailCaptcha/
+        TYPE:
+            POST
+        JSON:
+            {
+                "email": "<email>"
+            }
     """
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = sendNewEmailCaptchaSerializer
+    serializer_class = sendNewMailCaptchaSerializer
+
+    def generate_code(self):
+        """
+        生成六位数字的验证码
+        """
+        seeds = "1234567890"
+        random_str = []
+        for i in range(6):
+            random_str.append(choice(seeds))
+        return "".join(random_str)
 
     def create(self, request, *args, **kwargs):
-        print("123")
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data["email"]
+        code = self.generate_code()
+
+        if smtp.code_smtp(email, code) == 1:
+            code_record = CaptchaModel(email=email, code=code)
+            code_record.save()
+            return Response({
+                "msg": "发送成功"
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response({
+                "detail": "发送失败"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class confirmNewMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """
+        确认新邮箱验证码
+        URL:
+            /member/security/confirmNewMailCaptcha/
+        TYPE:
+            POST
+        JSON:
+            {
+                "email": "<email>",
+                "code": "<code>"
+            }
+    """
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = confirmMailCaptchaSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        return Response({
+            'msg': '验证码正确'
+        }, status=status.HTTP_200_OK)
