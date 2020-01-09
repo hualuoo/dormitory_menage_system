@@ -1,57 +1,59 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<title>用户列表</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		
+
 		<!-- 所有的 css 资源 -->
 		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
-		<link rel="stylesheet" href="../../static/sa.css"> 
-		
+		<link rel="stylesheet" href="../../static/sa.css">
+
 		<!-- 所有的 js 资源 -->
 		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
 		<script src="https://unpkg.com/element-ui@2.8.2/lib/index.js"></script>
-		
+
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
 		<script src="../../static/kj/laydate/laydate.js"></script>
 		<script src="../../static/sa.js"></script>
 		<script src="data-list.js"></script>
-		
+
 		<style type="text/css">
-			
+
 		</style>
-		
+
 	</head>
+
 	<body>
-		
+
 		<!-- 防止margin向下击穿 -->
 		<div style="margin-top: -1em;"><br></div>
-		
+
 		<div class="vue-box" style="display: none;" :style="'display: block;'">
-			
+
 			<!-- 参数栏 -->
 			<div class="c-panel">
 				<div class="c-title">检索参数</div>
 				<el-form ref="form">
-	
+
 					<div class="c-item">
 						<label class="c-label">昵称：</label>
 						<el-input size="mini" v-model="p.username" placeholder="模糊搜索" @keyup.enter="f5"></el-input>
 					</div>
-					
+
 					<div class="c-item">
 						<label class="c-label">注册日期：</label>
 						<el-input size="mini" v-model="p.start_time" class="start_time"></el-input>
 						&nbsp;至&nbsp;
 						<el-input size="mini" v-model="p.end_time" class="end_time"></el-input>
 					</div>
-					
+
 					<div class="c-item" style="min-width: 0px;">
 						<el-button type="primary" icon="el-icon-search" size="mini" @click="f5">查询</el-button>
 					</div>
-					
+
 					<!-- <br />
 					<div class="c-item">
 						<label class="c-label">注册方式：</label>
@@ -78,16 +80,16 @@
 				</el-form>
 
 			</div>
-			
+
 			<!-- 数据栏 -->
-			<div class="c-panel">			
+			<div class="c-panel">
 				<div class="c-title">列表</div>
-				<el-table class="data-table" :data="dataList" size="mini"  style="width: 100%">
-					
-					<el-table-column label="编号" prop="id" width="70px" > </el-table-column>
+				<el-table class="data-table" :data="dataList" size="mini" style="width: 100%">
+
+					<el-table-column label="编号" prop="id" width="70px"> </el-table-column>
 					<el-table-column label="昵称" prop="username" width="200px">
 						<template slot-scope="scope">
-							<img :src="scope.row.avatar" style="width: 3em; height: 3em; float: left; margin-right: 1em; border-radius: 50%;" >
+							<img :src="scope.row.avatar" style="width: 3em; height: 3em; float: left; margin-right: 1em; border-radius: 50%;">
 							<div style="float: left; width: 130px; line-height: 20px;">
 								<b>{{scope.row.username}}</b>
 								<p>{{scope.row.tell}}</p>
@@ -96,8 +98,7 @@
 					</el-table-column>
 					<el-table-column label="个人相册">
 						<template slot-scope="scope">
-							<img :src="scope.row.photo_list[0]" style="width: 40px; height: 40px; cursor: pointer;" @click="pre_img(scope.row)" >
-							共{{scope.row.photo_list.length}}张, 点击预览
+							<img :src="scope.row.photo_list[0]" style="width: 40px; height: 40px; cursor: pointer;" @click="pre_img(scope.row)"> 共{{scope.row.photo_list.length}}张, 点击预览
 						</template>
 					</el-table-column>
 					<el-table-column label="性别" prop="sex"> </el-table-column>
@@ -119,48 +120,25 @@
 						</template>
 					</el-table-column>
 				</el-table>
-		
+
 				<!-- 分页 -->
 				<div class="page-box">
-					<el-pagination background
-						layout="total, prev, pager, next, sizes, jumper" 
-						:current-page.sync="page.pageNo" 
-						:page-size.sync="page.pageSize" 
-						:total="page.count" 
-						:page-sizes="[1, 10, 20, 30, 40, 50, 100]" 
-						@current-change="f5(true)" 
-						@size-change="f5(true)">
+					<el-pagination background layout="total, prev, pager, next, sizes, jumper" :current-page.sync="page.pageNo" :page-size.sync="page.pageSize" :total="page.count" :page-sizes="[1, 10, 20, 30, 40, 50, 100]" @current-change="f5(true)" @size-change="f5(true)">
 					</el-pagination>
 				</div>
 
 			</div>
-			
-			
-			<div class="c-panel" style="background-color: rgba(0,0,0,0);">
-				layer：<el-link type="primary" href="http://layer.layui.com/" target="_blank">
-					一个可以让你想到即可做到的JavaScript弹窗（层）解决方案
-				</el-link> <br>
-				laydate：<el-link type="primary" href="https://www.layui.com/laydate/" target="_blank">
-					世界上最好用的日期选择插件 
-				</el-link> <br>
-				
-			</div>
-			
-			<br><br><br><br><br><br><br><br><br>
 
-			
 		</div>
-		
+
 		<script type="text/javascript">
-			
-			
 			// 渲染日期选择插件 
 			function init_laydate() {
 				// 开始日期
 				laydate.render({
 					elem: '.start_time input',
 					type: 'date',
-					done: function(value, date){
+					done: function(value, date) {
 						app.p.start_time = value;
 					}
 				});
@@ -168,25 +146,23 @@
 				laydate.render({
 					elem: '.end_time input',
 					type: 'date',
-					done: function(value, date){
+					done: function(value, date) {
 						app.p.end_time = value;
 					}
 				});
 			}
-			
-			
-			
+
 			var app = new Vue({
 				el: '.vue-box',
 				data: {
-					p: {	// 查询参数 
+					p: { // 查询参数 
 						username: '',
 						create_type: 0,
 						sort_type: 1,
-						start_time: sa.$util.forDate(new Date(new Date().getFullYear(), new Date().getMonth(), 1)), 	// 本月一号 
+						start_time: sa.$util.forDate(new Date(new Date().getFullYear(), new Date().getMonth(), 1)), // 本月一号 
 						end_time: sa.$util.forDate(new Date()),
 					},
-					page: {	// 分页信息
+					page: { // 分页信息
 						pageNo: 1,
 						pageSize: 10,
 						count: 1422
@@ -196,7 +172,7 @@
 				methods: {
 					// 数据刷新
 					f5: function() {
-						sa.ajax2('/user/getList', this.p, function(res){
+						sa.ajax2('/user/getList', this.p, function(res) {
 							// this.dataList = res.data;	// 数据
 							// this.page = res.page;		// 分页 
 							this.$message('查询：' + JSON.stringify(this.p));
@@ -229,8 +205,8 @@
 								id: data.id,
 								start: 0,
 								data: arr_list
-							}
-							,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+							},
+							anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
 						});
 
 					},
@@ -262,17 +238,12 @@
 						}.bind(this));
 					}
 				},
-				mounted:function(){
+				mounted: function() {
 					init_laydate();
 				}
 			})
-			
 		</script>
-		
-		
-		
-		
-		
-		
+
 	</body>
+
 </html>

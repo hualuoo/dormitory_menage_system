@@ -76,7 +76,41 @@
 			// 第二个模板的内容
 			// var tow_content = '输入账号和密码，点击按钮登录即可';
 			var tow_content = '本页面参考于此模板：<br/> <a href="http://www.jq22.com/demo/jQuery-dl20160111/" target="_blank">http://www.jq22.com/yanshi5518</a>';
-			
+
+			// 初始化
+			var token;
+			if(sessionStorage.getItem("token") != null) {
+				token = sessionStorage.getItem("token");
+			}
+			if(localStorage.getItem("token") != null) {
+				token = localStorage.getItem("token");
+			}
+			if(token != null) {
+				$.ajax({
+					url: "http://127.0.0.1:8000/token-verify/",
+					type: "post",
+					dataType: "json",
+					data: {
+						"token": token
+					},
+					success: function(data) {
+						layer.msg('检测到' + data.username + '已登录，正在跳转');
+						setTimeout(function() {
+							if(parent == window) {
+								location.href = "index.html";
+							} else {
+								parent.layer.closeAll('iframe');
+								parent.location.reload();
+							}
+						}, 1000);
+					},
+					error: function(jqXHR) {
+						sessionStorage.removeItem("token");
+						localStorage.removeItem("token");
+					}
+				})
+			}
+
 			// 用户名输入框 修改 监听
 			$('#login_username').bind("input propertychange", function() {
 				if($('#login_username').val() != "")
@@ -84,7 +118,7 @@
 				else
 					document.getElementById("username_error_field").innerText = "用户名不能为空";
 			})
-			
+
 			// 密码输入框 修改 监听
 			$('#login_password').bind("input propertychange", function() {
 				if($('#login_password').val() != "")
@@ -92,7 +126,7 @@
 				else
 					document.getElementById("password_error_field").innerText = "密码不能为空";
 			})
-			
+
 			// 点击"登录"按钮
 			$('#login_button').click(function() {
 				var login_username = $('#login_username').val();
@@ -124,20 +158,18 @@
 					},
 
 					success: function(data) {
-						if (data.is_superuser == false) {
+						if(data.is_superuser == false) {
 							return layer.msg('抱歉，仅管理员可以登陆');
 						}
 						// 如果选择7天免登录，即将token存入localStorage
-						if (document.getElementById("save_token").checked){
-							localStorage.setItem("username", data.username);
-							localStorage.setItem("token", 'JWT ' + data.token);
+						if(document.getElementById("save_token").checked) {
+							localStorage.setItem("token", data.token);
 						} else {
-							sessionStorage.setItem("username", data.username);
-							sessionStorage.setItem("token", 'JWT ' + data.token);
+							sessionStorage.setItem("token", data.token);
 						}
 						layer.msg(data.username + '，欢迎登录');
 						setTimeout(function() {
-							if (parent == window) {
+							if(parent == window) {
 								location.href = "index.html";
 							} else {
 								parent.layer.closeAll('iframe');

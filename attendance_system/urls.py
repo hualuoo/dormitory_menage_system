@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 from rest_framework.routers import DefaultRouter
 
 from users.views import UsersViewset, UserInfoViewset, VerifyCodeViewset, ChangePasswordViewset
@@ -46,4 +46,5 @@ urlpatterns = [
 
     # jwt的认证接口
     url(r'^login/', obtain_jwt_token),
+    url(r'^token-verify/', verify_jwt_token)
 ]

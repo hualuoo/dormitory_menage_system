@@ -6,7 +6,7 @@
 // ================================= 示例：一些基本信息 ================================= 
 
 // 设置模板标题 
-sp.title = "后台管理";
+sp.title = "后台模板";
 sp.logo_url = 'sa-resources/admin-logo.png';    // 设置logo图标地址   默认值：sa-resources/admin-logo.png
 sp.icon_url = 'sa-resources/admin-logo.png';    // 设置icon图标地址   默认值：sa-resources/admin-logo.png
 
@@ -35,11 +35,12 @@ sp.setMenuList(myMenuList);	// 写入菜单
 
 // ================================= 示例：设置user信息 =================================
 // 用户登录后，右上角可直接显示用户的头像和昵称
+/*
 sp.user = {
 	username: 'root',	// 昵称 
 	avatar: 'sa-resources/admin-logo.png'	// 头像地址  
 }
-
+*/
 
 
 // ================================= 示例：设置登录后的头像处，下拉可以出现的选项  =================================
@@ -50,6 +51,7 @@ sp.dropList = [		// 头像点击处可操作的选项
 			sp.$message('点击了我的资料，你可以参照文档重写此函数');
 		}
 	},
+	/*
 	{
 		name: '切换账号',
 		click: function() {
@@ -64,6 +66,7 @@ sp.dropList = [		// 头像点击处可操作的选项
 			});
 		}
 	},
+	*/
 	{
 		name: '退出登录',
 		click: function() {
@@ -71,6 +74,8 @@ sp.dropList = [		// 头像点击处可操作的选项
 			// location="login.html";
 			layer.confirm('退出登录？', function(res) {
 				layer.alert('注销成功', function() {
+					sessionStorage.removeItem("token");
+					localStorage.removeItem("token");
 					location.href = "login.html";
 				})
 			});

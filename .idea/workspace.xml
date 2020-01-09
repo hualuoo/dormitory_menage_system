@@ -3,12 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/utils/jwt_custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/jwt_custom.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin-web/admin-web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin-web/admin-web/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin-web/admin-web/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin-web/admin-web/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin-web/admin-web/sa-resources/my-code.js" beforeDir="false" afterPath="$PROJECT_DIR$/admin-web/admin-web/sa-resources/my-code.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/attendance_system_web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/attendance_system_web/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/attendance_system_web/member/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/attendance_system_web/member/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +128,7 @@
       <updated>1577701568747</updated>
       <workItem from="1577701572309" duration="78444000" />
       <workItem from="1578225180885" duration="39189000" />
-      <workItem from="1578410571042" duration="36934000" />
+      <workItem from="1578410571042" duration="39758000" />
     </task>
     <servers />
   </component>
