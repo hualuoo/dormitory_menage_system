@@ -7,6 +7,31 @@ from utils import smtp
 from .models import UserModel, UserInfo, CaptchaModel
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ("username", "email")
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    """
+    用户详情序列化类
+    """
+    #user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = UserInfo
+        fields = "__all__"
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    userinfo = UserInfoSerializer(read_only=True)
+
+    class Meta:
+        model = UserModel
+        fields = ("username", "userinfo")
+
+
 class UserRegSerializer(serializers.ModelSerializer):
     """
     用户注册序列化类
@@ -128,23 +153,6 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ("email", "code",)
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ("username", "email")
-
-
-class UserInfoSerializer(serializers.ModelSerializer):
-    """
-    用户详情序列化类
-    """
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = UserInfo
-        fields = "__all__"
 
 
 class VerifyCodeSerializer(serializers.Serializer):

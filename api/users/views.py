@@ -3,7 +3,7 @@ from random import choice
 from datetime import datetime, timedelta
 from .models import UserModel, UserInfo, CaptchaModel
 from utils import smtp
-from .serializers import UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
+from .serializers import UserListSerializer, UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
 from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
 
 from rest_framework import viewsets
@@ -22,20 +22,31 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Ret
     """
     用户详细信息
     """
-    permission_classes = (IsAuthenticated, UserInfoIsOwner, )
-    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    # permission_classes = (IsAuthenticated, UserInfoIsOwner, )
+    # authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
     # 根据用户ID查询用户详细信息
-    lookup_field = "user_id"
+    # lookup_field = "user_id"
 
+    """
     def get_queryset(self):
         if self.request.user.is_superuser:
             return UserInfo.objects.all()
         return UserInfo.objects.filter(user=self.request.user)
+    """
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(
+            {
+                'data': serializer.data
+            })
 
 
-class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     用戶
     """
@@ -51,6 +62,9 @@ class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.Ge
         return []
 
     def get_serializer_class(self):
+        print(self.action)
+        if self.action == "list":
+            return UserListSerializer
         if self.action == "create":
             return UserRegSerializer
         if self.action == "update":
