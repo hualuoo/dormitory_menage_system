@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from users.models import UserModel
 
 from rest_framework import serializers
@@ -15,14 +17,17 @@ class CustomBackend(ModelBackend):
         if user.count() == 0:
             raise serializers.ValidationError({'username_error_field': '用户名不存在'})
             return None
-        if user[0].is_active == 0:
+        last_user = user[0]
+        if last_user.is_active == 0:
             raise serializers.ValidationError({'user_error_field': '用户已被禁用'})
             return None
-        if user[0].check_password(password):
-            if user[0].email is not None:
+        if last_user.check_password(password):
+            last_user.last_login = datetime.now()
+            last_user.save()
+            if last_user.email is not None:
                 # login_smtp(user)
-                return user[0]
-            return user[0]
+                return last_user
+            return last_user
         else:
             raise serializers.ValidationError({'password_error_field': '密码错误'})
             return None

@@ -48,7 +48,7 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Ret
 
 class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
-    用戶
+    用戶列表
     """
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = UserRegSerializer
@@ -62,7 +62,6 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
         return []
 
     def get_serializer_class(self):
-        print(self.action)
         if self.action == "list":
             return UserListSerializer
         if self.action == "create":
@@ -70,6 +69,64 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
         if self.action == "update":
             return ChangeEmailSerializer
         return UserRegSerializer
+
+    def list(self, request, *args, **kwargs):
+        from django.db.models import Q, F
+
+        # 获取全部数据
+        all_result = self.get_queryset()
+
+        # 数据条数
+        recordsTotal = all_result.count()
+        recordsFiltered = recordsTotal
+
+        # 第一条数据的起始位置
+        start = int(request.GET['start'])
+        # 每页显示的长度，默认为10
+        length = int(request.GET['length'])
+        # 计数器，确保ajax从服务器返回是对应的
+        draw = int(request.GET['draw'])
+        # 全局收索条件
+        new_search = request.GET['search[value]']
+        # 排序列的序号
+        new_order = request.GET['order[0][column]']
+        # 排序列名
+        by_name = request.GET['columns[{0}][data]'.format(new_order)]
+        # 排序类型，升序降序
+        fun_order = request.GET['order[0][dir]']
+
+        # 替换字符串进行外链查询
+        new_search = new_search.replace(".", "__")
+        by_name = by_name.replace(".", "__")
+
+        # 排序开启，匹配表格列，空值排最后
+        if by_name:
+            if fun_order == "asc":
+                all_result = all_result.order_by(F(by_name).asc(nulls_last=True))
+            else:
+                all_result = all_result.order_by(F(by_name).desc(nulls_last=True))
+
+        # 模糊查询，包含内容就查询
+        if new_search:
+            all_result = all_result.filter(Q(id__contains=new_search) | Q(username__contains=new_search) |
+                                           Q(last_login__contains=new_search) | Q(date_joined__contains=new_search) |
+                                           Q(email__contains=new_search) | Q(userinfo__realname__contains=new_search) |
+                                           Q(userinfo__birthday__contains=new_search) | Q(userinfo__gender__contains=new_search) |
+                                           Q(userinfo__mobile__contains=new_search))
+
+        # 获取首页的数据
+        datas = all_result[start:(start + length)]
+
+        queryset = self.filter_queryset(datas)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(
+            {
+                'draw': draw,
+                'recordsTotal': recordsTotal,
+                'recordsFiltered': recordsFiltered,
+                'data': serializer.data
+            })
 
     def put(self, request, pk, *args, **kwargs):
         return self.update(request, *args, **kwargs)

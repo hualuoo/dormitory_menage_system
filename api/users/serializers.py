@@ -17,7 +17,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
     """
     用户详情序列化类
     """
-    #user = UserSerializer(read_only=True)
+    gender = serializers.CharField(source='get_gender_display')
 
     class Meta:
         model = UserInfo
@@ -26,10 +26,12 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 class UserListSerializer(serializers.ModelSerializer):
     userinfo = UserInfoSerializer(read_only=True)
+    last_login = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
+    date_joined = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
 
     class Meta:
         model = UserModel
-        fields = ("username", "userinfo")
+        fields = ("id", "username", "last_login", "date_joined", "email", "userinfo",)
 
 
 class UserRegSerializer(serializers.ModelSerializer):
@@ -266,4 +268,4 @@ class sendNewMailCaptchaSerializer(serializers.Serializer):
 
     class Meta:
         model = CaptchaModel
-        fields = ("email", )
+        fields = ("email",)

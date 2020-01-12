@@ -13,20 +13,25 @@
 		<!-- DataTables -->
 		<script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
 
+		<!-- 所有的 css 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css">
 	</head>
 
 	<body>
 
-		<table id="t1">
+		<table id="t1" class="data-table">
 			<colgroup>
-				<col style="width:10%">
-				<col style="width:20%;">
-				<col style="width:20%;">
-				<col style="width:20%;">
-				<col style="width:20%;">
-				<col style="width:20%;">
-				<col style="width:20%;">
-				<col style="width:20%;">
+				<col style="width:1%">
+				<col style="width:2%;">
+				<col style="width:3%;">
+				<col style="width:2%;">
+				<col style="width:3%;">
+				<col style="width:1%;">
+				<col style="width:3%;">
+				<col style="width:4%;">
+				<col style="width:4%;">
+				<col style="width:2%;">
 			</colgroup>
 			<thead>
 				<tr>
@@ -37,6 +42,8 @@
 					<th>生日</th>
 					<th>性别</th>
 					<th>电话</th>
+					<th>最后登录时间</th>
+					<th>创建账户时间</th>
 					<th>状态</th>
 				</tr>
 			</thead>
@@ -50,73 +57,110 @@
 		$(document).ready(function() {
 
 			$("#t1").dataTable({
-					// 开启服务器模式
-					"serverSide": true,
-					// 开启处理功能
-					"processing": true,
-					// 允许排序
-					"orderable": true,
-					// 允许查询
-					"searching": true,
-					// 根据第四列降序排列
-					"order": [
-						[3, "desc"]
-					],
-					// 发送post请求
-					"ajax": {
-						"type": 'GET',
-						"url": 'http://127.0.0.1:8000/userinfo/'
+				// 开启服务器模式
+				"serverSide": true,
+				// 开启处理功能
+				"processing": true,
+				// 是否允许排序
+				"orderable": true,
+				// 是否允许检索
+				"searching": true,
+				// 是否显示情报 就是"当前显示1/100记录"这个信息
+				"info": true,
+				// 初期排序列
+				// "order": [
+				// 	 [1, "asc"]
+				// ],
+				// 水平滚动条
+				"scrollX": false,
+				// 垂直滚动条
+				"scrollY": false,
+				// 件数选择功能 默认true
+				"lengthChange": true,
+				// 件数选择下拉框内容
+				"lengthMenu": [10, 25, 50, 100],
+				// 每页的初期件数 用户可以操作lengthMenu上的值覆盖
+				"pageLength": 10,
+				// 发送请求
+				"ajax": {
+					"type": 'GET',
+					"url": 'http://127.0.0.1:8000/users/'
+				},
+				// 返回数据
+				columns: [{
+						"data": "id",
+						// 数据渲染，返回超链接的字条
+						"render": function(data, type, full, meta) {
+							return '<a href="/work/work_results?name=' + data + '" ><span>' + data + '</span></a>';
+						}
 					},
-					// 返回数据
-					columns: [{
-							"data": "user.id",
-							// 数据渲染，返回超链接的字条
-							"render": function(data, type, full, meta) {
-								return '<a href="/work/work_results?name=' + data + '" ><span>' + data + '</span></a>';
-							}
-						},
-						{
-							"data": "user.username"
-						},
-						{
-							"data": "user.email"
-						},
-						{
-							"data": "realname"
-						},
-						{
-							"data": "birthday"
-						},
-						{
-							"data": "gender"
-						},
-						{
-							"data": "mobile"
-						},
-						{
-							"data": "status",
-							// 数据渲染，判断返回内容，返回span颜色
-							"render": function(data, type, full, meta) {
-								if(data == '执行成功') {
-									return '<span class="label label-success">' + data + '</span>';
-								} else if(data == '执行失败') {
-									return '<span class="label label-danger">' + data + '</span>';
-								} else if(data == '执行中') {
-									return '<span class="label label-warning">' + data + '</span>';
-								} else {
-									return '<span class="label label-primary">' + data + '</span>';
-								}
+					{
+						"data": "username"
+					},
+					{
+						"data": "email"
+					},
+					{
+						"data": "userinfo.realname",
+						"defaultContent": ""
+					},
+					{
+						"data": "userinfo.birthday",
+						"defaultContent": ""
+					},
+					{
+						"data": "userinfo.gender",
+						"defaultContent": ""
+					},
+					{
+						"data": "userinfo.mobile",
+						"defaultContent": ""
+					},
+					{
+						"data": "last_login",
+						"defaultContent": ""
+					},
+					{
+						"data": "date_joined",
+						"defaultContent": ""
+					},
+					{
+						"data": "status",
+						// 数据渲染，判断返回内容，返回span颜色
+						"render": function(data, type, full, meta) {
+							if(data == '执行成功') {
+								return '<span class="label label-success">' + data + '</span>';
+							} else if(data == '执行失败') {
+								return '<span class="label label-danger">' + data + '</span>';
+							} else if(data == '执行中') {
+								return '<span class="label label-warning">' + data + '</span>';
+							} else {
+								return '<span class="label label-primary">' + data + '</span>';
 							}
 						}
-					],
-					'columnDefs': [{
-						'targets': 0,
-						'searchable': true
-					}]
-
-				}
-
-			);
+					}
+				],
+				'columnDefs': [{
+					'targets': 0,
+					'searchable': true
+				}],
+				"oLanguage": {
+					"sLengthMenu": "每页显示 _MENU_条",
+					"sProcessing": "正在载入........",
+					"sZeroRecords": "没有找到符合条件的数据",
+					"sProcessing": "<img src=’./loading.gif’ />",
+					"sInfo": "当前显示第 _START_ - _END_ 条　共计 _TOTAL_ 条",
+					"sInfoEmpty": "没有记录",
+					"sInfoFiltered": "(从 _MAX_ 条记录中过滤)",
+					"sSearch": "搜索用户名或姓名：",
+					"oPaginate": {
+						"sFirst": "首页",
+						"sPrevious": "前一页",
+						"sNext": "后一页",
+						"sLast": "尾页"
+					}
+				},
+			});
 		});
 
 		$("form").submit(function(e) {
