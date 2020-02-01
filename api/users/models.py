@@ -9,7 +9,7 @@ class UserModel(AbstractUser):
     """
     用户
     """
-    email = models.EmailField(max_length=100, null=True, blank=True, verbose_name="邮箱")
+    email = models.EmailField(max_length=100, blank=True, verbose_name="邮箱")
 
     class Meta:
         verbose_name = "用户"

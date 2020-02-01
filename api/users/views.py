@@ -77,9 +77,12 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
         return Response(serializer.data)
         """
 
-        from django.db.models import Q, F
-
         """
+        ##############################
+        # 此处适配DataTable服务端模式
+        ##############################
+        from django.db.models import Q, F
+        
         # 获取全部数据
         all_result = self.get_queryset()
 
@@ -135,11 +138,13 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
                 'data': serializer.data
             })
         """
+        ##############################
+        # 此处适配LayUI Table服务端模式
+        ##############################
+        from django.db.models import Q, F
+
         # 获取全部数据
         all_result = self.get_queryset()
-
-        # 数据条数
-        recordsTotal = all_result.count()
 
         # 分页页数
         page = int(request.GET['page'])
@@ -149,15 +154,34 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
         field = request.GET.get('field', '')
         # 排序类型，升序降序
         order = request.GET.get('order', '')
+        # 模糊搜索关键词
+        search_username = request.GET.get('search_username', '')
+        search_realname = request.GET.get('search_realname', '')
+        search_email = request.GET.get('search_email', '')
+        search_mobile = request.GET.get('search_mobile', '')
 
         # 替换字符串进行外链查询
         field = field.replace(".", "__")
 
+        # 排序
         if field:
             if order == "asc":
                 all_result = all_result.order_by(F(field).asc(nulls_last=True))
             elif order == "desc":
                 all_result = all_result.order_by(F(field).desc(nulls_last=True))
+
+        # 搜索
+        if search_username:
+            all_result = all_result.filter(Q(username__icontains=search_username))
+        if search_realname:
+            all_result = all_result.filter(Q(userinfo__realname__icontains=search_realname))
+        if search_email:
+            all_result = all_result.filter(Q(email__icontains=search_email))
+        if search_mobile:
+            all_result = all_result.filter(Q(userinfo__mobile__icontains=search_mobile))
+
+        # 数据条数
+        recordsTotal = all_result.count()
 
         # 获取首页的数据
         datas = all_result[(page*limit-limit):(page*limit)]
