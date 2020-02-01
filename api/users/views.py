@@ -71,8 +71,15 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
         return UserRegSerializer
 
     def list(self, request, *args, **kwargs):
+        """
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+        """
+
         from django.db.models import Q, F
 
+        """
         # 获取全部数据
         all_result = self.get_queryset()
 
@@ -125,6 +132,44 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
                 'draw': draw,
                 'recordsTotal': recordsTotal,
                 'recordsFiltered': recordsFiltered,
+                'data': serializer.data
+            })
+        """
+        # 获取全部数据
+        all_result = self.get_queryset()
+
+        # 数据条数
+        recordsTotal = all_result.count()
+
+        # 分页页数
+        page = int(request.GET['page'])
+        # 每页条数
+        limit = int(request.GET['limit'])
+        # 排序列名
+        field = request.GET.get('field', '')
+        # 排序类型，升序降序
+        order = request.GET.get('order', '')
+
+        # 替换字符串进行外链查询
+        field = field.replace(".", "__")
+
+        if field:
+            if order == "asc":
+                all_result = all_result.order_by(F(field).asc(nulls_last=True))
+            elif order == "desc":
+                all_result = all_result.order_by(F(field).desc(nulls_last=True))
+
+        # 获取首页的数据
+        datas = all_result[(page*limit-limit):(page*limit)]
+
+        queryset = self.filter_queryset(datas)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(
+            {
+                'code': 0,
+                'msg': '',
+                'count': recordsTotal,
                 'data': serializer.data
             })
 

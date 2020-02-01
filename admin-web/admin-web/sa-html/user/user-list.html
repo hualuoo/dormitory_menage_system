@@ -93,37 +93,8 @@
 			<div class="c-panel">
 				<div class="c-title">列表</div>
 				<table id="t1" class="layui-table">
-					<colgroup>
-						<col style="width:1%">
-						<col style="width:2%;">
-						<col style="width:3%;">
-						<col style="width:2%;">
-						<col style="width:3%;">
-						<col style="width:1%;">
-						<col style="width:3%;">
-						<col style="width:4%;">
-						<col style="width:4%;">
-						<col style="width:2%;">
-					</colgroup>
-					<thead>
-						<tr>
-							<th>编号</th>
-							<th>用户名</th>
-							<th>邮箱</th>
-							<th>真实姓名</th>
-							<th>生日</th>
-							<th>性别</th>
-							<th>电话</th>
-							<th>最后登录时间</th>
-							<th>创建账户时间</th>
-							<th>状态</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
 				</table>
 				
-				<!--
 				<el-table class="data-table" :data="dataList" size="mini" style="width: 100%">
 
 					<el-table-column label="编号" prop="id" width="70px"> </el-table-column>
@@ -168,7 +139,6 @@
 					</el-pagination>
 				</div>
 				
-				-->
 				
 			</div>
 
@@ -188,6 +158,8 @@
 					"searching": true,
 					// 是否显示情报 就是"当前显示1/100记录"这个信息
 					"info": true,
+					//分页加上首页等
+					"pagingType":   "full_numbers",
 					// 初期排序列
 					// "order": [
 					// 	 [1, "asc"]
@@ -210,6 +182,7 @@
 					},
 					// 返回数据
 					columns: [{
+							"title": "编号",
 							"data": "id",
 							// 数据渲染，返回超链接的字条
 							"render": function(data, type, full, meta) {
@@ -217,48 +190,49 @@
 							}
 						},
 						{
+							"title": "用户名",
 							"data": "username"
 						},
 						{
+							"title": "绑定邮箱",
 							"data": "email"
 						},
 						{
+							"title": "真实姓名",
 							"data": "userinfo.realname",
 							"defaultContent": ""
 						},
 						{
+							"title": "出生日期",
 							"data": "userinfo.birthday",
 							"defaultContent": ""
 						},
 						{
+							"title": "性别",
 							"data": "userinfo.gender",
 							"defaultContent": ""
 						},
 						{
+							"title": "手机号码",
 							"data": "userinfo.mobile",
 							"defaultContent": ""
 						},
 						{
+							"title": "最后登陆时间",
 							"data": "last_login",
 							"defaultContent": ""
 						},
 						{
+							"title": "账户创建时间",
 							"data": "date_joined",
-							"defaultContent": ""
 						},
 						{
+							"title": "操作",
 							"data": "status",
 							// 数据渲染，判断返回内容，返回span颜色
 							"render": function(data, type, full, meta) {
-								if(data == '执行成功') {
-									return '<span class="label label-success">' + data + '</span>';
-								} else if(data == '执行失败') {
-									return '<span class="label label-danger">' + data + '</span>';
-								} else if(data == '执行中') {
-									return '<span class="label label-warning">' + data + '</span>';
-								} else {
-									return '<span class="label label-primary">' + data + '</span>';
-								}
+								return '<button type="primary" class="c-button" icon="el-icon-edit" @click="dongjie(scope.row)" v-if="scope.row.status == 1">禁用</button>';
+								
 							}
 						}
 					],
@@ -276,10 +250,10 @@
 						"sInfoFiltered": "(从 _MAX_ 条记录中过滤)",
 						"sSearch": "搜索用户名或姓名：",
 						"oPaginate": {
-							"sFirst": "首页",
+							"sFirst": "<<",
 							"sPrevious": "<",
 							"sNext": ">",
-							"sLast": "尾页"
+							"sLast": ">>"
 						}
 					},
 				});
