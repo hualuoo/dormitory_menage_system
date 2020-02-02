@@ -47,7 +47,7 @@
 							<button class="layui-btn" id="usersearch_button">
               					<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i> 搜索
             				</button>
-            				<button class="layui-btn layui-btn-normal" id="searchclear_button">
+							<button class="layui-btn layui-btn-normal" id="searchclear_button">
               					<i class="layui-icon layui-icon-senior layuiadmin-button-btn"></i> 清空
             				</button>
 						</div>
@@ -56,8 +56,12 @@
 
 				<div class="layui-card-body">
 					<div style="padding-bottom: 10px;">
-						<button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
-						<button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+						<button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel" id="userdel_button">
+							<i class="layui-icon layui-icon-delete"></i> 删除
+						</button>
+						<button class="layui-btn layuiadmin-btn-useradmin" data-type="add" id="useradd_button">
+							<i class="layui-icon layui-icon-add-circle"></i> 添加
+						</button>
 					</div>
 
 					<table id="LAY-user-manage" lay-filter="LAY-user-manage"></table>
@@ -73,7 +77,7 @@
 					elem: '#LAY-user-manage',
 					autoSort: false, //禁用前端自动排序
 					toolbar: true,
-					url: 'http://127.0.0.1:8000/users/',
+					url: 'http://127.0.0.1:8000/userinfo/',
 					limit: 10,
 					limits: [10, 20, 50, 100],
 					height: 'full-180',
@@ -172,6 +176,7 @@
 					});
 				});
 
+				// 模糊查询"搜索"按钮
 				$('#usersearch_button').click(function() {
 					//执行重载
 					table.reload('LAY-user-manage', {
@@ -186,7 +191,9 @@
 						}
 					}, 'data');
 				});
-				$('#searchclear_button').click(function(){
+
+				// 模糊查询"清空"按钮
+				$('#searchclear_button').click(function() {
 					$('#usersearch_username').val("");
 					$('#usersearch_realname').val("");
 					$('#usersearch_email').val("");
@@ -203,20 +210,50 @@
 						}
 					}, 'data');
 				})
-			})
 
+				// 用户"删除"按钮
+				$('#userdel_button').click(function() {
+					var data = table.checkStatus('LAY-user-manage').data;
+					if (data.length == 0){
+						layer.alert("请选择需要删除的用户！");
+						return;
+					}
+					var ids = '';
+					data.map(function(value, index, arr) {
+						ids += value.id + ',';
+					})
+					var reg=/,$/gi;
+					ids = ids.replace(reg,"");
+					layer.confirm('确定删除ID为' + ids + '的用户吗？', {icon:3,title:'删除确认'}, function(index) {
+						layer.alert(ids);
+					})
+				})
+				
+				//用户"添加"按钮
+				$('#useradd_button').click(function() {
+					layer.alert("123");
+				})
+			})
+			
+			//"编辑"按钮
 			function useredit(id) {
 				layer.open({
 					type: 2,
 					title: '修改用户',
-					content: 'useredit.html',
+					content: 'useredit.html?id='+ id,
+					shadeClose: true,
 					maxmin: true,
 					area: ['500px', '450px'],
 					btn: ['确定', '取消'],
 					yes: function(index, layero) {
-						var iframeWindow = window['layui-layer-iframe' + index],
-							submitID = 'LAY-user-front-submit',
-							submit = layero.find('iframe').contents().find('#' + submitID);
+						var body = layer.getChildFrame('body', index);
+						var userrealname = body.contents().find("#userrealname").val();
+						layer.alert(userrealname);
+						
+						/*
+						//var iframeWindow = window['layui-layer-iframe' + index],
+							//submitID = 'LAY-user-front-submit',
+							//submit = layero.find('iframe').contents().find('#' + submitID);
 
 						//监听提交
 						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
@@ -229,6 +266,7 @@
 						});
 
 						submit.trigger('click');
+						*/
 					}
 				});
 			}

@@ -27,7 +27,7 @@ router = DefaultRouter()
 router.register(r'users', UsersViewset, basename="users")
 router.register(r'userinfo', UserInfoViewset, basename="userinfo")
 router.register(r'code', VerifyCodeViewset, basename="code")
-router.register(r'changepassword', ChangePasswordViewset, basename="changepassword")
+# router.register(r'changepassword', ChangePasswordViewset, basename="changepassword")
 
 router.register(r'member/security/getUserFuzzyMail', getUserFuzzyMailViewset, basename="getUserFuzzyMail")
 router.register(r'member/security/checkUserMail', checkUserMailViewset, basename="checkUserMail")

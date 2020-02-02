@@ -3,19 +3,12 @@ from datetime import datetime, timedelta
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from utils import smtp
 from .models import UserModel, UserInfo, CaptchaModel
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ("username", "email")
-
-
-class UserInfoSerializer(serializers.ModelSerializer):
+class UserInfoListSerializer(serializers.ModelSerializer):
     """
-    用户详情序列化类
+    用户信息 序列化类 2
     """
     gender = serializers.CharField(source='get_gender_display')
 
@@ -25,7 +18,10 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class UserListSerializer(serializers.ModelSerializer):
-    userinfo = UserInfoSerializer(read_only=True)
+    """
+    用户信息 序列化类 1
+    """
+    userinfo = UserInfoListSerializer(read_only=True)
     last_login = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
     date_joined = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
 
@@ -34,15 +30,19 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = ("id", "username", "last_login", "date_joined", "email", "userinfo",)
 
 
+class UserInfoUpdateSerializer(serializers.ModelSerializer):
+    """
+    用户信息修改 序列化类
+    """
+
+
 class UserRegSerializer(serializers.ModelSerializer):
     """
     用户注册序列化类
     """
     username = serializers.CharField(label="用户名", help_text="用户名", required=True, allow_blank=False,
                                      validators=[UniqueValidator(queryset=UserModel.objects.all(), message="用户已经存在")])
-    password = serializers.CharField(
-        style={'input_type': 'password'}, help_text="密码", label="密码", write_only=True,
-    )
+    password = serializers.CharField(style={'input_type': 'password'}, help_text="密码", label="密码", write_only=True)
 
     def create(self, validated_data):
         user = super(UserRegSerializer, self).create(validated_data=validated_data)

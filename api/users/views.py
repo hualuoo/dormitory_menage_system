@@ -3,7 +3,7 @@ from random import choice
 from datetime import datetime, timedelta
 from .models import UserModel, UserInfo, CaptchaModel
 from utils import smtp
-from .serializers import UserListSerializer, UserInfoSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
+from .serializers import UserListSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
 from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
 
 from rest_framework import viewsets
@@ -18,73 +18,32 @@ from utils.permission import UserIsOwner, UserInfoIsOwner
 # Create your views here.
 
 
-class UserInfoViewset(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     用户详细信息
     """
-    # permission_classes = (IsAuthenticated, UserInfoIsOwner, )
-    # authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    queryset = UserInfo.objects.all()
-    serializer_class = UserInfoSerializer
-    # 根据用户ID查询用户详细信息
-    # lookup_field = "user_id"
-
-    """
-    def get_queryset(self):
-        if self.request.user.is_superuser:
-            return UserInfo.objects.all()
-        return UserInfo.objects.filter(user=self.request.user)
-    """
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-
-        return Response(
-            {
-                'data': serializer.data
-            })
-
-
-class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
-    """
-    用戶列表
-    """
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = UserRegSerializer
+    serializer_class = UserListSerializer
     queryset = UserModel.objects.all()
-
-    def get_permissions(self):
-        if self.action == "create":
-            return []
-        if self.action == "update":
-            return [IsAuthenticated(), UserIsOwner(), ]
-        return []
 
     def get_serializer_class(self):
         if self.action == "list":
             return UserListSerializer
-        if self.action == "create":
-            return UserRegSerializer
+        if self.action == "retrieve":
+            return UserListSerializer
         if self.action == "update":
-            return ChangeEmailSerializer
-        return UserRegSerializer
+            return UserListSerializer
+        return UserListSerializer
 
     def list(self, request, *args, **kwargs):
-        """
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-        """
-
         """
         ##############################
         # 此处适配DataTable服务端模式
         ##############################
         from django.db.models import Q, F
-        
+
         # 获取全部数据
-        all_result = self.get_queryset()
+        all_result = self.filter_queryset(self.get_queryset())
 
         # 数据条数
         recordsTotal = all_result.count()
@@ -144,12 +103,12 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
         from django.db.models import Q, F
 
         # 获取全部数据
-        all_result = self.get_queryset()
+        all_result = self.filter_queryset(self.get_queryset())
 
         # 分页页数
-        page = int(request.GET['page'])
+        page = int(request.GET.get('page', '0'))
         # 每页条数
-        limit = int(request.GET['limit'])
+        limit = int(request.GET.get('limit', '0'))
         # 排序列名
         field = request.GET.get('field', '')
         # 排序类型，升序降序
@@ -184,9 +143,10 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
         recordsTotal = all_result.count()
 
         # 获取首页的数据
-        datas = all_result[(page*limit-limit):(page*limit)]
+        if (page != 0) and (limit != 0):
+            all_result = all_result[(page * limit - limit):(page * limit)]
 
-        queryset = self.filter_queryset(datas)
+        queryset = self.filter_queryset(all_result)
         serializer = self.get_serializer(queryset, many=True)
 
         return Response(
@@ -196,6 +156,46 @@ class UsersViewset(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Update
                 'count': recordsTotal,
                 'data': serializer.data
             })
+
+    def update(self, request, *args, **kwargs):
+        """
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+        """
+
+
+
+class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """
+    用戶列表
+    """
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = UserRegSerializer
+    queryset = UserModel.objects.all()
+
+    def get_permissions(self):
+        if self.action == "create":
+            return []
+        if self.action == "update":
+            return [IsAuthenticated(), UserIsOwner(), ]
+        return []
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return UserRegSerializer
+        if self.action == "update":
+            return ChangeEmailSerializer
+        return UserRegSerializer
 
     def put(self, request, pk, *args, **kwargs):
         return self.update(request, *args, **kwargs)
