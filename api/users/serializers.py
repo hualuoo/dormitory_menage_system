@@ -34,6 +34,29 @@ class UserInfoUpdateSerializer(serializers.ModelSerializer):
     """
     用户信息修改 序列化类
     """
+    email = serializers.EmailField(max_length=100, help_text="邮箱")
+    realname = serializers.CharField(max_length=30, help_text="姓名")
+    birthday = serializers.DateField(help_text="出生年月")
+    gender = serializers.ChoiceField(help_text="性别", choices=(("male", "男"), ("female", "女")))
+    mobile = serializers.CharField(max_length=11, help_text="电话")
+
+    def validate_email(self, email):
+        if UserModel.objects.filter(email=email).count() and self.instance.email != email:
+            raise serializers.ValidationError("该邮箱已被其他账户使用")
+        return email
+
+    def validate_mobile(self, mobile):
+        UserInfos = UserInfo.objects.filter(user=self.instance.id)
+        if UserInfos.count():
+            if UserInfos.first().mobile != mobile and UserInfo.objects.filter(mobile=mobile).count():
+                raise serializers.ValidationError("该手机已被其他账户使用")
+        elif UserInfo.objects.filter(mobile=mobile).count():
+            raise serializers.ValidationError("该手机已被其他账户使用")
+        return mobile
+
+    class Meta:
+        model = UserModel
+        fields = ("email", "realname", "birthday", "gender", "mobile")
 
 
 class UserRegSerializer(serializers.ModelSerializer):
@@ -99,6 +122,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("验证码不存在")
         if not verify_user.check_password(self.initial_data["old_password"]):
             raise serializers.ValidationError("旧密码错误")
+        return code
 
     def update(self, instance, validated_data):
         user = self.context['request'].user
@@ -133,6 +157,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
     def validate_email(self, email):
         if UserModel.objects.filter(email=email).count():
             raise serializers.ValidationError("该邮箱已被其他账户使用")
+        return email
 
     def validate_code(self, code):
         verify_records = CaptchaModel.objects.filter(email=self.initial_data["email"]).order_by("-create_time")
@@ -145,6 +170,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("验证码错误")
         else:
             raise serializers.ValidationError("验证码错误")
+        return code
 
     def validate(self, attrs):
         if attrs["email"] is None:
@@ -239,6 +265,7 @@ class confirmMailCaptchaSerializer(serializers.Serializer):
                 raise serializers.ValidationError({'detail': '该验证码错误'})
         else:
             raise serializers.ValidationError({'detail': '该邮箱的验证码不存在'})
+        return code
 
     class Meta:
         model = UserModel

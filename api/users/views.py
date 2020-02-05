@@ -3,7 +3,7 @@ from random import choice
 from datetime import datetime, timedelta
 from .models import UserModel, UserInfo, CaptchaModel
 from utils import smtp
-from .serializers import UserListSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
+from .serializers import UserListSerializer, UserInfoUpdateSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
 from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
 
 from rest_framework import viewsets
@@ -32,7 +32,7 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.U
         if self.action == "retrieve":
             return UserListSerializer
         if self.action == "update":
-            return UserListSerializer
+            return UserInfoUpdateSerializer
         return UserListSerializer
 
     def list(self, request, *args, **kwargs):
@@ -133,7 +133,7 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.U
         if search_username:
             all_result = all_result.filter(Q(username__icontains=search_username))
         if search_realname:
-            all_result = all_result.filter(Q(userinfo__realname__icontains=search_realname))
+            all_result = all_result.filter(Q(first_name__icontains=search_realname) | Q(last_name__icontains=search_realname))
         if search_email:
             all_result = all_result.filter(Q(email__icontains=search_email))
         if search_mobile:
@@ -172,7 +172,31 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.U
 
         return Response(serializer.data)
         """
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
 
+        instance.email = request.data["email"]
+        instance.save()
+
+        UserInfos = UserInfo.objects.filter(user=instance.id)
+        if UserInfos.count():
+            userinfo = UserInfos.first()
+            userinfo.birthday = serializer.validated_data["birthday"]
+            userinfo.gender = serializer.validated_data["gender"]
+            userinfo.mobile = serializer.validated_data["mobile"]
+            userinfo.save()
+        else:
+            userinfo = UserInfo.objects.create(realname=serializer.validated_data["realname"],
+                                               birthday=serializer.validated_data["birthday"],
+                                               gender=serializer.validated_data["gender"],
+                                               mobile=serializer.validated_data["mobile"],
+                                               user=instance)
+            userinfo.save()
+
+        return Response({
+            "msg": "用户" + instance.username + "的信息修改成功"
+        }, status=status.HTTP_200_OK)
 
 
 class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):

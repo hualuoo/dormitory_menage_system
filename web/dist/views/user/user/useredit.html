@@ -14,55 +14,55 @@
 
 	<body>
 
-		<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+		<div class="layui-form layui-form-pane" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 20px 0 20px;">
 			<div class="layui-form-item">
-				<label class="layui-form-label">用户ID</label>
+				<label class="layui-form-label" style="color: #808080;">用户ID</label>
 				<div class="layui-input-inline">
 					<input type="text" name="userid" id="userid" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" disabled="disabled">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">用户名</label>
+				<label class="layui-form-label" style="color: #808080;">用户名</label>
 				<div class="layui-input-inline">
-					<input type="text" name="username" id="username" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+					<input type="text" name="username" id="username" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" disabled="disabled">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">绑定邮箱</label>
+				<label class="layui-form-label">绑定邮箱 <a style="color: red;">*</a></label>
 				<div class="layui-input-inline">
 					<input type="text" name="useremail" id="useremail" lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">真实姓名</label>
+				<label class="layui-form-label">真实姓名 <a style="color: red;">*</a></label>
 				<div class="layui-input-inline">
-					<input type="text" name="userrealname" id="userrealname" lay-verify="phone" placeholder="请输入号码" autocomplete="off" class="layui-input">
+					<input type="text" name="userrealname" id="userrealname" lay-verify="realname" placeholder="请输入姓名" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">出生日期</label>
+				<label class="layui-form-label">出生日期 <a style="color: red;">*</a></label>
 				<div class="layui-input-inline">
-					<input type="text" name="userbirthday" id="userbirthday" placeholder="请输入号码" autocomplete="off" class="layui-input">
+					<input type="text" name="userbirthday" id="userbirthday" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">手机号码</label>
+				<label class="layui-form-label">手机号码 <a style="color: red;">*</a></label>
 				<div class="layui-input-inline">
-					<input type="text" name="usermobile" id="usermobile" lay-verify="usermobile" placeholder="请输入号码" autocomplete="off" class="layui-input">
+					<input type="text" name="usermobile" id="usermobile" lay-verify="phone" placeholder="请输入号码" autocomplete="off" class="layui-input">
 				</div>
 			</div>
-			<div class="layui-form-item">
+			<!--<div class="layui-form-item">
 				<label class="layui-form-label">头像</label>
 				<div class="layui-input-inline">
 					<input type="text" name="avatar" lay-verify="required" placeholder="请上传图片" autocomplete="off" class="layui-input">
 				</div>
 				<button style="float: left;" type="button" class="layui-btn" id="layuiadmin-upload-useradmin">上传图片</button>
-			</div>
-			<div class="layui-form-item" lay-filter="sex">
-				<label class="layui-form-label">选择性别</label>
+			</div>-->
+			<div class="layui-form-item" lay-filter="sex" pane="">
+				<label class="layui-form-label">选择性别 <a style="color: red;">*</a></label>
 				<div class="layui-input-block">
-					<input type="radio" name="usergender" value="男" title="男" checked="checked">
-					<input type="radio" name="usergender" value="女" title="女">
+					<input type="radio" name="usergender" value="male" title="男" checked="checked">
+					<input type="radio" name="usergender" value="female" title="女">
 				</div>
 			</div>
 			<div class="layui-form-item layui-hide">
@@ -72,7 +72,69 @@
 
 		<script src="../../../layuiadmin/layui/layui.js"></script>
 		<script>
-			// h
+			layui.use(['form', 'layedit', 'laydate'], function() {
+				var form = layui.form,
+					layer = layui.layer,
+					laydate = layui.laydate;
+
+				//日期
+				laydate.render({
+					elem: '#userbirthday'
+				});
+
+				//自定义验证规则
+				form.verify({
+					realname: [
+						/^[\u4E00-\u9FA5]{2,4}$/, '姓名必须为2到4个中文'
+					],
+					pass: [
+						/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'
+					]
+				});
+
+				/*
+				//监听指定开关
+				form.on('switch(switchTest)', function(data) {
+					layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+						offset: '6px'
+					});
+					layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+				});
+
+				//监听提交
+				form.on('submit(demo1)', function(data) {
+					layer.alert(JSON.stringify(data.field), {
+						title: '最终的提交信息'
+					})
+					return false;
+				});
+
+				//表单赋值
+				layui.$('#LAY-component-form-setval').on('click', function() {
+					form.val('example', {
+						"username": "贤心" // "name": "value"
+							,
+						"password": "123456",
+						"interest": 1,
+						"like[write]": true //复选框选中状态
+							,
+						"close": true //开关状态
+							,
+						"sex": "女",
+						"desc": "我爱 layui"
+					});
+				});
+
+				//表单取值
+				layui.$('#LAY-component-form-getval').on('click', function() {
+					var data = form.val('example');
+					alert(JSON.stringify(data));
+				});
+				*/
+
+			});
+
+			// 获取url的参数
 			function GetQueryString(name) {
 				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 				var r = window.location.search.substr(1).match(reg);
@@ -80,8 +142,8 @@
 				return null;
 			}
 			var id = GetQueryString("id");
-			
-			if (id != null){
+
+			if(id != null) {
 				$.ajax({
 					url: "http://127.0.0.1:8000/userinfo/" + id + "/",
 					type: "get",
@@ -90,25 +152,30 @@
 						$('#userid').val(id);
 						$('#username').val(data.username);
 						$('#useremail').val(data.email);
-						$('#userrealname').val(data.userinfo.realname);
-						$('#userbirthday').val(data.userinfo.birthday);
-						$('#usermobile').val(data.userinfo.mobile);
-						var usergender = document.getElementsByName("usergender");
-						for(var i = 0; i < usergender.length; i++) {
-							if(usergender[i].value == data.userinfo.gender) {
-								usergender[i].checked = true;
-								break;
+						if(data.userinfo != null) {
+							$('#userrealname').val(data.userinfo.realname);
+							$('#userbirthday').val(data.userinfo.birthday);
+							$('#usermobile').val(data.userinfo.mobile);
+							var usergender = document.getElementsByName("usergender");
+							for(var i = 0; i < usergender.length; i++) {
+								if(usergender[i].title == data.userinfo.gender) {
+									usergender[i].checked = true;
+									break;
+								}
 							}
 						}
 						//alert($('input:radio[name="usergender"]:checked').val());
 					},
 					error: function(jqXHR) {
-						sessionStorage.removeItem("token");
-						localStorage.removeItem("token");
+						layer.msg('数据加载错误，请联系管理员处理', {
+							icon: 2,
+							anim: 6
+						});
 					}
 				})
 			}
 
+			/*
 			layui.config({
 				base: '../../../layuiadmin/' //静态资源所在路径
 			}).extend({
@@ -129,6 +196,7 @@
 					}
 				});
 			})
+			*/
 		</script>
 	</body>
 	<script>

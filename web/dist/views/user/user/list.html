@@ -17,7 +17,7 @@
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" id="usersearch">
 					<div class="layui-form-item">
 						<div class="layui-col-md2">
 							<label class="layui-form-label">用户名</label>
@@ -150,6 +150,7 @@
 								field: 'operation',
 								title: '操作',
 								width: '12%',
+								fixed: 'right',
 								templet: function(d) {
 									return '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" onclick="useredit(' + d.id + ');"><i class="layui-icon layui-icon-edit"></i>编辑</a>' +
 										'<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>';
@@ -163,7 +164,7 @@
 					}
 				});
 
-				// 监听单元格事件
+				// 监听单元格事件<排序>
 				table.on('sort(LAY-user-manage)', function(obj) { //注：tool是工具条事件名，LAY-user-manage是table原始容器的属性 lay-filter="对应的值"
 					//尽管我们的 table 自带排序功能，但并没有请求服务端。
 					//有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
@@ -210,11 +211,22 @@
 						}
 					}, 'data');
 				})
+				
+				//搜索区域DIV回车监听
+				$("#usersearch").bind("keydown", function(e) {
+					// 兼容FF和IE和Opera
+					var theEvent = e || window.event;
+					var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+					if(code == 13) {
+						//回车执行查询
+						$("#usersearch_button").click();
+					}
+				});
 
 				// 用户"删除"按钮
 				$('#userdel_button').click(function() {
 					var data = table.checkStatus('LAY-user-manage').data;
-					if (data.length == 0){
+					if(data.length == 0) {
 						layer.alert("请选择需要删除的用户！");
 						return;
 					}
@@ -222,117 +234,174 @@
 					data.map(function(value, index, arr) {
 						ids += value.id + ',';
 					})
-					var reg=/,$/gi;
-					ids = ids.replace(reg,"");
-					layer.confirm('确定删除ID为' + ids + '的用户吗？', {icon:3,title:'删除确认'}, function(index) {
+					var reg = /,$/gi;
+					ids = ids.replace(reg, "");
+					layer.confirm('确定删除ID为' + ids + '的用户吗？', {
+						icon: 3,
+						title: '删除确认'
+					}, function(index) {
 						layer.alert(ids);
 					})
 				})
-				
+
 				//用户"添加"按钮
 				$('#useradd_button').click(function() {
 					layer.alert("123");
 				})
 			})
-			
+
 			//"编辑"按钮
 			function useredit(id) {
 				layer.open({
 					type: 2,
 					title: '修改用户',
-					content: 'useredit.html?id='+ id,
+					content: 'useredit.html?id=' + id,
 					shadeClose: true,
 					maxmin: true,
-					area: ['500px', '450px'],
+					area: ['400px', '500px'],
 					btn: ['确定', '取消'],
 					yes: function(index, layero) {
-						var body = layer.getChildFrame('body', index);
-						var userrealname = body.contents().find("#userrealname").val();
-						layer.alert(userrealname);
-						
-						/*
-						//var iframeWindow = window['layui-layer-iframe' + index],
-							//submitID = 'LAY-user-front-submit',
-							//submit = layero.find('iframe').contents().find('#' + submitID);
+						var iframeWindow = window['layui-layer-iframe' + index],
+							submitID = 'LAY-user-front-submit',
+							submit = layero.find('iframe').contents().find('#' + submitID);
 
 						//监听提交
 						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
 							var field = data.field; //获取提交的字段
-
-							//提交 Ajax 成功后，静态更新表格中的数据
-							//$.ajax({});
-							table.reload('LAY-user-front-submit'); //数据刷新
-							layer.close(index); //关闭弹层
+							$.ajax({
+								url: "http://127.0.0.1:8000/userinfo/" + id + "/",
+								type: "put",
+								dataType: "json",
+								data: {
+									"email": field.useremail,
+									"mobile": field.usermobile,
+									"realname": field.userrealname,
+									"birthday": field.userbirthday,
+									"gender": field.usergender
+								},
+								success: function(data) {
+									layer.msg(data.msg, {
+										icon: 1,
+										time: 2000
+									})
+									layer.close(index); //关闭弹层
+									layui.table.reload('LAY-user-manage');
+								},
+								error: function(jqXHR) {
+									var json_responseText = JSON.parse(jqXHR.responseText);
+									if(json_responseText.email) {
+										layer.msg(json_responseText.email[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#useremail').focus();
+										return;
+									}
+									if(json_responseText.mobile) {
+										layer.msg(json_responseText.mobile[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#usermobile').focus();
+										return;
+									}
+									if(json_responseText.realname) {
+										layer.msg(json_responseText.realname[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#userrealname').focus();
+										return;
+									}
+									if(json_responseText.birthday) {
+										layer.msg(json_responseText.birthday[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#userbirthday').focus();
+										return;
+									}
+									if(json_responseText.gender) {
+										layer.msg(json_responseText.gender[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#usergender').focus();
+										return;
+									}
+								}
+							})
 						});
-
 						submit.trigger('click');
-						*/
+					},
+					btn2: function(index, layero) {
+						layui.table.reload('LAY-user-manage');
 					}
 				});
 			}
 
 			/*
-			$(function() {
-				$('#usersearch_button').click(function() {
-					var usersearch_id = $('#usersearch_id').val();
-					//执行重载
-					table.reload('testReload', {
-						page: {
-							curr: 1 //重新从第 1 页开始
-						},
-						where: {
-							key: {
-								id: usersearch_id
+				$(function() {
+					$('#usersearch_button').click(function() {
+						var usersearch_id = $('#usersearch_id').val();
+						//执行重载
+						table.reload('testReload', {
+							page: {
+								curr: 1 //重新从第 1 页开始
+							},
+							where: {
+								key: {
+									id: usersearch_id
+								}
 							}
-						}
-					}, 'data');
-				});
-			});
-			
-			layui.config({
-				base: '../../../layuiadmin/' //静态资源所在路径
-			}).extend({
-				index: 'lib/index' //主入口模块
-			}).use(['index', 'useradmin', 'table'], function() {
-				var $ = layui.$,
-					form = layui.form,
-					table = layui.table;
-
-				//监听搜索
-				form.on('submit(LAY-user-front-search)', function(data) {
-					var field = data.field;
-
-					//执行重载
-					table.reload('LAY-user-manage', {
-						where: field
+						}, 'data');
 					});
 				});
+			
+				layui.config({
+					base: '../../../layuiadmin/' //静态资源所在路径
+				}).extend({
+					index: 'lib/index' //主入口模块
+				}).use(['index', 'useradmin', 'table'], function() {
+					var $ = layui.$,
+						form = layui.form,
+						table = layui.table;
 
-				//事件
-				var active = {
-					batchdel: function() {
-						var checkStatus = table.checkStatus('LAY-user-manage'),
-							checkData = checkStatus.data; //得到选中的数据
+					//监听搜索
+					form.on('submit(LAY-user-front-search)', function(data) {
+						var field = data.field;
 
-						if(checkData.length === 0) {
-							return layer.msg('请选择数据');
-						}
+						//执行重载
+						table.reload('LAY-user-manage', {
+							where: field
+						});
+					});
 
-						layer.prompt({
-							formType: 1,
-							title: '敏感操作，请验证口令'
-						}, function(value, index) {
-							layer.close(index);
+					//事件
+					var active = {
+						batchdel: function() {
+							var checkStatus = table.checkStatus('LAY-user-manage'),
+								checkData = checkStatus.data; //得到选中的数据
 
-							layer.confirm('确定删除吗？', function(index) {
+							if(checkData.length === 0) {
+								return layer.msg('请选择数据');
+							}
 
-								//执行 Ajax 后重载
-								/*
-								admin.req({
-								  url: 'xxx'
-								  //,……
-								});
-								*/
+							layer.prompt({
+								formType: 1,
+								title: '敏感操作，请验证口令'
+							}, function(value, index) {
+								layer.close(index);
+
+								layer.confirm('确定删除吗？', function(index) {
+
+									//执行 Ajax 后重载
+									/*
+									admin.req({
+									  url: 'xxx'
+									  //,……
+									});
+									*/
 
 			/*
 								table.reload('LAY-user-manage');
