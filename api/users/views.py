@@ -3,11 +3,12 @@ from random import choice
 from datetime import datetime, timedelta
 from .models import UserModel, UserInfo, CaptchaModel
 from utils import smtp
-from .serializers import UserListSerializer, UserInfoUpdateSerializer, UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
+from .serializers import UserListSerializer, UserInfoUpdateSerializer, UserResetPasswordSerializer, UserResetPasswordMultipleSerializer
+from .serializers import UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
 from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
 
 from rest_framework import viewsets
-from rest_framework.views import APIView
+# from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -15,12 +16,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from utils.permission import UserIsOwner, UserInfoIsOwner
 
+from rest_framework.decorators import action
+
 # Create your views here.
 
 
-class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
-    用户详细信息
+    用户视图类
     """
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = UserListSerializer
@@ -33,9 +36,25 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.U
             return UserListSerializer
         if self.action == "update":
             return UserInfoUpdateSerializer
+        if self.action == "reset_password":
+            return UserResetPasswordSerializer
+        if self.action == "reset_password_multiple":
+            return UserResetPasswordMultipleSerializer
         return UserListSerializer
 
+    """
+        显示单个用户信息
+        url: '/users/<pk>/'
+        type: 'get'
+    """
+
     def list(self, request, *args, **kwargs):
+        """
+            显示用户信息列表
+            url: '/users/<pk>/'
+            type: 'get'
+        """
+
         """
         ##############################
         # 此处适配DataTable服务端模式
@@ -109,15 +128,34 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.U
         page = int(request.GET.get('page', '0'))
         # 每页条数
         limit = int(request.GET.get('limit', '0'))
+
+        # 是否为非冻结用户
+        is_active = request.GET.get('is_active', '')
+        # 是否为教师
+        is_staff = request.GET.get('is_staff', '')
+
         # 排序列名
         field = request.GET.get('field', '')
         # 排序类型，升序降序
         order = request.GET.get('order', '')
         # 模糊搜索关键词
+        search_firstname = request.GET.get('search_firstname', '')
+        search_lastname = request.GET.get('search_lastname', '')
         search_username = request.GET.get('search_username', '')
-        search_realname = request.GET.get('search_realname', '')
-        search_email = request.GET.get('search_email', '')
         search_mobile = request.GET.get('search_mobile', '')
+        search_email = request.GET.get('search_email', '')
+
+        # 是否为非冻结用户
+        if is_active == 'true':
+            all_result = all_result.filter(Q(is_active=True))
+        if is_active == 'false':
+            all_result = all_result.filter(Q(is_active=False))
+
+        # 是否为教师
+        if is_staff == 'true':
+            all_result = all_result.filter(Q(is_staff=True))
+        if is_staff == 'false':
+            all_result = all_result.filter(Q(is_staff=False))
 
         # 替换字符串进行外链查询
         field = field.replace(".", "__")
@@ -132,8 +170,10 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.U
         # 搜索
         if search_username:
             all_result = all_result.filter(Q(username__icontains=search_username))
-        if search_realname:
-            all_result = all_result.filter(Q(first_name__icontains=search_realname) | Q(last_name__icontains=search_realname))
+        if search_firstname:
+            all_result = all_result.filter(Q(first_name__icontains=search_firstname))
+        if search_lastname:
+            all_result = all_result.filter(Q(last_name__icontains=search_lastname))
         if search_email:
             all_result = all_result.filter(Q(email__icontains=search_email))
         if search_mobile:
@@ -159,24 +199,26 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.U
 
     def update(self, request, *args, **kwargs):
         """
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
+            修改用户信息
+            url: '/users/<pk>/'
+            type: 'update'
+            dataType: 'json'
+            data: {
+                'email': '<email>',
+                'first_name': '<first_name>',
+                'last_name': '<last_name>',
+                'birthday': '<birthday>',
+                'gender': '<gender>',
+                'mobile': '<mobile>'
+            }
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
 
         instance.email = request.data["email"]
+        instance.first_name = request.data["first_name"]
+        instance.last_name = request.data["last_name"]
         instance.save()
 
         UserInfos = UserInfo.objects.filter(user=instance.id)
@@ -187,15 +229,163 @@ class UserInfoViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.U
             userinfo.mobile = serializer.validated_data["mobile"]
             userinfo.save()
         else:
-            userinfo = UserInfo.objects.create(realname=serializer.validated_data["realname"],
-                                               birthday=serializer.validated_data["birthday"],
+            userinfo = UserInfo.objects.create(birthday=serializer.validated_data["birthday"],
                                                gender=serializer.validated_data["gender"],
                                                mobile=serializer.validated_data["mobile"],
                                                user=instance)
             userinfo.save()
 
         return Response({
-            "msg": "用户" + instance.username + "的信息修改成功"
+            "msg": "操作成功：用户" + instance.username + "的信息修改成功"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True)
+    def reset_password(self, request, *args, **kwargs):
+        """
+            重置密码
+            url: '/users/<pk>/reset_password/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'password': '<password>'
+            }
+        """
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        instance.set_password(serializer.validated_data["password"])
+        instance.save()
+        return Response({
+            "msg": "操作成功：用户" + instance.username + "的密码修改成功"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=False)
+    def reset_password_multiple(self, request, *args, **kwargs):
+        """
+            批量重置密码
+            url: '/users/reset_password_multiple/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'ids': '<pk1>,<pk2>,<pk3>',
+                'password': '<password>'
+            }
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        ids = serializer.validated_data["ids"].split(',')
+        for i in ids:
+            user = UserModel.objects.filter(id=i).first()
+            user.set_password(serializer.validated_data["password"])
+            user.save()
+
+        return Response({
+            "msg": "操作成功：所选用户账户密码已重置"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True)
+    def set_inactive(self, request, *args, **kwargs):
+        """
+            禁用用户
+            url: '/users/<pk>/set_inactive/'
+            type: 'post'
+        """
+        user = self.get_object()
+        user.is_active = False
+        user.save()
+        return Response({
+            "msg": user.username + "用户账户已禁用"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=False)
+    def set_inactive_multiple(self, request, *args, **kwargs):
+        """
+            批量禁用用户
+            url: '/users/set_inactive_multiple/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'ids': '<pk1>,<pk2>,<pk3>'
+            }
+        """
+        ids_str = request.data["ids"]
+        ids = ids_str.split(',')
+        for i in ids:
+            users = UserModel.objects.filter(id=i)
+            if users.count() == 0:
+                return Response({
+                    "error": "操作失败：ID为" + i + "的用户不存在"
+                }, status=status.HTTP_400_BAD_REQUEST)
+        for i in ids:
+            user = UserModel.objects.filter(id=i).first()
+            user.is_active = False
+            user.save()
+        return Response({
+            "msg": "操作成功：所选用户账户已禁用"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True)
+    def set_active(self, request, *args, **kwargs):
+        """
+            启用用户
+            url: '/users/<pk>/set_active/'
+            type: 'post'
+        """
+        user = self.get_object()
+        user.is_active = True
+        user.save()
+        return Response({
+            "msg": user.username + "用户账户已启用"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=False)
+    def set_active_multiple(self, request, *args, **kwargs):
+        """
+            批量启用用户
+            url: '/users/set_active_multiple/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'ids': '<pk1>,<pk2>,<pk3>'
+            }
+        """
+        ids_str = request.data["ids"]
+        ids = ids_str.split(',')
+        for i in ids:
+            users = UserModel.objects.filter(id=i)
+            if users.count() == 0:
+                return Response({
+                    "error": "操作失败：ID为" + i + "的用户不存在"
+                }, status=status.HTTP_400_BAD_REQUEST)
+        for i in ids:
+            user = UserModel.objects.filter(id=i).first()
+            user.is_active = True
+            user.save()
+        return Response({
+            "msg": "操作成功：所选用户账户已启用"
+        }, status=status.HTTP_200_OK)
+
+
+class delMultipleUserViewset(viewsets.GenericViewSet):
+    """
+    批量删除用户
+    """
+    # permission_classes = (IsAuthenticated,)
+    # authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    queryset = UserModel.objects.all()
+    serializer_class = UserListSerializer
+
+    @action(methods=['GET'], detail=False)
+    def deltest(self, request, *args, **kwargs):
+        """
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        """
+        return Response({
+            "msg": "用户的信息修改成功"
         }, status=status.HTTP_200_OK)
 
 

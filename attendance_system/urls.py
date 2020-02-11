@@ -19,13 +19,12 @@ from django.conf.urls import url, include
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 from rest_framework.routers import DefaultRouter
 
-from users.views import UsersViewset, UserInfoViewset, VerifyCodeViewset, ChangePasswordViewset
+from users.views import UsersViewset, UserViewset, VerifyCodeViewset, ChangePasswordViewset
 from users.views import getUserFuzzyMailViewset, checkUserMailViewset, sendOldMailCaptchaViewset, confirmOldMailCaptchaViewset, sendNewMailCaptchaViewset, confirmNewMailCaptchaViewset
-
+from users.views import delMultipleUserViewset
 
 router = DefaultRouter()
-router.register(r'users', UsersViewset, basename="users")
-router.register(r'userinfo', UserInfoViewset, basename="userinfo")
+# router.register(r'users', UsersViewset, basename="users")
 router.register(r'code', VerifyCodeViewset, basename="code")
 # router.register(r'changepassword', ChangePasswordViewset, basename="changepassword")
 
@@ -36,12 +35,10 @@ router.register(r'member/security/confirmOldMailCaptcha', confirmOldMailCaptchaV
 router.register(r'member/security/sendNewMailCaptcha', sendNewMailCaptchaViewset, basename="sendNewMailCaptcha")
 router.register(r'member/security/confirmNewMailCaptcha', confirmNewMailCaptchaViewset, basename="confirmNewMailCaptcha")
 
+router.register(r'users', UserViewset, basename="user")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    #url(r'users/$', UsersListView.as_view(), name="users-list"),
-
     url(r'^', include(router.urls)),
 
     # jwt的认证接口

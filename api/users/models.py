@@ -23,10 +23,11 @@ class UserInfo(models.Model):
     """
     用户详情信息
     """
-    birthday = models.DateField(blank=True, verbose_name="出生年月")
-    gender = models.CharField(max_length=6, choices=(("male", "男"), ("female", "女")), default="male",
+    birthday = models.DateField(null=True, blank=True, verbose_name="出生年月")
+    gender = models.CharField(max_length=7, choices=(("male", "男"), ("female", "女"), ("unknown", "未知")), default="unknown",
                               verbose_name="性别")
     mobile = models.CharField(blank=True, max_length=11, verbose_name="电话")
+    
     user = models.OneToOneField(UserModel, verbose_name="用户", on_delete=models.CASCADE, related_name="userinfo")
 
     class Meta:
