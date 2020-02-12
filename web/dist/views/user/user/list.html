@@ -113,6 +113,20 @@
 								sort: true
 							},
 							{
+								field: 'userinfo.photo',
+								width: '5%',
+								title: '头像',
+								align: 'center',
+								templet: function(d) {
+									if (d.userinfo) {
+										if (d.userinfo.photo) {
+											return '<div><img style="height:25px;width:25px;border-radius:50%;line-height:50px!important;" src="' + d.userinfo.photo + '"></div>';
+										}
+									}
+									return '<div><img style="height:25px;width:25px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:8000/media/users/photo/default.jpg"></div>';
+								}
+							},
+							{
 								field: 'username',
 								width: '8%',
 								title: '用户名',
@@ -164,6 +178,7 @@
 								sort: true,
 								templet: '<div>{{d.userinfo ? d.userinfo.mobile: ""}}</div>'
 							},
+							
 							{
 								field: 'last_login',
 								width: '14%',
@@ -200,7 +215,7 @@
 							{
 								field: 'operation',
 								title: '操作',
-								width: '21%',
+								width: '16%',
 								align: 'center',
 								fixed: 'right',
 								templet: function(d) {
@@ -406,13 +421,13 @@
 									error: function(jqXHR) {
 										var json_responseText = JSON.parse(jqXHR.responseText);
 										if(json_responseText.ids) {
-											layer.msg(json_responseText.ids.error, {
+											layer.msg(json_responseText.ids[0], {
 												icon: 2,
 												anim: 6
 											});
 										}
 										if(json_responseText.password) {
-											layer.msg(json_responseText.password.error, {
+											layer.msg(json_responseText.password[0], {
 												icon: 2,
 												anim: 6
 											});
@@ -577,7 +592,7 @@
 								},
 								error: function(jqXHR) {
 									var json_responseText = JSON.parse(jqXHR.responseText);
-									layer.msg(json_responseText.password.error, {
+									layer.msg(json_responseText.password[0], {
 										icon: 2,
 										anim: 6
 									});

@@ -16,6 +16,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
         django-filter
     djangorestframework-jwt
     django-cors-headers
+    pillow
 """
 
 import os
@@ -145,6 +146,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 AUTH_USER_MODEL = 'users.UserModel'
 

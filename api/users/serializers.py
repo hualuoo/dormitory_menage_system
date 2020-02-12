@@ -13,10 +13,11 @@ class UserInfoListSerializer(serializers.ModelSerializer):
     gender = serializers.CharField(help_text="性别")
     birthday = serializers.DateField(help_text="出生日期", format="%Y-%m-%d", required=False)
     mobile = serializers.CharField(help_text="手机")
+    photo = serializers.ImageField(help_text="照片")
 
     class Meta:
         model = UserInfo
-        fields = ("gender", "birthday", "mobile", )
+        fields = ("gender", "birthday", "mobile", "photo", )
 
 
 class UserListSerializer(serializers.ModelSerializer):
@@ -74,13 +75,20 @@ class UserResetPasswordSerializer(serializers.ModelSerializer):
     """
     用户重置密码 序列类
     """
-    password = serializers.CharField(style={'input_type': 'password'}, help_text="密码", label="密码", write_only=True)
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True, max_length=16, min_length=6,
+                                     error_messages={
+                                         "blank": "请输入密码",
+                                         "required": "请输入密码",
+                                         "max_length": "密码必须6到16位",
+                                         "min_length": "密码必须6到16位"
+                                     },
+                                     help_text="密码", label="密码")
 
     def validate_password(self, password):
         import re
         flag = re.match(r'^[\S][^\u4e00-\u9fa5]{5,15}$', password)
         if flag is None:
-            raise serializers.ValidationError({'error': '密码必须6到16位，且不能出现空格和汉字'})
+            raise serializers.ValidationError('操作失败：密码必须6到16位，且不能出现空格和汉字')
         return password
 
     class Meta:
@@ -93,21 +101,28 @@ class UserResetPasswordMultipleSerializer(serializers.ModelSerializer):
     用户密码修改 序列类
     """
     ids = serializers.CharField()
-    password = serializers.CharField(style={'input_type': 'password'}, help_text="密码", label="密码", write_only=True)
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True, max_length=16, min_length=6,
+                                     error_messages={
+                                         "blank": "请输入密码",
+                                         "required": "请输入密码",
+                                         "max_length": "密码必须6到16位",
+                                         "min_length": "密码必须6到16位"
+                                     },
+                                     help_text="密码", label="密码")
 
     def validate_ids(self, ids):
         ids_list = ids.split(',')
         for i in ids_list:
             users = UserModel.objects.filter(id=i)
             if users.count() == 0:
-                raise serializers.ValidationError({'error': '操作失败：ID为' + i + '的用户不存在'})
+                raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在')
         return ids
 
     def validate_password(self, password):
         import re
         flag = re.match(r'^[\S][^\u4e00-\u9fa5]{5,15}$', password)
         if flag is None:
-            raise serializers.ValidationError({'error': '密码必须6到16位，且不能出现空格和汉字'})
+            raise serializers.ValidationError('操作失败：密码必须6到16位，且不能出现空格和汉字')
         return password
 
     class Meta:

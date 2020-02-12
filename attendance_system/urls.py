@@ -18,10 +18,11 @@ from django.urls import path
 from django.conf.urls import url, include
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 from rest_framework.routers import DefaultRouter
+from django.views.static import serve
+from attendance_system.settings import MEDIA_ROOT
 
 from users.views import UsersViewset, UserViewset, VerifyCodeViewset, ChangePasswordViewset
 from users.views import getUserFuzzyMailViewset, checkUserMailViewset, sendOldMailCaptchaViewset, confirmOldMailCaptchaViewset, sendNewMailCaptchaViewset, confirmNewMailCaptchaViewset
-from users.views import delMultipleUserViewset
 
 router = DefaultRouter()
 # router.register(r'users', UsersViewset, basename="users")
@@ -40,6 +41,7 @@ router.register(r'users', UserViewset, basename="user")
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include(router.urls)),
+    url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 
     # jwt的认证接口
     url(r'^login/', obtain_jwt_token),

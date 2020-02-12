@@ -27,7 +27,7 @@ class UserInfo(models.Model):
     gender = models.CharField(max_length=7, choices=(("male", "男"), ("female", "女"), ("unknown", "未知")), default="unknown",
                               verbose_name="性别")
     mobile = models.CharField(blank=True, max_length=11, verbose_name="电话")
-    
+    photo = models.ImageField(upload_to="users/photo/", null=True, blank=True, verbose_name="照片")
     user = models.OneToOneField(UserModel, verbose_name="用户", on_delete=models.CASCADE, related_name="userinfo")
 
     class Meta:

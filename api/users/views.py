@@ -240,6 +240,37 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
+    def upload_photo(self, request, *args, **kwargs):
+        """
+            上传头像
+            url: '/users/<pk>/upload_photo/'
+        """
+        from utils.save_file import save_img
+
+        photo = request.FILES.get("file")
+        flag = save_img(photo, "users/photo")
+
+        if flag == 1:
+            Response({
+                "error": "操作失败：上传的文件超过2Mb"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if flag == 2:
+            return Response({
+                "error": "操作失败：上传的文件不属于图片"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        instance = self.get_object()
+        instance.userinfo.photo = flag
+        instance.userinfo.save()
+        return Response({
+            "code": 0,
+            "msg": "操作成功：头像上传成功",
+            "data": {
+                "src": "http://127.0.0.1:8000/media/" + flag
+            }
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True)
     def reset_password(self, request, *args, **kwargs):
         """
             重置密码
@@ -280,7 +311,6 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             user = UserModel.objects.filter(id=i).first()
             user.set_password(serializer.validated_data["password"])
             user.save()
-
         return Response({
             "msg": "操作成功：所选用户账户密码已重置"
         }, status=status.HTTP_200_OK)
@@ -296,7 +326,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
         user.is_active = False
         user.save()
         return Response({
-            "msg": user.username + "用户账户已禁用"
+            "msg": "用户" + user.username + "已被禁用"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=False)
@@ -323,7 +353,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             user.is_active = False
             user.save()
         return Response({
-            "msg": "操作成功：所选用户账户已禁用"
+            "msg": "操作成功：所选用户账户已被禁用"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -337,7 +367,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
         user.is_active = True
         user.save()
         return Response({
-            "msg": user.username + "用户账户已启用"
+            "msg": "用户" + user.username + "已被启用"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=False)
@@ -364,28 +394,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             user.is_active = True
             user.save()
         return Response({
-            "msg": "操作成功：所选用户账户已启用"
-        }, status=status.HTTP_200_OK)
-
-
-class delMultipleUserViewset(viewsets.GenericViewSet):
-    """
-    批量删除用户
-    """
-    # permission_classes = (IsAuthenticated,)
-    # authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    queryset = UserModel.objects.all()
-    serializer_class = UserListSerializer
-
-    @action(methods=['GET'], detail=False)
-    def deltest(self, request, *args, **kwargs):
-        """
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-        """
-        return Response({
-            "msg": "用户的信息修改成功"
+            "msg": "操作成功：所选用户账户已被启用"
         }, status=status.HTTP_200_OK)
 
 

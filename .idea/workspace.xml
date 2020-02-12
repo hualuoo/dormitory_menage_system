@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/users/migrations/0007_auto_20200210_1430.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/users/migrations/0008_auto_20200210_1555.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/users/migrations/0009_userinfo_photo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/users/migrations/0010_auto_20200211_2105.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/easy-install.pth" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/easy-install.pth" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +132,7 @@
       <updated>1577701568747</updated>
       <workItem from="1577701572309" duration="78444000" />
       <workItem from="1578225180885" duration="39189000" />
-      <workItem from="1578410571042" duration="174514000" />
+      <workItem from="1578410571042" duration="198500000" />
     </task>
     <servers />
   </component>
@@ -163,22 +165,22 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1290" y="480" key="FileChooserDialogImpl/0.0.2560.1400@0.0.2560.1400" timestamp="1578227371539" />
-    <state width="1696" height="173" key="GridCell.Tab.0.bottom" timestamp="1581404732125">
+    <state width="1805" height="198" key="GridCell.Tab.0.bottom" timestamp="1581507912577">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1696" height="173" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1581404732125" />
-    <state width="1696" height="173" key="GridCell.Tab.0.center" timestamp="1581404732125">
+    <state width="1805" height="198" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1581507912577" />
+    <state width="1805" height="198" key="GridCell.Tab.0.center" timestamp="1581507912576">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1696" height="173" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1581404732125" />
-    <state width="1696" height="173" key="GridCell.Tab.0.left" timestamp="1581404732124">
+    <state width="1805" height="198" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1581507912576" />
+    <state width="1805" height="198" key="GridCell.Tab.0.left" timestamp="1581507912576">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1696" height="173" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1581404732124" />
-    <state width="1696" height="173" key="GridCell.Tab.0.right" timestamp="1581404732125">
+    <state width="1805" height="198" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1581507912576" />
+    <state width="1805" height="198" key="GridCell.Tab.0.right" timestamp="1581507912576">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1696" height="173" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1581404732125" />
+    <state width="1805" height="198" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1581507912576" />
     <state width="1530" height="308" key="GridCell.Tab.1.bottom" timestamp="1578405388665">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -195,10 +197,11 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="1530" height="308" key="GridCell.Tab.1.right/0.0.2560.1400@0.0.2560.1400" timestamp="1578405388665" />
-    <state x="768" y="351" key="SettingsEditor" timestamp="1578229854632">
+    <state x="768" y="351" key="SettingsEditor" timestamp="1581433682547">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="768" y="351" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1578229854632" />
+    <state x="576" y="261" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1581427222223" />
+    <state x="768" y="351" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1581433682547" />
     <state x="1126" y="615" key="VCS.ChangelistChooser" timestamp="1578228897932">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
