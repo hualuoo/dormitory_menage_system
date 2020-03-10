@@ -2,15 +2,62 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/users/migrations/0009_userinfo_photo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/users/migrations/0010_auto_20200211_2105.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin-web/admin-web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin-web/admin-web/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/migrations/0002_remove_dormitory_now_live_number.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/migrations/0003_dormitory_now_live_number.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0002_auto_20200110_2319.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0003_auto_20200110_2328.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0004_auto_20200201_2017.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0005_auto_20200203_1232.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0006_remove_userinfo_realname.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0007_auto_20200210_1430.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0008_auto_20200210_1555.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0009_userinfo_photo.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0010_auto_20200211_2105.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0011_auto_20200217_1341.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0012_auto_20200217_1342.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0013_auto_20200217_1344.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0014_userinfo_live_dormitory.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0015_auto_20200221_1718.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0016_auto_20200221_1719.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0017_auto_20200221_1720.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0018_auto_20200221_1839.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/utils/jwt_custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/jwt_custom.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/utils/permission.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/permission.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/utils/save_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/save_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/easy-install.pth" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/easy-install.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/11/b556964dcd9bd2c1fc0315ae0bece796.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/12/1918243a203ce0a38359f20fc856c958.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/12/b556964dcd9bd2c1fc0315ae0bece796.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/16/989dd904240b0c629786ffe14bf12990.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/photo/default.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Scripts/numpy-1.18.1+mkl-cp38-cp38m-win_amd64.whl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/layuiadmin/cropper/croppers.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/layuiadmin/cropper/croppers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/adminform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/role.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/roleform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/forget.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/reg.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/useredit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/userform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/复制 userform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/user/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/声明：本项目非商业项目，仅限用于学习和研究目的" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,19 +87,23 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../attendance_system-master" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/api/user_operation" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\project\attendance_system" />
-      <recent name="C:\project\attendance_system\api" />
-      <recent name="C:\project\attendance_system\api\users" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\project\attendance_system\api" />
+      <recent name="C:\project\attendance_system\api\dormitory" />
+      <recent name="C:\project\attendance_system\api\rooms" />
       <recent name="C:\project\attendance_system\api\utils" />
       <recent name="C:\project\attendance_system\api\users" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\project\attendance_system\api\user_operation" />
+      <recent name="C:\project\attendance_system\api\users\backup" />
+      <recent name="C:\project\attendance_system\api\dormitories" />
+      <recent name="C:\project\attendance_system\api\dormitorys" />
+      <recent name="C:\project\attendance_system\api\dormitory" />
     </key>
   </component>
   <component name="RunManager" selected="Django server.attendance_system">
@@ -132,7 +183,11 @@
       <updated>1577701568747</updated>
       <workItem from="1577701572309" duration="78444000" />
       <workItem from="1578225180885" duration="39189000" />
-      <workItem from="1578410571042" duration="198500000" />
+      <workItem from="1578410571042" duration="201332000" />
+      <workItem from="1581826965260" duration="3895000" />
+      <workItem from="1581833047783" duration="5850000" />
+      <workItem from="1581844924356" duration="192092000" />
+      <workItem from="1583754811610" duration="12766000" />
     </task>
     <servers />
   </component>
@@ -153,10 +208,14 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="1124" y="429" key="#Inspections" timestamp="1581150148411">
+    <state x="1124" y="429" key="#Inspections" timestamp="1582892801919">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1124" y="429" key="#Inspections/0.0.2560.1400@0.0.2560.1400" timestamp="1581150148411" />
+    <state x="1124" y="429" key="#Inspections/0.0.2560.1400@0.0.2560.1400" timestamp="1582892801919" />
+    <state x="1310" y="664" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582179444313">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1310" y="664" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1582179444313" />
     <state x="952" y="497" key="#com.intellij.ide.util.MemberChooser" timestamp="1578306338854">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -165,22 +224,26 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1290" y="480" key="FileChooserDialogImpl/0.0.2560.1400@0.0.2560.1400" timestamp="1578227371539" />
-    <state width="1805" height="198" key="GridCell.Tab.0.bottom" timestamp="1581507912577">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1583848320627">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1805" height="198" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1581507912577" />
-    <state width="1805" height="198" key="GridCell.Tab.0.center" timestamp="1581507912576">
+    <state width="2517" height="213" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1583848320627" />
+    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1583848320627">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1805" height="198" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1581507912576" />
-    <state width="1805" height="198" key="GridCell.Tab.0.left" timestamp="1581507912576">
+    <state width="2517" height="213" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
+    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1583848320627" />
+    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1583848320626">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1805" height="198" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1581507912576" />
-    <state width="1805" height="198" key="GridCell.Tab.0.right" timestamp="1581507912576">
+    <state width="2517" height="213" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
+    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1583848320626" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1583848320627">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1805" height="198" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1581507912576" />
+    <state width="2517" height="213" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1583848320627" />
     <state width="1530" height="308" key="GridCell.Tab.1.bottom" timestamp="1578405388665">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -197,21 +260,22 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="1530" height="308" key="GridCell.Tab.1.right/0.0.2560.1400@0.0.2560.1400" timestamp="1578405388665" />
-    <state x="768" y="351" key="SettingsEditor" timestamp="1581433682547">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state x="576" y="261" key="SettingsEditor" timestamp="1582024039431">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="576" y="261" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1581427222223" />
-    <state x="768" y="351" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1581433682547" />
+    <state x="576" y="261" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1582024039431" />
+    <state x="768" y="351" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1581839323807" />
     <state x="1126" y="615" key="VCS.ChangelistChooser" timestamp="1578228897932">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1126" y="615" key="VCS.ChangelistChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1578228897932" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1581329970319">
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1583319490598">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1581329970319" />
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583045107980" />
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1583319490598" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/attendance_system$clean_migrations.coverage" NAME="clean-migrations Coverage Results" MODIFIED="1578651833892" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
+    <SUITE FILE_PATH="coverage/attendance_system$clean_migrations.coverage" NAME="clean-migrations Coverage Results" MODIFIED="1583133316467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
   </component>
 </project>

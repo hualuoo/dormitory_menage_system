@@ -1,98 +1,155 @@
-from random import choice
+import re
 from datetime import datetime, timedelta
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import UserModel, UserInfo, CaptchaModel
+from .models import User, UserInfo, CaptchaModel
 
 
-class UserInfoListSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     """
-    用户信息 序列化类 2
+    用户 获取 序列化类
     """
-    gender = serializers.CharField(help_text="性别")
-    birthday = serializers.DateField(help_text="出生日期", format="%Y-%m-%d", required=False)
-    mobile = serializers.CharField(help_text="手机")
-    photo = serializers.ImageField(help_text="照片")
-
-    class Meta:
-        model = UserInfo
-        fields = ("gender", "birthday", "mobile", "photo", )
-
-
-class UserListSerializer(serializers.ModelSerializer):
-    """
-    用户信息 序列化类 1
-    """
-    userinfo = UserInfoListSerializer(help_text="其他信息", read_only=True)
+    id = serializers.IntegerField(help_text="ID")
+    username = serializers.CharField(help_text="用户名")
+    email = serializers.CharField(help_text="邮箱")
     first_name = serializers.CharField(help_text="姓")
     last_name = serializers.CharField(help_text="名")
-    last_login = serializers.DateTimeField(help_text="最后登录时间", format="%Y-%m-%d %H:%M:%S", required=False)
-    date_joined = serializers.DateTimeField(help_text="账户创建时间", format="%Y-%m-%d %H:%M:%S", required=False)
+    last_login = serializers.DateTimeField(help_text="最后登录时间", format="%Y-%m-%d %H:%M:%S")
+    date_joined = serializers.DateTimeField(help_text="账户创建时间", format="%Y-%m-%d %H:%M:%S")
     is_active = serializers.BooleanField(help_text="是否可用")
-    is_staff = serializers.BooleanField(help_text="是否为教师")
+    is_staff = serializers.BooleanField(help_text="是否为教职工")
+    info__birthday = serializers.DateField(source='info.birthday', help_text="出生年月")
+    info__gender = serializers.ChoiceField(source='info.gender', help_text="性别",
+                                           choices=(("male", "男"), ("female", "女"), ("unknown", "未知")))
+    info__mobile = serializers.CharField(source='info.mobile', help_text="电话", allow_blank=True, max_length=11)
+    info__avatar = serializers.ImageField(source='info.avatar', help_text="照片")
+    lived_dormitory_number = serializers.SerializerMethodField()
+
+    def get_lived_dormitory_number(self, obj):
+        if obj.lived_dormitory is not None:
+            return obj.lived_dormitory.number
+        else:
+            return None
 
     class Meta:
-        model = UserModel
-        fields = ("id", "username", "first_name", "last_name", "last_login", "date_joined", "email", "userinfo", "is_active", "is_staff", )
+        model = User
+        fields = ("id", "username", "email", "first_name", "last_name", "last_login", "date_joined", "is_active",
+                  "is_staff", "info__birthday", "info__gender", "info__mobile", "info__avatar","lived_dormitory_number", )
 
 
-class UserInfoUpdateSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(serializers.ModelSerializer):
     """
-    用户信息修改 序列化类
+    用户 创建 序列化类
     """
-    email = serializers.EmailField(allow_blank=True, max_length=100, help_text="邮箱")
-    first_name = serializers.CharField(allow_blank=True, max_length=4, help_text="姓")
-    last_name = serializers.CharField(allow_blank=True, max_length=4, help_text="名")
-    birthday = serializers.DateField(help_text="出生年月", allow_null=True)
-    gender = serializers.ChoiceField(help_text="性别", choices=(("male", "男"), ("female", "女"), ("unknown", "未知")))
-    mobile = serializers.CharField(allow_blank=True, max_length=11, help_text="电话")
+    username = serializers.CharField(help_text="用户名")
+    password = serializers.CharField(help_text="密码", write_only=True)
+
+    def validate_username(self, username):
+        flag = re.match(r'^[a-zA-Z0-9_-]{4,16}$', username)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：用户名须为4~16位，可包含数字、字母、下划线、减号，不可包含中文和空格！')
+        if User.objects.filter(username=username):
+            raise serializers.ValidationError('操作失败：该用户名已存在！')
+        return username
+
+    def validate_password(self, password):
+        flag = re.match(r'(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{8,20}$', password)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：密码须为6~20位，数字、字母、字符至少包含两种，且不能包含中文和空格！')
+        return password
+
+    def create(self, validated_data):
+        user = super(UserCreateSerializer, self).create(validated_data=validated_data)
+        user.set_password(validated_data["password"])
+        user.save()
+        info = UserInfo.objects.create(user=user)
+        info.save()
+        return user
+
+    class Meta:
+        model = User
+        fields = ("username", "password", )
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    """
+    用户 修改 序列化类
+    """
+    email = serializers.EmailField(help_text="邮箱", allow_blank=True, max_length=100)
+    first_name = serializers.CharField(help_text="姓", allow_blank=True, max_length=4)
+    last_name = serializers.CharField(help_text="名", allow_blank=True, max_length=4)
+    info__birthday = serializers.DateField(source='info.birthday', help_text="出生年月", allow_null=True, required=False)
+    info__gender = serializers.ChoiceField(source='info.gender', help_text="性别",
+                                           choices=(("male", "男"), ("female", "女"), ("unknown", "未知")))
+    info__mobile = serializers.CharField(source='info.mobile', help_text="电话", allow_blank=True, max_length=11)
 
     def validate_email(self, email):
         if len(email) == 0:
             return email
-        if UserModel.objects.filter(email=email).count() and self.instance.email != email:
-            raise serializers.ValidationError("该邮箱已被其他账户使用")
+        flag = re.match(r'(^$)|^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$', email)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：邮箱格式不正确！')
+        if User.objects.filter(email=email).count() and self.instance.email != email:
+            raise serializers.ValidationError("该邮箱已被其他账户使用！")
         return email
 
-    def validate_mobile(self, mobile):
+    def validate_first_name(self, first_name):
+        flag = re.match(r'(^$)|^[\u4E00-\u9FA5]{1,2}$', first_name)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：姓必须为1到2个中文！')
+        return first_name
+
+    def validate_last_name(self, last_name):
+        flag = re.match(r'(^$)|^[\u4E00-\u9FA5]{1,2}$', last_name)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：名必须为1到2个中文！')
+        return last_name
+
+    def validate_info__mobile(self, mobile):
         if len(mobile) == 0:
             return mobile
-        UserInfos = UserInfo.objects.filter(user=self.instance.id)
-        if UserInfos.count():
-            if UserInfos.first().mobile != mobile and UserInfo.objects.filter(mobile=mobile).count():
-                raise serializers.ValidationError("该手机已被其他账户使用")
-        elif UserInfo.objects.filter(mobile=mobile).count():
+        flag = re.match(r'(^$)|^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$', mobile)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：请输入正确的手机号！')
+        if UserInfo.objects.filter(mobile=mobile).count() and self.instance.info.mobile != mobile:
             raise serializers.ValidationError("该手机已被其他账户使用")
         return mobile
 
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.save()
+        if self.initial_data['info__birthday'] == "":
+            print(self.initial_data['info__birthday'])
+            instance.info.birthday = None
+        else:
+            instance.info.birthday = self.initial_data['info__birthday']
+        instance.info.gender = self.initial_data['info__gender']
+        instance.info.mobile = self.initial_data['info__mobile']
+        instance.info.save()
+        return instance
+
     class Meta:
-        model = UserModel
-        fields = ("email", "first_name", "last_name", "birthday", "gender", "mobile")
+        model = User
+        fields = ("email", "first_name", "last_name", "info__birthday", "info__gender", "info__mobile", )
 
 
 class UserResetPasswordSerializer(serializers.ModelSerializer):
     """
     用户重置密码 序列类
     """
-    password = serializers.CharField(style={'input_type': 'password'}, write_only=True, max_length=16, min_length=6,
-                                     error_messages={
-                                         "blank": "请输入密码",
-                                         "required": "请输入密码",
-                                         "max_length": "密码必须6到16位",
-                                         "min_length": "密码必须6到16位"
-                                     },
-                                     help_text="密码", label="密码")
+    password = serializers.CharField(help_text="密码", write_only=True)
 
     def validate_password(self, password):
-        import re
-        flag = re.match(r'^[\S][^\u4e00-\u9fa5]{5,15}$', password)
+        flag = re.match(r'(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{8,20}$', password)
         if flag is None:
-            raise serializers.ValidationError('操作失败：密码必须6到16位，且不能出现空格和汉字')
+            raise serializers.ValidationError('操作失败：密码须为8~20位，数字、字母、字符至少包含两种，且不能包含中文和空格！')
         return password
 
     class Meta:
-        model = UserModel
+        model = User
         fields = ("password", )
 
 
@@ -100,53 +157,76 @@ class UserResetPasswordMultipleSerializer(serializers.ModelSerializer):
     """
     用户密码修改 序列类
     """
-    ids = serializers.CharField()
-    password = serializers.CharField(style={'input_type': 'password'}, write_only=True, max_length=16, min_length=6,
-                                     error_messages={
-                                         "blank": "请输入密码",
-                                         "required": "请输入密码",
-                                         "max_length": "密码必须6到16位",
-                                         "min_length": "密码必须6到16位"
-                                     },
-                                     help_text="密码", label="密码")
+    ids = serializers.CharField(help_text="用户队列")
+    password = serializers.CharField(help_text="密码", write_only=True)
 
     def validate_ids(self, ids):
         ids_list = ids.split(',')
         for i in ids_list:
-            users = UserModel.objects.filter(id=i)
+            users = User.objects.filter(id=i)
             if users.count() == 0:
                 raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在')
         return ids
 
     def validate_password(self, password):
-        import re
-        flag = re.match(r'^[\S][^\u4e00-\u9fa5]{5,15}$', password)
+        flag = re.match(r'(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{8,20}$', password)
         if flag is None:
-            raise serializers.ValidationError('操作失败：密码必须6到16位，且不能出现空格和汉字')
+            raise serializers.ValidationError('操作失败：密码须为8~20位，数字、字母、字符至少包含两种，且不能包含中文和空格！')
         return password
 
     class Meta:
-        model = UserModel
+        model = User
         fields = ("ids", "password", )
 
 
-class UserRegSerializer(serializers.ModelSerializer):
+class UserCheckIdsSerializer(serializers.ModelSerializer):
     """
-    用户注册序列化类
+    用户 队列检查 序列类
     """
-    username = serializers.CharField(label="用户名", help_text="用户名", required=True, allow_blank=False,
-                                     validators=[UniqueValidator(queryset=UserModel.objects.all(), message="用户已经存在")])
-    password = serializers.CharField(style={'input_type': 'password'}, help_text="密码", label="密码", write_only=True)
+    ids = serializers.CharField(help_text="用户队列")
 
-    def create(self, validated_data):
-        user = super(UserRegSerializer, self).create(validated_data=validated_data)
-        user.set_password(validated_data["password"])
-        user.save()
-        return user
+    def validate_ids(self, ids):
+        ids_list = ids.split(',')
+        for i in ids_list:
+            users = User.objects.filter(id=i)
+            if users.count() == 0:
+                raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在')
+        return ids
 
     class Meta:
-        model = UserModel
-        fields = ("username", "password")
+        model = User
+        fields = ("ids", )
+
+
+class UserCreateMultipleSerializer(serializers.ModelSerializer):
+    """
+    用户 批量创建 序列类
+    """
+    first_username = serializers.CharField(help_text="用户名")
+    create_number = serializers.IntegerField(help_text="创建数量", min_value=1, max_value=100)
+    password = serializers.CharField(help_text="密码", write_only=True)
+
+    def validate_first_username(self, first_username):
+        flag = re.match(r'^[0-9]{4,16}$', first_username)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：首用户名须为4~16位，只可包含数字！')
+        if int(first_username) + int(self.initial_data["create_number"]) - 1 > 9999999999999999:
+            raise serializers.ValidationError('操作失败：用户名越界！')
+        for username in range(int(first_username), int(first_username)+int(self.initial_data["create_number"])):
+            if User.objects.filter(username=username):
+                raise serializers.ValidationError('操作失败：已存在用户' + str(username) + '！')
+        return int(first_username)
+
+    def validate_password(self, password):
+        flag = re.match(r'(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{8,20}$', password)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：密码须为8~20位，数字、字母、字符至少包含两种，且不能包含中文和空格！')
+        return password
+
+    class Meta:
+        model = User
+        fields = ("first_username", "create_number", "password", )
+
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
@@ -207,7 +287,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return attrs
 
     class Meta:
-        model = UserModel
+        model = User
         fields = ("username", "code", "old_password", "new_password")
 
 
@@ -226,7 +306,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=100, help_text="邮箱")
 
     def validate_email(self, email):
-        if UserModel.objects.filter(email=email).count():
+        if User.objects.filter(email=email).count():
             raise serializers.ValidationError("该邮箱已被其他账户使用")
         return email
 
@@ -250,7 +330,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
         return attrs
 
     class Meta:
-        model = UserModel
+        model = User
         fields = ("email", "code",)
 
 
@@ -285,7 +365,7 @@ class checkUserMailSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=100, help_text="邮箱")
 
     class Meta:
-        model = UserModel
+        model = User
         fields = ("email",)
 
 
@@ -304,7 +384,7 @@ class sendOldMailCaptchaSerializer(serializers.Serializer):
         return email
 
     class Meta:
-        model = UserModel
+        model = User
         fields = ("email",)
 
 
@@ -339,7 +419,7 @@ class confirmMailCaptchaSerializer(serializers.Serializer):
         return code
 
     class Meta:
-        model = UserModel
+        model = User
         fields = ("email", "code")
 
 
@@ -356,7 +436,7 @@ class sendNewMailCaptchaSerializer(serializers.Serializer):
         验证邮箱
         """
         # 邮箱是否被使用
-        if UserModel.objects.filter(email=email).count():
+        if User.objects.filter(email=email).count():
             raise serializers.ValidationError({'detail': '该邮箱已被使用'})
         # 验证码发送频率
         one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=1, seconds=0)

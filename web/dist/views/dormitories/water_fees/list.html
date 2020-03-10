@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>宿舍管理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	</head>
+
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" id="usersearch">
+					<div class="layui-form-item layui-row">
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">宿舍编号</label>
+							<div class="layui-input-block">
+								<input type="text" name="id" placeholder="请输入宿舍编号" autocomplete="off" class="layui-input" id="water_fees_search_dormitory_number">
+							</div>
+						</div>
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">查询月份</label>
+							<div class="layui-input-block">
+								<input type="text" class="layui-input" id="water_fees_search_month">
+							</div>
+						</div>
+						<div class="layui-col-sm2 layui-col-md-offset1">
+							<button class="layui-btn" id="water_fees_search_button">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i> 搜索
+                    </button>
+							<button class="layui-btn layui-btn-warm" id="water_fees_search_clean_button">
+                        <i class="layui-icon layui-icon-senior layuiadmin-button-btn"></i> 清空
+                    </button>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-card-body layui-form">
+
+					<div class="layui-form-item">
+						<input type="checkbox" name="" title="只显示需缴费宿舍" lay-filter="only_use_up_water_fees">
+						<button class="layui-btn layui-btn-sm layui-btn-normal" data-type="batchdel" id="water_fees_change_cost_multiple_button">
+                    		<i class="layui-icon layui-icon-survey"></i> 批量修改水费单价
+                		</button>
+						<button class="layui-btn layui-btn-sm layui-btn-normal" data-type="add" id="dormitory_create_button">
+                    		<i class="layui-icon layui-icon-add-circle"></i> 创建单个宿舍
+                		</button>
+					</div>
+					<table id="LAY-water_fees-manage" lay-filter="LAY-water_fees-manage"></table>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.js"></script>
+
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-inline" lay-event="refresh" onclick="layui.table.reload('LAY-water_fees-manage')">
+				<i class="layui-icon layui-icon-refresh"></i>
+			</div>
+		</script>
+
+		<script>
+			layui.use(['table', 'laydate'], function() {
+				var table = layui.table;
+				var laydate = layui.laydate;
+				table.render({
+					elem: '#LAY-water_fees-manage',
+					autoSort: false, //禁用前端自动排序
+					toolbar: '#toolbarDemo',
+					url: 'http://127.0.0.1:8000/water_fees/',
+					where: {
+
+					},
+					limit: 10,
+					limits: [10, 20, 50, 100],
+					height: 'full-206',
+					cols: [
+						[{
+								type: 'checkbox',
+								width: '3%',
+								align: 'center'
+							},
+							{
+								field: 'id',
+								title: 'ID',
+								width: '5%',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'dormitory_number',
+								width: '8%',
+								title: '宿舍编号',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'used_water',
+								width: '10%',
+								title: '已用水量(吨)',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'surplus_water',
+								width: '10%',
+								title: '剩余水量(吨)',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'total_water',
+								width: '10%',
+								title: '总共水量(吨)',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'cost',
+								width: '9%',
+								title: '水费(元/吨)',
+								align: 'center',
+							},
+							{
+								field: 'need_to_pay',
+								width: '10%',
+								title: '需缴水费(元)',
+								align: 'center'
+							},
+							{
+								field: 'month',
+								width: '11%',
+								title: '月份',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'used_info',
+								width: '6%',
+								title: '情况',
+								align: 'center',
+								templet: function(d) {
+									if(d.surplus_water < 0) {
+										return '<span class="layui-badge">超量</span>';
+									}
+									if(d.surplus_water < d.total_water * 0.4) {
+										return '<span class="layui-badge layui-bg-orange">紧张</span>';
+									}
+									if(d.surplus_water < d.total_water * 0.7) {
+										return '<span class="layui-badge layui-bg-gray">一般</span>';
+									}
+									if(d.surplus_water < d.total_water) {
+										return '<span class="layui-badge layui-bg-green">充裕</span>';
+									}
+								}
+							},
+							{
+								field: 'operation',
+								title: '操作',
+								width: '18%',
+								align: 'center',
+								fixed: 'right',
+								templet: function(d) {
+									var str = '<a class="layui-btn layui-btn-normal layui-btn-xs" onclick="water_fees_cost(' + d.id + ');"><i class="layui-icon layui-icon-set"></i>水费单价</a>';
+									str += '<a class="layui-btn layui-btn-primary layui-btn-xs" onclick="water_fees_detailed(' + d.id + ');"><i class="layui-icon layui-icon-cols"></i>详单</a>';
+									str += '<a class="layui-btn layui-btn-primary layui-btn-xs" onclick="water_fees_note(' + d.id + ');"><i class="layui-icon layui-icon-note"></i>备注</a>';
+									return str;
+								}
+							}
+						]
+					],
+					page: true,
+					done: function(res, curr, count) {
+						//数据的回调用，可不写
+					}
+				});
+
+				// 监听单元格事件<排序>
+				table.on('sort(LAY-water_fees-manage)', function(obj) { //注：tool是工具条事件名，LAY-water_fees-manage是table原始容器的属性 lay-filter="对应的值"
+					//尽管我们的 table 自带排序功能，但并没有请求服务端。
+					//有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+					table.reload('LAY-water_fees-manage', { //LAY-water_fees-manage是表格容器id
+						initSort: obj, //记录初始排序，如果不设的话，将无法标记表头的排序状态。 layui 2.1.1 新增参数
+						where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+							field: obj.field, //排序字段
+							order: obj.type //排序方式
+						}
+					});
+				});
+
+				laydate.render({
+					elem: '#water_fees_search_month',
+					type: 'month',
+					theme: 'grid'
+				});
+
+				// 模糊查询"搜索"按钮
+				$('#water_fees_search_button').click(function() {
+					//执行重载
+					table.reload('LAY-water_fees-manage', {
+						page: {
+							curr: 1 //重新从第 1 页开始
+						},
+						where: {
+							search_dormitory_number: $('#water_fees_search_dormitory_number').val().trim(),
+							search_month: $('#water_fees_search_month').val().trim()
+						}
+					}, 'data');
+				});
+
+				// 模糊查询"清空"按钮
+				$('#water_fees_search_clean_button').click(function() {
+					$('#water_fees_search_dormitory_number').val("");
+					$('#water_fees_search_month').val("");
+					table.reload('LAY-water_fees-manage', {
+						where: {
+							search_dormitory_number: '',
+							search_month: ''
+						}
+					}, 'data');
+				});
+
+				//搜索区域DIV回车监听
+				$("#usersearch").bind("keydown", function(e) {
+					// 兼容FF和IE和Opera
+					var theEvent = e || window.event;
+					var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+					if(code == 13) {
+						//回车执行查询
+						$("#dormitories_search_button").click();
+					}
+				});
+
+				// 水费"批量修改水费单价"按钮
+				$('#water_fees_change_cost_multiple_button').click(function() {
+					var data = table.checkStatus('LAY-water_fees-manage').data;
+					if(data.length == 0) {
+						layer.alert("请选择需要修改水费单价的水费单！");
+						return false;
+					}
+					var ids = '';
+					data.map(function(value, index, arr) {
+						ids += value.id + ',';
+					})
+					var reg = /,$/gi;
+					ids = ids.replace(reg, "");
+
+					layer.prompt({
+						formType: 0,
+						title: '请输入新的水费单价'
+					}, function(value, index) {
+						layer.confirm('确定修改吗？',
+							function(index2) {
+								$.ajax({
+									url: "http://127.0.0.1:8000/water_fees/change_cost_multiple/",
+									type: "post",
+									dataType: "json",
+									data: {
+										"ids": ids,
+										"cost": value
+									},
+									success: function(data) {
+										layer.close(index);
+										layer.msg(data.msg, {
+											icon: 1,
+											time: 2000
+										})
+										layui.table.reload('LAY-water_fees-manage');
+									},
+									error: function(jqXHR) {
+										var json_responseText = JSON.parse(jqXHR.responseText);
+										if(json_responseText.ids) {
+											layer.msg(json_responseText.ids[0], {
+												icon: 2,
+												anim: 6
+											});
+											return false;
+										}
+										if(json_responseText.cost) {
+											layer.msg(json_responseText.cost[0], {
+												icon: 2,
+												anim: 6
+											});
+											return false;
+										}
+										if(json_responseText.detail) {
+											layer.msg(json_responseText.detail, {
+												icon: 2,
+												anim: 6
+											});
+											return false;
+										}
+										layui.table.reload('LAY-water_fees-manage');
+									}
+								});
+							}
+						)
+					});
+				});
+
+				// "创建单个宿舍"按钮
+				$('#dormitory_create_button').click(function() {
+					layer.open({
+						type: 2,
+						title: '创建',
+						content: 'dormitory_create.html',
+						shadeClose: true,
+						maxmin: true,
+						area: ['280px', '438px'],
+						btn: ['确定', '取消'],
+						yes: function(index, layero) {
+							var iframeWindow = window['layui-layer-iframe' + index],
+								submitID = 'LAY-dormitory-front-submit',
+								submit = layero.find('iframe').contents().find('#' + submitID);
+
+							//监听提交
+							iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
+								var field = data.field; //获取提交的字段
+								$.ajax({
+									url: "http://127.0.0.1:8000/dormitories/",
+									type: "post",
+									dataType: "json",
+									data: {
+										"number": field.dormitory_number,
+										"area": field.dormitory_area,
+										"build": field.dormitory_build,
+										"floor": field.dormitory_floor,
+										"room": field.dormitory_room,
+										"allow_live_number": field.dormitory_allow_live_number
+									},
+									success: function(data) {
+										layer.msg('操作成功：新宿舍' + data.number + '创建成功', {
+											icon: 1,
+											time: 2000
+										})
+										layer.close(index); //关闭弹层
+										layui.table.reload('LAY-water_fees-manage');
+									},
+									error: function(jqXHR) {
+										var json_responseText = JSON.parse(jqXHR.responseText);
+										if(json_responseText.number) {
+											layer.msg(json_responseText.number[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_number').focus();
+											return false;
+										}
+										if(json_responseText.area) {
+											layer.msg(json_responseText.area[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_area').focus();
+											return false;
+										}
+										if(json_responseText.build) {
+											layer.msg(json_responseText.build[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_build').focus();
+											return false;
+										}
+										if(json_responseText.floor) {
+											layer.msg(json_responseText.floor[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_floor').focus();
+											return false;
+										}
+										if(json_responseText.room) {
+											layer.msg(json_responseText.room[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_room').focus();
+											return false;
+										}
+										if(json_responseText.allow_live_number) {
+											layer.msg(json_responseText.allow_live_number[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_allow_live_number').focus();
+											return false;
+										}
+										if(json_responseText.detail) {
+											layer.msg(json_responseText.detail, {
+												icon: 2,
+												anim: 6
+											});
+											return false;
+										}
+									}
+								});
+							});
+							submit.trigger('click');
+						},
+						btn2: function(index, layero) {
+							layer.close(index); //关闭弹层
+						}
+					});
+				});
+			})
+
+			// 表单修饰 "只显示需缴费宿舍"
+			layui.use('form', function() {
+				var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+				form.render();
+				form.on('checkbox(only_use_up_water_fees)', function(data) {
+					if(data.elem.checked) {
+						layui.table.reload('LAY-water_fees-manage', {
+							where: {
+								'only_use_up': 'true'
+							}
+						}, 'data');
+					} else {
+						layui.table.reload('LAY-water_fees-manage', {
+							where: {
+								'only_use_up': 'all'
+							}
+						}, 'data');
+					}
+				});
+			});
+
+			// 水费"设置水费单价"按钮
+			function water_fees_cost(id) {
+				layer.prompt({
+					formType: 0,
+					title: '请输入新的水费单价'
+				}, function(value, index) {
+					$.ajax({
+						url: "http://127.0.0.1:8000/water_fees/" + id + "/change_cost/",
+						type: "post",
+						dataType: "json",
+						data: {
+							"cost": value
+						},
+						success: function(data) {
+							layer.close(index);
+							layer.msg(data.msg, {
+								icon: 1,
+								time: 2000
+							})
+							layui.table.reload('LAY-water_fees-manage');
+						},
+						error: function(jqXHR) {
+							var json_responseText = JSON.parse(jqXHR.responseText);
+							if(json_responseText.cost) {
+								layer.msg(json_responseText.cost[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.detail) {
+								layer.msg(json_responseText.detail, {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							layui.table.reload('LAY-water_fees-manage');
+						}
+					});
+				});
+			};
+
+			//"详单"按钮
+			function water_fees_detailed(id) {
+				layer.open({
+					type: 2,
+					title: '详单',
+					content: 'water_fees_detailed.html?water_fees_id=' + id,
+					shadeClose: true,
+					maxmin: true,
+					area: ['840px', '673px'],
+					btn: ['提交', '关闭'],
+					yes: function(index, layero) {
+						var iframeWindow = window['layui-layer-iframe' + index],
+							submitID = 'LAY-water_fees-front-submit',
+							submit = layero.find('iframe').contents().find('#' + submitID);
+
+						//监听提交
+						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
+							var field = data.field; //获取提交的字段
+							$.ajax({
+								url: "http://127.0.0.1:8000/water_fees/" + id + "/change_note/",
+								type: "post",
+								dataType: "json",
+								data: {
+									"note": field.water_fees_note
+								},
+								success: function(data) {
+									layer.msg(data.msg, {
+										icon: 1,
+										time: 2000
+									})
+									layer.close(index); //关闭弹层
+									layui.table.reload('LAY-water_fees-manage');
+								},
+								error: function(jqXHR) {
+									var json_responseText = JSON.parse(jqXHR.responseText);
+									if(json_responseText.note) {
+										layer.msg(json_responseText.note[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#water_fees_note').focus();
+										return false;
+									}
+									if(json_responseText.detail) {
+										layer.msg(json_responseText.detail, {
+											icon: 2,
+											anim: 6
+										});
+										return false;
+									}
+								}
+							});
+						});
+						submit.trigger('click');
+					},
+					btn1: function(index, layero) {
+						layer.close(index); //关闭弹层
+						layui.table.reload('LAY-water_fees-manage');
+					}
+				});
+			}
+			
+			//"备注"按钮
+			function water_fees_note(id) {
+				layer.open({
+					type: 2,
+					title: '编辑',
+					content: 'water_fees_note.html?water_fees_id=' + id,
+					shadeClose: true,
+					maxmin: true,
+					area: ['640px', '273px'],
+					btn: ['提交', '关闭'],
+					yes: function(index, layero) {
+						var iframeWindow = window['layui-layer-iframe' + index],
+							submitID = 'LAY-water_fees-front-submit',
+							submit = layero.find('iframe').contents().find('#' + submitID);
+
+						//监听提交
+						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
+							var field = data.field; //获取提交的字段
+							$.ajax({
+								url: "http://127.0.0.1:8000/water_fees/" + id + "/change_note/",
+								type: "post",
+								dataType: "json",
+								data: {
+									"note": field.water_fees_note
+								},
+								success: function(data) {
+									layer.msg(data.msg, {
+										icon: 1,
+										time: 2000
+									})
+									layer.close(index); //关闭弹层
+									layui.table.reload('LAY-water_fees-manage');
+								},
+								error: function(jqXHR) {
+									var json_responseText = JSON.parse(jqXHR.responseText);
+									if(json_responseText.note) {
+										layer.msg(json_responseText.note[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#water_fees_note').focus();
+										return false;
+									}
+									if(json_responseText.detail) {
+										layer.msg(json_responseText.detail, {
+											icon: 2,
+											anim: 6
+										});
+										return false;
+									}
+								}
+							});
+						});
+						submit.trigger('click');
+					},
+					btn1: function(index, layero) {
+						layer.close(index); //关闭弹层
+						layui.table.reload('LAY-water_fees-manage');
+					}
+				});
+			}
+			
+			
+		</script>
+	</body>
+
+</html>

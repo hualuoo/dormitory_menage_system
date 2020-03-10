@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
+    'dormitories.apps.DormitoriesConfig',
+    'user_operation.apps.UserOperationConfig',
+    'system_setting.apps.SystemSettingConfig',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -148,7 +151,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-AUTH_USER_MODEL = 'users.UserModel'
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

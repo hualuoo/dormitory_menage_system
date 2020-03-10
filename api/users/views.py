@@ -1,46 +1,84 @@
-from rest_framework import mixins
 from random import choice
-from datetime import datetime, timedelta
-from .models import UserModel, UserInfo, CaptchaModel
-from utils import smtp
-from .serializers import UserListSerializer, UserInfoUpdateSerializer, UserResetPasswordSerializer, UserResetPasswordMultipleSerializer
-from .serializers import UserRegSerializer, VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
-from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
-
+from rest_framework import mixins
 from rest_framework import viewsets
-# from rest_framework.views import APIView
+from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
-from utils.permission import UserIsOwner, UserInfoIsOwner
-
 from rest_framework.decorators import action
+
+from .models import User, UserInfo, CaptchaModel
+from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer
+from .serializers import UserResetPasswordSerializer, UserResetPasswordMultipleSerializer, UserCheckIdsSerializer, UserCreateMultipleSerializer
+from .serializers import VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
+from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
+
+from utils import smtp
+from utils.permission import UserIsSuperUser, UserIsSelf, UserIsOwner
 
 # Create your views here.
 
 
-class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
-    用户视图类
+    用户 视图类
     """
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = UserListSerializer
-    queryset = UserModel.objects.all()
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
     def get_serializer_class(self):
         if self.action == "list":
-            return UserListSerializer
+            return UserSerializer
         if self.action == "retrieve":
-            return UserListSerializer
+            return UserSerializer
+        if self.action == "create":
+            return UserCreateSerializer
+        if self.action == "create_multiple":
+            return UserCreateMultipleSerializer
         if self.action == "update":
-            return UserInfoUpdateSerializer
+            return UserUpdateSerializer
         if self.action == "reset_password":
             return UserResetPasswordSerializer
         if self.action == "reset_password_multiple":
             return UserResetPasswordMultipleSerializer
-        return UserListSerializer
+        if self.action == "set_inactive":
+            return
+        if self.action == "set_inactive_multiple":
+            return UserCheckIdsSerializer
+        if self.action == "set_active":
+            return
+        if self.action == "set_active_multiple":
+            return UserCheckIdsSerializer
+        if self.action == "set_avatar":
+            return
+        return UserSerializer
+
+    def get_permissions(self):
+        if self.action == "list":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "retrieve":
+            return [IsAuthenticated(), UserIsSelf()]
+        if self.action == "create":
+            return []
+        if self.action == "create_multiple":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "reset_password":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "reset_password_multiple":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "set_inactive":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "set_inactive_multiple":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "set_active":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "set_active_multiple":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "set_avatar":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        return []
 
     """
         显示单个用户信息
@@ -54,7 +92,6 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
             url: '/users/<pk>/'
             type: 'get'
         """
-
         """
         ##############################
         # 此处适配DataTable服务端模式
@@ -157,9 +194,6 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
         if is_staff == 'false':
             all_result = all_result.filter(Q(is_staff=False))
 
-        # 替换字符串进行外链查询
-        field = field.replace(".", "__")
-
         # 排序
         if field:
             if order == "asc":
@@ -196,79 +230,6 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
                 'count': recordsTotal,
                 'data': serializer.data
             })
-
-    def update(self, request, *args, **kwargs):
-        """
-            修改用户信息
-            url: '/users/<pk>/'
-            type: 'update'
-            dataType: 'json'
-            data: {
-                'email': '<email>',
-                'first_name': '<first_name>',
-                'last_name': '<last_name>',
-                'birthday': '<birthday>',
-                'gender': '<gender>',
-                'mobile': '<mobile>'
-            }
-        """
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        instance.email = request.data["email"]
-        instance.first_name = request.data["first_name"]
-        instance.last_name = request.data["last_name"]
-        instance.save()
-
-        UserInfos = UserInfo.objects.filter(user=instance.id)
-        if UserInfos.count():
-            userinfo = UserInfos.first()
-            userinfo.birthday = serializer.validated_data["birthday"]
-            userinfo.gender = serializer.validated_data["gender"]
-            userinfo.mobile = serializer.validated_data["mobile"]
-            userinfo.save()
-        else:
-            userinfo = UserInfo.objects.create(birthday=serializer.validated_data["birthday"],
-                                               gender=serializer.validated_data["gender"],
-                                               mobile=serializer.validated_data["mobile"],
-                                               user=instance)
-            userinfo.save()
-
-        return Response({
-            "msg": "操作成功：用户" + instance.username + "的信息修改成功"
-        }, status=status.HTTP_200_OK)
-
-    @action(methods=['POST'], detail=True)
-    def upload_photo(self, request, *args, **kwargs):
-        """
-            上传头像
-            url: '/users/<pk>/upload_photo/'
-        """
-        from utils.save_file import save_img
-
-        photo = request.FILES.get("file")
-        flag = save_img(photo, "users/photo")
-
-        if flag == 1:
-            Response({
-                "error": "操作失败：上传的文件超过2Mb"
-            }, status=status.HTTP_400_BAD_REQUEST)
-        if flag == 2:
-            return Response({
-                "error": "操作失败：上传的文件不属于图片"
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-        instance = self.get_object()
-        instance.userinfo.photo = flag
-        instance.userinfo.save()
-        return Response({
-            "code": 0,
-            "msg": "操作成功：头像上传成功",
-            "data": {
-                "src": "http://127.0.0.1:8000/media/" + flag
-            }
-        }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
     def reset_password(self, request, *args, **kwargs):
@@ -308,7 +269,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
 
         ids = serializer.validated_data["ids"].split(',')
         for i in ids:
-            user = UserModel.objects.filter(id=i).first()
+            user = User.objects.filter(id=i).first()
             user.set_password(serializer.validated_data["password"])
             user.save()
         return Response({
@@ -340,16 +301,12 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
                 'ids': '<pk1>,<pk2>,<pk3>'
             }
         """
-        ids_str = request.data["ids"]
-        ids = ids_str.split(',')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        ids = serializer.validated_data["ids"].split(',')
         for i in ids:
-            users = UserModel.objects.filter(id=i)
-            if users.count() == 0:
-                return Response({
-                    "error": "操作失败：ID为" + i + "的用户不存在"
-                }, status=status.HTTP_400_BAD_REQUEST)
-        for i in ids:
-            user = UserModel.objects.filter(id=i).first()
+            user = User.objects.filter(id=i).first()
             user.is_active = False
             user.save()
         return Response({
@@ -381,27 +338,132 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
                 'ids': '<pk1>,<pk2>,<pk3>'
             }
         """
-        ids_str = request.data["ids"]
-        ids = ids_str.split(',')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        ids = serializer.validated_data["ids"].split(',')
         for i in ids:
-            users = UserModel.objects.filter(id=i)
-            if users.count() == 0:
-                return Response({
-                    "error": "操作失败：ID为" + i + "的用户不存在"
-                }, status=status.HTTP_400_BAD_REQUEST)
-        for i in ids:
-            user = UserModel.objects.filter(id=i).first()
+            user = User.objects.filter(id=i).first()
             user.is_active = True
             user.save()
         return Response({
             "msg": "操作成功：所选用户账户已被启用"
         }, status=status.HTTP_200_OK)
 
+    @action(methods=['POST'], detail=False)
+    def create_multiple(self, request, *args, **kwargs):
+        """
+            批量创建用户
+            url: '/users/create_multiple/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'first_username': '<first_username>',
+                'create_number': '<create_number>',
+                'password': '<password>'
+            }
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
+        first_username = serializer.validated_data["first_username"]
+        create_number = serializer.validated_data["create_number"]
+        for username in range(first_username, first_username+create_number):
+            user = User.objects.create(username=username)
+            user.set_password(serializer.validated_data["password"])
+            user.save()
+            info = UserInfo.objects.create(user=user)
+            info.save()
+
+        return Response({
+            "msg": "操作成功：" + str(first_username) + "-" + str(username) + "账户已被创建"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True)
+    def set_avatar(self, request, *args, **kwargs):
+        """
+            上传头像
+            url: '/users/<pk>/set_avatar/'
+        """
+        from utils.save_file import save_img
+
+        avatar = request.FILES.get("file")
+
+        flag = save_img(avatar, "users/avatar")
+        if flag == 0:
+            return Response({
+                "error": "操作失败：未选择上传的文件"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if flag == 1:
+            return Response({
+                "error": "操作失败：上传的文件超过2Mb"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if flag == 2:
+            return Response({
+                "error": "操作失败：上传的文件不属于图片"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        instance = self.get_object()
+        instance.info.avatar = flag
+        instance.info.save()
+        return Response({
+            "code": 0,
+            "msg": "操作成功：头像上传成功",
+            "data": {
+                "src": "http://" + request.META['HTTP_HOST'] + "/media/" + flag
+            }
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True)
+    def test(self, request, *args, **kwargs):
+        from utils.save_file import save_img
+        from utils import face_recognition
+        from attendance_system import settings
+        import numpy
+        import json
+
+        image = request.FILES.get("file")
+        flag = save_img(image, "users/face")
+        if flag == 0:
+            return Response({
+                "error": "操作失败：未选择上传的文件"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if flag == 1:
+            return Response({
+                "error": "操作失败：上传的文件超过2Mb"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if flag == 2:
+            return Response({
+                "error": "操作失败：上传的文件不属于图片"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        image_path = settings.MEDIA_ROOT.replace("\\", "/") + "/" + flag
+        face_128d_features = face_recognition.return_face_128d_features(image_path)
+
+        if face_128d_features == 0:
+            return Response({
+                "error": "操作失败：未检测到人脸"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if face_128d_features == 1:
+            return Response({
+                "error": "操作失败：检测到多张人脸"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        face_128d_features_list = []
+        for i in face_128d_features:
+            face_128d_features_list.append(i)
+
+        instance = self.get_object()
+        instance.userinfo.face_128d_features = json.dumps(face_128d_features_list)
+        instance.userinfo.save()
+
+        return Response({
+            "msg": "操作成功"
+        }, status=status.HTTP_200_OK)
+
+
+"""
 class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
-    """
-    用戶列表
-    """
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = UserRegSerializer
     queryset = UserModel.objects.all()
@@ -422,6 +484,7 @@ class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.Ge
 
     def put(self, request, pk, *args, **kwargs):
         return self.update(request, *args, **kwargs)
+"""
 
 
 class ChangePasswordViewset(mixins.UpdateModelMixin, viewsets.GenericViewSet):
@@ -431,7 +494,7 @@ class ChangePasswordViewset(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     permission_classes = (IsAuthenticated, UserIsOwner,)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = ChangePasswordSerializer
-    queryset = UserModel.objects.all()
+    queryset = User.objects.all()
 
 
 class VerifyCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -478,7 +541,7 @@ class getUserFuzzyMailViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    queryset = UserModel.objects.all()
+    queryset = User.objects.all()
 
     def fuzzy_mail(self, mail):
         end = mail.index("@")

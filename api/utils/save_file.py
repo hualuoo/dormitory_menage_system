@@ -8,19 +8,24 @@ from attendance_system import settings
 
 
 def save_img(image, child_folder):
+    # 判断文件是否为空
+    if image is None:
+        return 0
+
     # 判断文件是否超出大小
     if image.size > 2097152:
         return 1
 
     # 临时存放
-    image_temp_path = os.path.join(settings.MEDIA_ROOT, "temp", image.name)
+    image_temp_path = settings.MEDIA_ROOT.replace("\\", "/") + "/temp/" + image.name.replace("\"", "")
     with open(image_temp_path, "wb") as f:
         for line in image:
             f.write(line)
 
     # 判断是否为图片
     imgType_list = {'jpg', 'bmp', 'png', 'jpeg', 'rgb', 'tif'}
-    if imghdr.what(image_temp_path) not in imgType_list:
+    image_type = imghdr.what(image_temp_path)
+    if image_type not in imgType_list:
         return 2
 
     # 计算图片MD5后删除临时文件
@@ -36,19 +41,16 @@ def save_img(image, child_folder):
     month_time = datetime.datetime.now().strftime('%m')
     # 日
     day_time = datetime.datetime.now().strftime('%d')
-    child_folder = child_folder.replace("/", "\\")
-    image_folder_path = os.path.join(settings.MEDIA_ROOT, child_folder, year_time, month_time, day_time)
+    image_folder_path = settings.MEDIA_ROOT.replace("\\", "/") + "/" + child_folder.replace("\\", "/") + "/" + year_time + "/" + month_time + "/" + day_time
 
     if not os.path.isdir(image_folder_path):
         os.makedirs(image_folder_path)
 
     # 按文件MD5命名
-    image_type = os.path.splitext(image.name)[1]
-    image_path = os.path.join(image_folder_path, image_md5 + image_type)
+    image_path = image_folder_path + "/" + image_md5 + "." + image_type
 
     with open(image_path, "wb") as f:
         for line in image:
             f.write(line)
 
-    child_folder = child_folder.replace("\\", "/")
-    return child_folder + "/" + year_time + "/" + month_time + "/" + day_time + "/" + image_md5 + image_type
+    return child_folder.replace("\\", "/") + "/" + year_time + "/" + month_time + "/" + day_time + "/" + image_md5 + "." + image_type

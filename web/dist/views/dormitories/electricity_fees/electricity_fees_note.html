@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>layuiAdmin 网站用户 iframe 框</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+	</head>
+
+	<body>
+
+		<div class="layui-form layui-form-pane" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 20px 0 20px;">
+			<div class="layui-form-item layui-form-text">
+				<label class="layui-form-label">备注</label>
+				<div class="layui-input-block">
+					<textarea name="electricity_fees_note" placeholder="" lay-verify="note" class="layui-textarea"></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item layui-hide">
+				<input type="button" lay-submit lay-filter="LAY-electricity_fees-front-submit" id="LAY-electricity_fees-front-submit" value="确认">
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.js"></script>
+		<script>
+			layui.use(['form'], function() {
+				var form = layui.form;
+				
+				form.verify({
+					note: [/^.{0,100}$/, '备注最多只能输入100个字符，且不支持换行']
+				});
+
+				// 获取url的参数并赋值
+				function GetQueryString(name) {
+					var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+					var r = window.location.search.substr(1).match(reg);
+					if(r != null) return decodeURI(r[2]);
+					return null;
+				}
+				var electricity_fees_id = GetQueryString("electricity_fees_id");
+				if(electricity_fees_id == null) {
+					layer.msg('数据加载错误，请检查链接', {
+						icon: 2,
+						anim: 6
+					});
+					return false;
+				}
+				// 数据加载
+				$.ajax({
+					url: "http://127.0.0.1:8000/electricity_fees/" + electricity_fees_id + "/",
+					type: "get",
+					dataType: "json",
+					success: function(data) {
+						form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+							"electricity_fees_note": data.note
+						});
+					},
+					error: function(jqXHR) {
+						layer.msg('数据加载错误，请联系管理员处理', {
+							icon: 2,
+							anim: 6
+						});
+					}
+				});
+		});
+		</script>
+	</body>
+
+</html>

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from users.models import UserModel
+from users.models import User
 
 from rest_framework import serializers
 from django.contrib.auth.backends import ModelBackend
@@ -13,13 +13,13 @@ class CustomBackend(ModelBackend):
     用户自定义用户验证
     """
     def authenticate(self, request, username=None, password=None, **kwargs):# 重写这个函数
-        user = UserModel.objects.filter(Q(username=username) | Q(email=username))
+        user = User.objects.filter(Q(username=username) | Q(email=username))
         if user.count() == 0:
-            raise serializers.ValidationError({'username_error_field': '用户名不存在'})
+            raise serializers.ValidationError({'detail': '用户名不存在'})
             return None
         last_user = user[0]
         if last_user.is_active == 0:
-            raise serializers.ValidationError({'user_error_field': '用户已被禁用'})
+            raise serializers.ValidationError({'detail': '用户已被禁用'})
             return None
         if last_user.check_password(password):
             last_user.last_login = datetime.now()
@@ -29,7 +29,7 @@ class CustomBackend(ModelBackend):
                 return last_user
             return last_user
         else:
-            raise serializers.ValidationError({'password_error_field': '密码错误'})
+            raise serializers.ValidationError({'detail': '密码错误'})
             return None
 
 

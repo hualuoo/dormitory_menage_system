@@ -21,8 +21,11 @@ from rest_framework.routers import DefaultRouter
 from django.views.static import serve
 from attendance_system.settings import MEDIA_ROOT
 
-from users.views import UsersViewset, UserViewset, VerifyCodeViewset, ChangePasswordViewset
+from users.views import UserViewset, VerifyCodeViewset, ChangePasswordViewset
 from users.views import getUserFuzzyMailViewset, checkUserMailViewset, sendOldMailCaptchaViewset, confirmOldMailCaptchaViewset, sendNewMailCaptchaViewset, confirmNewMailCaptchaViewset
+
+from dormitories.views import DormitoryViewset, WaterFeesViewset, ElectricityFeesViewset
+from user_operation.views import ElectricityFeesLogViewset, RepairViewset, RepairLogViewset
 
 router = DefaultRouter()
 # router.register(r'users', UsersViewset, basename="users")
@@ -36,7 +39,14 @@ router.register(r'member/security/confirmOldMailCaptcha', confirmOldMailCaptchaV
 router.register(r'member/security/sendNewMailCaptcha', sendNewMailCaptchaViewset, basename="sendNewMailCaptcha")
 router.register(r'member/security/confirmNewMailCaptcha', confirmNewMailCaptchaViewset, basename="confirmNewMailCaptcha")
 
-router.register(r'users', UserViewset, basename="user")
+router.register(r'users', UserViewset, basename="users")
+router.register(r'dormitories', DormitoryViewset, basename="dormitories")
+router.register(r'water_fees', WaterFeesViewset, basename="water_fees")
+router.register(r'electricity_fees', ElectricityFeesViewset, basename="electricity_fees")
+router.register(r'electricity_fees_log', ElectricityFeesLogViewset, basename="electricity_fees_log")
+router.register(r'repair', RepairViewset, basename="repair")
+router.register(r'repair_log', RepairLogViewset, basename="repair_log")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

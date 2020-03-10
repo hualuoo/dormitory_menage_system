@@ -2,14 +2,16 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 
+from dormitories.models import Dormitory
 # Create your models here.
 
 
-class UserModel(AbstractUser):
+class User(AbstractUser):
     """
     用户
     """
     email = models.EmailField(max_length=100, blank=True, verbose_name="邮箱")
+    lived_dormitory = models.ForeignKey(Dormitory, on_delete=models.CASCADE, verbose_name="居住宿舍", null=True, related_name='lived_users')
 
     class Meta:
         verbose_name = "用户"
@@ -27,8 +29,9 @@ class UserInfo(models.Model):
     gender = models.CharField(max_length=7, choices=(("male", "男"), ("female", "女"), ("unknown", "未知")), default="unknown",
                               verbose_name="性别")
     mobile = models.CharField(blank=True, max_length=11, verbose_name="电话")
-    photo = models.ImageField(upload_to="users/photo/", null=True, blank=True, verbose_name="照片")
-    user = models.OneToOneField(UserModel, verbose_name="用户", on_delete=models.CASCADE, related_name="userinfo")
+    avatar = models.ImageField(upload_to="users/avatar/", null=True, blank=True, verbose_name="照片")
+    face_128d_features = models.CharField(max_length=3000, blank=True, verbose_name="人脸128D数据")
+    user = models.OneToOneField(User, verbose_name="用户", on_delete=models.CASCADE, related_name="info")
 
     class Meta:
         verbose_name = "用户详情信息"
