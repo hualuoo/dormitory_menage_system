@@ -2,48 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin-web/admin-web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin-web/admin-web/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/migrations/0002_remove_dormitory_now_live_number.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/migrations/0003_dormitory_now_live_number.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0002_auto_20200110_2319.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0003_auto_20200110_2328.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0004_auto_20200201_2017.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0005_auto_20200203_1232.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0006_remove_userinfo_realname.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0007_auto_20200210_1430.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0008_auto_20200210_1555.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0009_userinfo_photo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0010_auto_20200211_2105.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0011_auto_20200217_1341.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0012_auto_20200217_1342.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0013_auto_20200217_1344.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0014_userinfo_live_dormitory.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0015_auto_20200221_1718.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0016_auto_20200221_1719.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0017_auto_20200221_1720.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/migrations/0018_auto_20200221_1839.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/utils/jwt_custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/jwt_custom.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/utils/permission.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/permission.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/utils/save_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/save_file.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/11/b556964dcd9bd2c1fc0315ae0bece796.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/12/1918243a203ce0a38359f20fc856c958.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/12/b556964dcd9bd2c1fc0315ae0bece796.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/16/989dd904240b0c629786ffe14bf12990.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/photo/default.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Scripts/numpy-1.18.1+mkl-cp38-cp38m-win_amd64.whl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/layuiadmin/cropper/croppers.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/layuiadmin/cropper/croppers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/10/852050754272c5e50da0702c99162941.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/10/8dfdf5c1015826d8fde9a60e7ae960b7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/dist/views/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/adminform.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/list.html" beforeDir="false" />
@@ -57,6 +20,14 @@
       <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/userform.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/复制 userform.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/web/dist/views/user/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/users/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/users/users/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/list_inactive.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/user_create_multiple.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/users/users/user_create_multiple.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/user_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/users/users/user_edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/userform.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/users/users/userform.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/复制 userform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/views/users/说明.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/web/dist/声明：本项目非商业项目，仅限用于学习和研究目的" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -188,6 +159,7 @@
       <workItem from="1581833047783" duration="5850000" />
       <workItem from="1581844924356" duration="192092000" />
       <workItem from="1583754811610" duration="12766000" />
+      <workItem from="1583855762209" duration="6001000" />
     </task>
     <servers />
   </component>

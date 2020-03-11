@@ -4,10 +4,11 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>layuiAdmin std - 通用后台管理模板系统（iframe标准版）</title>
+		<title>宿舍门禁管理系统 - 后台</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<script type="text/javascript" charset="utf8" src="../layuiadmin/js/jquery-1.10.2.min.js"></script>
 		<link rel="stylesheet" href="../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../layuiadmin/style/admin.css" media="all">
 
@@ -69,18 +70,18 @@
 						</li>
 						<li class="layui-nav-item" lay-unselect>
 							<a href="javascript:;">
-								<cite>贤心</cite>
+								<cite id="header_username"></cite>
 							</a>
 							<dl class="layui-nav-child">
-								<dd>
+								<dd style="text-align: center;">
 									<a lay-href="set/user/info.html">基本资料</a>
 								</dd>
-								<dd>
+								<dd style="text-align: center;">
 									<a lay-href="set/user/password.html">修改密码</a>
 								</dd>
 								<hr>
-								<dd layadmin-event="logout" style="text-align: center;">
-									<a>退出</a>
+								<dd onclick="logout()" style="text-align: center;">
+									<a href="#">退出</a>
 								</dd>
 							</dl>
 						</li>
@@ -548,14 +549,27 @@
 			</div>
 		</div>
 
-		<script src="../layuiadmin/layui/layui.js"></script>
+		<script src="../layuiadmin/layui/layui.all.js"></script>
+		<script src="../layuiadmin/js/check-token.js"></script>
+
 		<script>
+			$('#header_username').text(get_username());
+
+			function logout() {
+				localStorage.removeItem("cache_token");
+				layui.layer.msg('退出账户成功');
+				setTimeout(function() {
+					location.href = "http://localhost:8020/dist/views/login.html";
+				}, 1000);
+			}
+
 			layui.config({
 				base: '../layuiadmin/' //静态资源所在路径
 			}).extend({
 				index: 'lib/index' //主入口模块
 			}).use('index');
 		</script>
+
 	</body>
 
 </html>

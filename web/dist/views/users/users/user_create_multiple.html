@@ -69,6 +69,9 @@
 					$.ajax({
 						url: "http://127.0.0.1:8000/users/create_multiple/",
 						type: "post",
+						headers: {
+							"Authorization": "JWT " + localStorage.getItem("cache_token")
+						},
 						dataType: "json",
 						data: {
 							"first_username": form_data.user_first_username,

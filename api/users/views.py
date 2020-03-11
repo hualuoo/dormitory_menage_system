@@ -415,6 +415,19 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
+    def remove_avatar(self, request, *args, **kwargs):
+        """
+            清除头像
+            url: '/users/<pk>/remove_avatar/'
+        """
+        instance = self.get_object()
+        instance.info.avatar = ""
+        instance.info.save()
+        return Response({
+            "msg": "操作成功：已清理 " + instance.username + " 账户的头像"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=True)
     def test(self, request, *args, **kwargs):
         from utils.save_file import save_img
         from utils import face_recognition

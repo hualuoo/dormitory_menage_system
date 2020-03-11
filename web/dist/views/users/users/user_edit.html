@@ -68,6 +68,7 @@
 		</div>
 
 		<script src="../../../layuiadmin/layui/layui.js"></script>
+		<script src="../../../layuiadmin/js/check-token.js"></script>
 		<script>
 			layui.use(['form', 'layedit', 'laydate'], function() {
 				var form = layui.form,
@@ -108,6 +109,9 @@
 					$.ajax({
 						url: "http://127.0.0.1:8000/users/" + id + "/",
 						type: "get",
+						headers: {
+							"Authorization": "JWT " + localStorage.getItem("cache_token")
+						},
 						dataType: "json",
 						success: function(data) {
 							form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
