@@ -2,33 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/api/users/migrations/0003_auto_20200313_1251.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/users/migrations/0004_auto_20200313_1301.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0002_auto_20200110_2319.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0003_auto_20200110_2328.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0004_auto_20200201_2017.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0005_auto_20200203_1232.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0006_remove_userinfo_realname.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0007_auto_20200210_1430.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0008_auto_20200210_1555.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0009_userinfo_photo.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/migrations/0010_auto_20200211_2105.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/10/852050754272c5e50da0702c99162941.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/10/8dfdf5c1015826d8fde9a60e7ae960b7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/adminform.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/role.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/administrators/roleform.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/forget.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/reg.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/useredit.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/userform.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/user/复制 userform.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/user/说明.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/users/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/users/users/list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/list_inactive.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/user_create_multiple.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/users/users/user_create_multiple.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/user_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/users/users/user_edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/userform.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/views/users/users/userform.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/users/users/复制 userform.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/views/users/说明.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dist/声明：本项目非商业项目，仅限用于学习和研究目的" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/utils/face_recognition.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/face_recognition.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/11/852050754272c5e50da0702c99162941.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/face/2020/02/17/989dd904240b0c629786ffe14bf12990.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +150,7 @@
       <workItem from="1581833047783" duration="5850000" />
       <workItem from="1581844924356" duration="192092000" />
       <workItem from="1583754811610" duration="12766000" />
-      <workItem from="1583855762209" duration="6001000" />
+      <workItem from="1583855762209" duration="22658000" />
     </task>
     <servers />
   </component>
@@ -196,26 +187,26 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1290" y="480" key="FileChooserDialogImpl/0.0.2560.1400@0.0.2560.1400" timestamp="1578227371539" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1583848320627">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1584161521888">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="213" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1583848320627" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1583848320627">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1584161521888" />
+    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1584161521888">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="213" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1583848320627" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1583848320626">
+    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1584161521888" />
+    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1584161521888">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="213" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1583848320626" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1583848320627">
+    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1584161521888" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1584161521888">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="213" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1583848320627" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1584161521888" />
     <state width="1530" height="308" key="GridCell.Tab.1.bottom" timestamp="1578405388665">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -241,11 +232,11 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1126" y="615" key="VCS.ChangelistChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1578228897932" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1583319490598">
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1584075918536">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583045107980" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1583319490598" />
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1584075918536" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/attendance_system$clean_migrations.coverage" NAME="clean-migrations Coverage Results" MODIFIED="1583133316467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />

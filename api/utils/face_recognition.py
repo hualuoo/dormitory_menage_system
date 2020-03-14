@@ -1,3 +1,4 @@
+import os
 import cv2
 import numpy
 import dlib
@@ -33,9 +34,11 @@ def return_face_128d_features(image_path):
     # 判断检测的图片中是否不存在人脸或出现多张人脸，faces的长度即为检测到人脸的个数
     if len(faces) == 0:
         # 检测不到人脸
+        os.remove(image_path)
         return 0
     if len(faces) > 1:
         # 检测人脸数大于2
+        os.remove(image_path)
         return 1
     if len(faces) == 1:
         # 如果人脸数为 1

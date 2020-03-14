@@ -8,11 +8,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from .models import User, UserInfo, CaptchaModel
-from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer
-from .serializers import UserResetPasswordSerializer, UserResetPasswordMultipleSerializer, UserCheckIdsSerializer, UserCreateMultipleSerializer
+from .models import User, UserInfo, UserFace, CaptchaModel
+from .serializers import UserSerializer, UserCreateSerializer, UserCreateMultipleSerializer, UserUpdateSerializer
+from .serializers import UserResetPasswordSerializer, UserResetPasswordMultipleSerializer, UserCheckIdsSerializer
+from .serializers import UserFaceListSerializer
 from .serializers import VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
 from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
+
+from datetime import datetime
 
 from utils import smtp
 from utils.permission import UserIsSuperUser, UserIsSelf, UserIsOwner
@@ -53,6 +56,8 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             return UserCheckIdsSerializer
         if self.action == "set_avatar":
             return
+        if self.action == "get_face_list":
+            return UserFaceListSerializer
         return UserSerializer
 
     def get_permissions(self):
@@ -427,16 +432,70 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             "msg": "操作成功：已清理 " + instance.username + " 账户的头像"
         }, status=status.HTTP_200_OK)
 
+    @action(methods=['GET'], detail=False)
+    def get_face_list(self, request, *args, **kwargs):
+        from django.db.models import Q
+
+        # 获取全部非冻结用户数据
+        all_result = self.filter_queryset(self.get_queryset())
+        all_result = all_result.filter(Q(is_active=True))
+
+        # 分页页数
+        page = int(request.GET.get('page', '0'))
+        # 每页条数
+        limit = int(request.GET.get('limit', '0'))
+
+        # 模糊搜索关键词
+        search_firstname = request.GET.get('search_firstname', '')
+        search_lastname = request.GET.get('search_lastname', '')
+        search_username = request.GET.get('search_username', '')
+        search_mobile = request.GET.get('search_mobile', '')
+        search_email = request.GET.get('search_email', '')
+
+        # 搜索
+        if search_username:
+            all_result = all_result.filter(Q(username__icontains=search_username))
+        if search_firstname:
+            all_result = all_result.filter(Q(first_name__icontains=search_firstname))
+        if search_lastname:
+            all_result = all_result.filter(Q(last_name__icontains=search_lastname))
+        if search_email:
+            all_result = all_result.filter(Q(email__icontains=search_email))
+        if search_mobile:
+            all_result = all_result.filter(Q(info__mobile__icontains=search_mobile))
+
+        # 数据条数
+        recordsTotal = all_result.count()
+        # 总页数
+        pages = int(recordsTotal/limit)+1
+
+        # 获取首页的数据
+        if (page != 0) and (limit != 0):
+            all_result = all_result[(page * limit - limit):(page * limit)]
+
+        recordsNumber = all_result.count()
+
+        queryset = self.filter_queryset(all_result)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(
+            {
+                'code': 0,
+                'msg': '',
+                'pages': pages,
+                'recordsNumber': recordsNumber,
+                'data': serializer.data
+            })
+
     @action(methods=['POST'], detail=True)
-    def test(self, request, *args, **kwargs):
+    def set_face(self, request, *args, **kwargs):
         from utils.save_file import save_img
         from utils import face_recognition
         from attendance_system import settings
-        import numpy
         import json
 
         image = request.FILES.get("file")
-        flag = save_img(image, "users/face")
+        flag = save_img(image, "users/face_photo")
         if flag == 0:
             return Response({
                 "error": "操作失败：未选择上传的文件"
@@ -467,11 +526,22 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             face_128d_features_list.append(i)
 
         instance = self.get_object()
-        instance.userinfo.face_128d_features = json.dumps(face_128d_features_list)
-        instance.userinfo.save()
-
+        if hasattr(instance, 'face'):
+            instance.face.photo = flag
+            instance.face.features = json.dumps(face_128d_features_list)
+            instance.face.add_time = datetime.now()
+            instance.face.save()
+        else:
+            face = UserFace.objects.create(photo=flag,
+                                           features=json.dumps(face_128d_features_list),
+                                           user=instance)
+            face.save()
         return Response({
-            "msg": "操作成功"
+            "code": 0,
+            "msg": "操作成功：人脸数据设置成功",
+            "data": {
+                "src": "http://" + request.META['HTTP_HOST'] + "/face_photo/" + flag
+            }
         }, status=status.HTTP_200_OK)
 
 

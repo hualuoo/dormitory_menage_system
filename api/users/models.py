@@ -29,8 +29,7 @@ class UserInfo(models.Model):
     gender = models.CharField(max_length=7, choices=(("male", "男"), ("female", "女"), ("unknown", "未知")), default="unknown",
                               verbose_name="性别")
     mobile = models.CharField(blank=True, max_length=11, verbose_name="电话")
-    avatar = models.ImageField(upload_to="users/avatar/", null=True, blank=True, verbose_name="照片")
-    face_128d_features = models.CharField(max_length=3000, blank=True, verbose_name="人脸128D数据")
+    avatar = models.ImageField(upload_to="users/avatar/", null=True, blank=True, verbose_name="头像")
     user = models.OneToOneField(User, verbose_name="用户", on_delete=models.CASCADE, related_name="info")
 
     class Meta:
@@ -39,6 +38,24 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class UserFace(models.Model):
+    """
+    用户人脸数据
+    """
+    photo = models.ImageField(upload_to="users/face_photo/", null=True, blank=True, verbose_name="人脸照片")
+    features = models.TextField(verbose_name="特征数据")
+    user = models.OneToOneField(User, verbose_name="用户", on_delete=models.CASCADE, related_name="face")
+    add_time = models.DateTimeField(default=datetime.now, verbose_name="创建时间")
+
+    class Meta:
+        verbose_name = "用户详情信息"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.user.username
+
 
 
 class CaptchaModel(models.Model):

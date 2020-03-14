@@ -72,6 +72,36 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = ("username", "password", )
 
 
+class UserCreateMultipleSerializer(serializers.ModelSerializer):
+    """
+    用户 批量创建 序列类
+    """
+    first_username = serializers.CharField(help_text="用户名")
+    create_number = serializers.IntegerField(help_text="创建数量", min_value=1, max_value=100)
+    password = serializers.CharField(help_text="密码", write_only=True)
+
+    def validate_first_username(self, first_username):
+        flag = re.match(r'^[0-9]{4,16}$', first_username)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：首用户名须为4~16位，只可包含数字！')
+        if int(first_username) + int(self.initial_data["create_number"]) - 1 > 9999999999999999:
+            raise serializers.ValidationError('操作失败：用户名越界！')
+        for username in range(int(first_username), int(first_username)+int(self.initial_data["create_number"])):
+            if User.objects.filter(username=username):
+                raise serializers.ValidationError('操作失败：已存在用户' + str(username) + '！')
+        return int(first_username)
+
+    def validate_password(self, password):
+        flag = re.match(r'(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{8,20}$', password)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：密码须为8~20位，数字、字母、字符至少包含两种，且不能包含中文和空格！')
+        return password
+
+    class Meta:
+        model = User
+        fields = ("first_username", "create_number", "password", )
+
+
 class UserUpdateSerializer(serializers.ModelSerializer):
     """
     用户 修改 序列化类
@@ -198,35 +228,20 @@ class UserCheckIdsSerializer(serializers.ModelSerializer):
         fields = ("ids", )
 
 
-class UserCreateMultipleSerializer(serializers.ModelSerializer):
+class UserFaceListSerializer(serializers.ModelSerializer):
     """
-    用户 批量创建 序列类
+    用户 人脸 序列类
     """
-    first_username = serializers.CharField(help_text="用户名")
-    create_number = serializers.IntegerField(help_text="创建数量", min_value=1, max_value=100)
-    password = serializers.CharField(help_text="密码", write_only=True)
-
-    def validate_first_username(self, first_username):
-        flag = re.match(r'^[0-9]{4,16}$', first_username)
-        if flag is None:
-            raise serializers.ValidationError('操作失败：首用户名须为4~16位，只可包含数字！')
-        if int(first_username) + int(self.initial_data["create_number"]) - 1 > 9999999999999999:
-            raise serializers.ValidationError('操作失败：用户名越界！')
-        for username in range(int(first_username), int(first_username)+int(self.initial_data["create_number"])):
-            if User.objects.filter(username=username):
-                raise serializers.ValidationError('操作失败：已存在用户' + str(username) + '！')
-        return int(first_username)
-
-    def validate_password(self, password):
-        flag = re.match(r'(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{8,20}$', password)
-        if flag is None:
-            raise serializers.ValidationError('操作失败：密码须为8~20位，数字、字母、字符至少包含两种，且不能包含中文和空格！')
-        return password
+    id = serializers.IntegerField(help_text="ID")
+    username = serializers.CharField(help_text="用户名")
+    first_name = serializers.CharField(help_text="姓")
+    last_name = serializers.CharField(help_text="名")
+    face__photo = serializers.ImageField(source='face.photo', help_text="人脸照片地址")
+    face__add_time = serializers.DateTimeField(source='face.add_time', help_text="账户创建时间", format="%Y-%m-%d %H:%M")
 
     class Meta:
         model = User
-        fields = ("first_username", "create_number", "password", )
-
+        fields = ("id", "username", "first_name", "last_name", "face__photo", "face__add_time", )
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
