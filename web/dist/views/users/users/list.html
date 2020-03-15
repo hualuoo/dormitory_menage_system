@@ -131,9 +131,9 @@
 								align: 'center',
 								templet: function(d) {
 									if(d.info__avatar) {
-										return '<div><img style="height:30px;width:30px;border-radius:50%;line-height:50px!important;" src="' + d.info__avatar + '"></div>';
+										return '<div><img style="height:30px;width:30px;border-radius:50%;line-height:50px!important;" src="' + d.info__avatar + '" onclick="user_set_avatar(' + d.id + ');"></div>';
 									}
-									return '<div><img style="height:30px;width:30px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:8000/media/users/avatar/default.jpg"></div>';
+									return '<div><img style="height:30px;width:30px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:8000/media/users/avatar/default.jpg" onclick="user_set_avatar(' + d.id + ');"></div>';
 								}
 							},
 							{
@@ -230,7 +230,7 @@
 								templet: function(d) {
 									var str = '<a class="layui-btn layui-btn-primary layui-btn-xs" onclick="user_edit(' + d.id + ');"><i class="layui-icon layui-icon-edit"></i>编辑</a>';
 									str += '<a class="layui-btn layui-btn-xs" onclick="user_reset_password(' + d.id + ');"><i class="layui-icon layui-icon-survey"></i>重置密码</a>';
-									str += '<a class="layui-btn layui-btn-xs" onclick="user_set_avatar(' + d.id + ');"><i class="layui-icon layui-icon-friends"></i>设置头像</a>';
+									str += '<a class="layui-btn layui-btn-xs" onclick="user_remove_avatar(' + d.id + ');"><i class="layui-icon layui-icon-friends"></i>移除头像</a>';
 									if(d.is_active) {
 										str += '<a class="layui-btn layui-btn-danger layui-btn-xs" onclick="user_set_inactive(' + d.id + ');"><i class="layui-icon layui-icon-face-cry"></i>禁用</a>';
 									} else {
@@ -728,6 +728,32 @@
 						layui.table.reload('LAY-users-manage');
 					}
 				})
+			}
+			
+			// "启用"按钮
+			function user_remove_avatar(id) {
+				$.ajax({
+					url: "http://127.0.0.1:8000/users/" + id + "/remove_avatar/",
+					type: "post",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					success: function(data) {
+						layer.msg(data.msg, {
+							icon: 1,
+							time: 2000
+						})
+						layui.table.reload('LAY-users-manage');
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						layer.msg(json_responseText.error[0], {
+							icon: 2,
+							anim: 6
+						});
+						layui.table.reload('LAY-users-manage');
+					}
+				});
 			}
 
 			// "禁用"按钮

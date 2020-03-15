@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'dormitories.apps.DormitoriesConfig',
     'user_operation.apps.UserOperationConfig',
     'system_setting.apps.SystemSettingConfig',
+    'access_control.apps.AccessControlConfig',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',

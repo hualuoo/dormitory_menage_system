@@ -26,6 +26,7 @@ from users.views import getUserFuzzyMailViewset, checkUserMailViewset, sendOldMa
 
 from dormitories.views import DormitoryViewset, WaterFeesViewset, ElectricityFeesViewset
 from user_operation.views import ElectricityFeesLogViewset, RepairViewset, RepairLogViewset
+from access_control.views import AccessControlViewset
 
 router = DefaultRouter()
 # router.register(r'users', UsersViewset, basename="users")
@@ -46,6 +47,7 @@ router.register(r'electricity_fees', ElectricityFeesViewset, basename="electrici
 router.register(r'electricity_fees_log', ElectricityFeesLogViewset, basename="electricity_fees_log")
 router.register(r'repair', RepairViewset, basename="repair")
 router.register(r'repair_log', RepairLogViewset, basename="repair_log")
+router.register(r'access_control', AccessControlViewset, basename="access_control")
 
 
 urlpatterns = [

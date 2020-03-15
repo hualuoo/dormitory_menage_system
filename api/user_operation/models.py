@@ -6,15 +6,16 @@ from dormitories.models import Dormitory
 # Create your models here.
 
 
-class WaterRateLog(models.Model):
+class WaterFeesLog(models.Model):
     """
     水费使用记录
     """
-    dormitory = models.ForeignKey(Dormitory, verbose_name="宿舍", on_delete=models.CASCADE, null=False, related_name='water_rate_log_dormitory')
+    dormitory = models.ForeignKey(Dormitory, verbose_name="宿舍", on_delete=models.CASCADE, null=False, related_name='water_fees_log_dormitory')
     mode = models.CharField(verbose_name="操作方式", max_length=3, choices=(("add", "加"), ("sub", "减")), default="sub")
     change_water = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="改变水量(吨)")
-    operator = models.ForeignKey(User, verbose_name="操作人", on_delete=models.CASCADE, null=False, related_name='water_rate_log_operator')
+    operator = models.ForeignKey(User, verbose_name="操作人", on_delete=models.CASCADE, null=False, related_name='water_fees_log_operator')
     add_time = models.DateTimeField(verbose_name="创建时间", default=datetime.now)
+    note = models.CharField(verbose_name="备注", max_length=100, blank=True, null=True)
 
     class Meta:
         verbose_name = "宿舍水费使用记录"
@@ -77,3 +78,5 @@ class RepairLog(models.Model):
 
     def __str__(self):
         return self.id
+
+

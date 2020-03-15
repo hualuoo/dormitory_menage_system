@@ -83,6 +83,8 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "set_avatar":
             return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "get_face_list":
+            return [IsAuthenticated(), UserIsSuperUser()]
         return []
 
     """
