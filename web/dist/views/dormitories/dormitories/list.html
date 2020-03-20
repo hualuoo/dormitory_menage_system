@@ -64,13 +64,15 @@
 				</div>
 
 				<div class="layui-card-body layui-form">
-					<div class="layui-form-item">
-						<input type="checkbox" name="" title="只显示未满宿舍" lay-filter="only_show_empty_dormitories">
+					<input type="checkbox" name="" title="只显示未满宿舍" lay-filter="only_show_empty_dormitories">
+					<div style="float:right">
 						<button class="layui-btn layui-btn-sm layui-btn-normal" data-type="add" id="dormitory_create_button">
                     		<i class="layui-icon layui-icon-add-circle"></i> 创建单个宿舍
                 		</button>
 					</div>
-					<table id="LAY-dormitories-manage" lay-filter="LAY-dormitories-manage"></table>
+					<div style="padding: 10px 0 0 0;">
+						<table id="LAY-dormitories-manage" lay-filter="LAY-dormitories-manage"></table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -91,15 +93,17 @@
 					autoSort: false, //禁用前端自动排序
 					toolbar: '#toolbarDemo',
 					url: 'http://127.0.0.1:8000/dormitories/',
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
 					where: {
 
 					},
 					limit: 10,
 					limits: [10, 20, 50, 100],
-					height: 'full-206',
+					height: 'full-198',
 					cols: [
-						[
-							{
+						[{
 								field: 'id',
 								title: 'ID',
 								width: '5%',
@@ -273,6 +277,9 @@
 								$.ajax({
 									url: "http://127.0.0.1:8000/dormitories/",
 									type: "post",
+									headers: {
+										"Authorization": "JWT " + localStorage.getItem("cache_token")
+									},
 									dataType: "json",
 									data: {
 										"number": field.dormitory_number,
@@ -422,6 +429,9 @@
 							$.ajax({
 								url: "http://127.0.0.1:8000/dormitories/" + id + "/change_note/",
 								type: "post",
+								headers: {
+									"Authorization": "JWT " + localStorage.getItem("cache_token")
+								},
 								dataType: "json",
 								data: {
 									"note": field.dormitory_note
@@ -481,6 +491,9 @@
 							$.ajax({
 								url: "http://127.0.0.1:8000/dormitories/" + id + "/",
 								type: "delete",
+								headers: {
+									"Authorization": "JWT " + localStorage.getItem("cache_token")
+								},
 								success: function(data) {
 									layer.close(index);
 									layer.msg('操作成功：ID为' + id + '的宿舍已被删除！', {

@@ -13,9 +13,10 @@ class AccessControlSerializer(serializers.ModelSerializer):
     person__first_name = serializers.CharField(source="person.first_name", help_text="通过的人的姓")
     person__last_name = serializers.CharField(source="person.last_name", help_text="通过的人的名")
     person__face__photo = serializers.ImageField(source="person.face.photo", help_text="通过的人的人脸照片")
+    state = serializers.ChoiceField(help_text="状态", choices=(("normal", "正常"), ("later", "晚归"), ("abnormal", "异常")), default="normal")
     accuracy = serializers.DecimalField(max_digits=5, decimal_places=2)
     add_time = serializers.DateTimeField(help_text="创建时间", format="%Y-%m-%d %H:%M", default=datetime.now)
 
     class Meta:
         model = AccessControl
-        fields = ("id", "photo", "person__username", "person__first_name", "person__last_name", "person__face__photo", "accuracy", "add_time", )
+        fields = ("id", "photo", "person__username", "person__first_name", "person__last_name", "person__face__photo", "state", "accuracy", "add_time", )

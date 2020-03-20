@@ -12,7 +12,7 @@ class AccessControl(models.Model):
     photo = models.ImageField(upload_to="users/access_control/", null=True, blank=True, verbose_name="通过门禁的照片")
     person = models.ForeignKey(User, verbose_name="通过的人", on_delete=models.CASCADE, null=False, related_name='access_control_s_person')
     accuracy = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="准确率(%)")
-
+    state = models.CharField(verbose_name="状态", max_length=10, choices=(("normal", "正常"), ("later", "晚归"), ("abnormal", "异常")), default="normal")
     add_time = models.DateTimeField(verbose_name="创建时间", default=datetime.now)
 
     class Meta:

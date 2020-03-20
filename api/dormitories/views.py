@@ -3,6 +3,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
+from rest_framework.authentication import SessionAuthentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Dormitory, WaterFees, ElectricityFees
 from .serializers import DormitorySerializer, DormitoryCreateSerializer, DormitoryOnChangeTransferSerializer, DormitoryChangeAllowLiveNumberSerializer, DormitoryChangeNoteSerializer
@@ -11,6 +14,7 @@ from .serializers import ElectricityFeesSerializer, ElectricityFeesRechargeSeria
 from users.models import User
 from user_operation.models import ElectricityFeesLog
 from system_setting.models import SystemSetting
+from utils.permission import UserIsSuperUser, UserIsSelf, UserIsOwner
 # Create your views here.
 
 
@@ -18,6 +22,7 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
     """
     宿舍 视图类
     """
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = DormitorySerializer
     queryset = Dormitory.objects.all()
 
@@ -35,6 +40,21 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         if self.action == "change_note":
             return DormitoryChangeNoteSerializer
         return DormitorySerializer
+
+    def get_permissions(self):
+        if self.action == "list":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "retrieve":
+            return [IsAuthenticated(), UserIsSelf()]
+        if self.action == "create":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "onchange_transfer":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "change_allow_live_number":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "change_note":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        return []
 
     def list(self, request, *args, **kwargs):
         """

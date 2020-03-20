@@ -24,9 +24,9 @@ class UserSerializer(serializers.ModelSerializer):
                                            choices=(("male", "男"), ("female", "女"), ("unknown", "未知")))
     info__mobile = serializers.CharField(source='info.mobile', help_text="电话", allow_blank=True, max_length=11)
     info__avatar = serializers.ImageField(source='info.avatar', help_text="照片")
-    lived_dormitory_number = serializers.SerializerMethodField()
+    lived_dormitory = serializers.SerializerMethodField()
 
-    def get_lived_dormitory_number(self, obj):
+    def get_lived_dormitory(self, obj):
         if obj.lived_dormitory is not None:
             return obj.lived_dormitory.number
         else:
@@ -35,7 +35,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "username", "email", "first_name", "last_name", "last_login", "date_joined", "is_active",
-                  "is_staff", "info__birthday", "info__gender", "info__mobile", "info__avatar","lived_dormitory_number", )
+                  "is_staff", "info__birthday", "info__gender", "info__mobile", "info__avatar","lived_dormitory", )
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -44,6 +44,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     """
     username = serializers.CharField(help_text="用户名")
     password = serializers.CharField(help_text="密码", write_only=True)
+    is_staff = serializers.BooleanField(help_text="是否为教职工")
 
     def validate_username(self, username):
         flag = re.match(r'^[a-zA-Z0-9_-]{4,16}$', username)
@@ -69,7 +70,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("username", "password", )
+        fields = ("username", "password", "is_staff", )
 
 
 class UserCreateMultipleSerializer(serializers.ModelSerializer):
@@ -196,6 +197,8 @@ class UserResetPasswordMultipleSerializer(serializers.ModelSerializer):
             users = User.objects.filter(id=i)
             if users.count() == 0:
                 raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在')
+            if users.first() == self.context['request'].user:
+                raise serializers.ValidationError('操作失败：您无法操作自己！')
         return ids
 
     def validate_password(self, password):
@@ -220,7 +223,9 @@ class UserCheckIdsSerializer(serializers.ModelSerializer):
         for i in ids_list:
             users = User.objects.filter(id=i)
             if users.count() == 0:
-                raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在')
+                raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在！')
+            if users.first() == self.context['request'].user:
+                raise serializers.ValidationError('操作失败：您无法操作自己！')
         return ids
 
     class Meta:

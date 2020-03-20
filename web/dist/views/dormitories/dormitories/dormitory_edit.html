@@ -67,7 +67,6 @@
 
 		<script src="../../../layuiadmin/layui/layui.js"></script>
 		<script>
-			
 			layui.use(['form', 'transfer'], function() {
 				var form = layui.form;
 				var transfer = layui.transfer;
@@ -93,6 +92,9 @@
 				$.ajax({
 					url: "http://127.0.0.1:8000/dormitories/" + dormitories_id + "/",
 					type: "get",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
 					dataType: "json",
 					success: function(data) {
 						form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
@@ -116,6 +118,9 @@
 				$.ajax({
 					type: "post",
 					url: "http://127.0.0.1:8000/dormitories/" + dormitories_id + "/get_transfer_data/",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
 					async: false,
 					success: function(data) {
 						transfer_data = data.data;
@@ -124,6 +129,9 @@
 				$.ajax({
 					type: "post",
 					url: "http://127.0.0.1:8000/dormitories/" + dormitories_id + "/get_transfer_value/",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
 					async: false,
 					success: function(data) {
 						transfer_value = data.value;
@@ -149,7 +157,11 @@
 						$.ajax({
 							type: "post",
 							url: "http://127.0.0.1:8000/dormitories/" + dormitories_id + "/onchange_transfer/",
+							headers: {
+								"Authorization": "JWT " + localStorage.getItem("cache_token")
+							},
 							dataType: "json",
+
 							data: {
 								ids: ids,
 								index: index
@@ -175,35 +187,38 @@
 						});
 					}
 				});
-				
+
 				form.on('select(dormitory_allow_live_number)', function(data) {
 					$.ajax({
-                        url: "http://127.0.0.1:8000/dormitories/" + dormitories_id + "/change_allow_live_number/",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                            "allow_live_number": $('#dormitory_allow_live_number').val()
-                        },
-                        success: function (data) {
-                            layer.msg(data.msg, {
-                                icon: 1,
-                                time: 2000
-                            })
-                        },
-                        error: function (jqXHR) {
-                            var json_responseText = JSON.parse(jqXHR.responseText);
-                            if (json_responseText.allow_live_number) {
-                                layer.msg(json_responseText.allow_live_number[0], {
-                                    icon: 2,
-                                    anim: 6,
-                                    btn: ['明白了'],
+						url: "http://127.0.0.1:8000/dormitories/" + dormitories_id + "/change_allow_live_number/",
+						type: "post",
+						headers: {
+							"Authorization": "JWT " + localStorage.getItem("cache_token")
+						},
+						dataType: "json",
+						data: {
+							"allow_live_number": $('#dormitory_allow_live_number').val()
+						},
+						success: function(data) {
+							layer.msg(data.msg, {
+								icon: 1,
+								time: 2000
+							})
+						},
+						error: function(jqXHR) {
+							var json_responseText = JSON.parse(jqXHR.responseText);
+							if(json_responseText.allow_live_number) {
+								layer.msg(json_responseText.allow_live_number[0], {
+									icon: 2,
+									anim: 6,
+									btn: ['明白了'],
 									yes: function(index) {
 										window.location.reload();
 									}
-                                });
-                            }
-                        }
-                    });
+								});
+							}
+						}
+					});
 				});
 
 			});

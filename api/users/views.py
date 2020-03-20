@@ -66,7 +66,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         if self.action == "retrieve":
             return [IsAuthenticated(), UserIsSelf()]
         if self.action == "create":
-            return []
+            return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "create_multiple":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "reset_password":
@@ -249,6 +249,10 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
                 'password': '<password>'
             }
         """
+        if request.user == self.get_object():
+            return Response({
+                "msg": "操作失败：您无法操作自己！"
+            }, status=status.HTTP_400_BAD_REQUEST)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -290,11 +294,15 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             url: '/users/<pk>/set_inactive/'
             type: 'post'
         """
+        if request.user == self.get_object():
+            return Response({
+                "msg": "操作失败：您无法操作自己！"
+            }, status=status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
         user.is_active = False
         user.save()
         return Response({
-            "msg": "用户" + user.username + "已被禁用"
+            "msg": "操作成功：用户" + user.username + "已被禁用"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=False)
@@ -327,6 +335,10 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             url: '/users/<pk>/set_active/'
             type: 'post'
         """
+        if request.user == self.get_object():
+            return Response({
+                "msg": "操作失败：您无法操作自己！"
+            }, status=status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
         user.is_active = True
         user.save()

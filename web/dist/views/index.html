@@ -121,42 +121,79 @@
 								</dl>
 							</li>
 							<li data-name="users" class="layui-nav-item">
-								<a href="javascript:;" lay-tips="用户" lay-direction="2">
+								<a href="javascript:;" lay-tips="用户管理" lay-direction="2">
 									<i class="layui-icon layui-icon-user"></i>
-									<cite>用户</cite>
+									<cite>用户管理</cite>
 								</a>
 								<dl class="layui-nav-child">
-									<dd>
-										<a lay-href="users/users/list.html">学生列表</a>
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;">学生</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="users/users/list.html">学生列表 - 所有</a>
+											</dd>
+											<dd>
+												<a lay-href="users/users/list_inactive.html">学生列表 - 禁用</a>
+											</dd>
+											<dd>
+												<a lay-href="users/users/user_create_multiple.html">批量创建学生</a>
+											</dd>
+										</dl>
 									</dd>
-									<dd>
-										<a lay-href="users/users/list_inactive.html">被禁用的学生</a>
-									</dd>
-									<dd>
-										<a lay-href="users/users/user_create_multiple.html">批量创建学生</a>
-									</dd>
-									<dd>
-										<a lay-href="users/users/list_staff.html">教职工列表</a>
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;">教职工</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="users/staff/list.html">教职工列表 - 所有</a>
+											</dd>
+											<dd>
+												<a lay-href="users/staff/list_inactive.html">教职工列表 - 禁用</a>
+											</dd>
+										</dl>
 									</dd>
 								</dl>
 							</li>
 							<li data-name="dormitories" class="layui-nav-item">
-								<a href="javascript:;" lay-tips="宿舍" lay-direction="2">
+								<a href="javascript:;" lay-tips="宿舍管理" lay-direction="2">
 									<i class="layui-icon layui-icon-template"></i>
-									<cite>宿舍</cite>
+									<cite>宿舍管理</cite>
 								</a>
 								<dl class="layui-nav-child">
-									<dd>
-										<a lay-href="dormitories/dormitories/list.html">宿舍管理</a>
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;">宿舍</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="dormitories/dormitories/list.html">宿舍列表 - 所有</a>
+											</dd>
+											<dd>
+												<a lay-href="dormitories/dormitories/list.html">宿舍列表 - 未满</a>
+											</dd>
+										</dl>
 									</dd>
-									<dd>
-										<a lay-href="dormitories/electricity_fees/list.html">电费管理</a>
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;">缴费</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="dormitories/electricity_fees/list.html">电费</a>
+											</dd>
+											<dd>
+												<a lay-href="dormitories/water_fees/list.html">水费</a>
+											</dd>
+										</dl>
 									</dd>
-									<dd>
-										<a lay-href="dormitories/water_fees/list.html">水费管理</a>
-									</dd>
-									<dd>
-										<a lay-href="dormitories/repair/list.html">报修单管理</a>
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;">维修</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="dormitories/repair/list.html">报修单列表 - 所有</a>
+											</dd>
+											<dd>
+												<a lay-href="dormitories/repair/list.html">报修单列表 - 待回复</a>
+											</dd>
+											<dd>
+												<a lay-href="dormitories/repair/list.html">报修单列表 - 待处理</a>
+											</dd>
+										</dl>
 									</dd>
 								</dl>
 							</li>
@@ -174,9 +211,6 @@
 									</dd>
 									<dd>
 										<a lay-href="dormitories/water_fees/list.html">异常处理</a>
-									</dd>
-									<dd>
-										<a lay-href="dormitories/repair/list.html">报修单管理</a>
 									</dd>
 								</dl>
 							</li>

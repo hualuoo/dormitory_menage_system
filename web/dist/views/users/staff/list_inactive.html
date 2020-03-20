@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>学生列表 - 所有</title>
+		<title>教职工列表 - 所有</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -63,7 +63,6 @@
 				</div>
 
 				<div class="layui-card-body layui-form">
-					<input type="checkbox" name="" title="显示禁用的用户" lay-filter="display_deactive_user">
 					<span class="layui-badge-dot layui-bg-blue"></span> 小知识：点击头像即可设置头像
 					<div style="float:right">
 						<button class="layui-btn layui-btn-sm layui-btn-normal" data-type="batchdel" id="users_set_inactive_multiple_button">
@@ -75,11 +74,8 @@
 						<button class="layui-btn layui-btn-sm layui-btn-normal" data-type="batchdel" id="users_reset_password_multiple_button">
                     		<i class="layui-icon layui-icon-survey"></i> 批量重置密码
                 		</button>
-						<button class="layui-btn layui-btn-sm layui-btn-normal" data-type="add" id="user_create_button">
-                    		<i class="layui-icon layui-icon-add-circle"></i> 创建单个学生
-                		</button>
 					</div>
-					<div style="padding: 10px 0 0 0;">
+					<div style="padding: 16px 0 0 0;">
 						<table id="LAY-users-manage" lay-filter="LAY-users-manage"></table>
 					</div>
 				</div>
@@ -108,8 +104,8 @@
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
 					where: {
-						'is_active': 'true',
-						'is_staff': 'false'
+						'is_active': 'false',
+						'is_staff': 'true'
 					},
 					limit: 10,
 					limits: [10, 20, 50, 100],
@@ -490,80 +486,6 @@
 						)
 					});
 				});
-
-				// 用户"添加学生"按钮
-				$('#user_create_button').click(function() {
-					layer.open({
-						type: 2,
-						title: '创建',
-						content: 'user_create.html',
-						shadeClose: true,
-						maxmin: true,
-						area: ['310px', '226px'],
-						btn: ['确定', '取消'],
-						yes: function(index, layero) {
-							var iframeWindow = window['layui-layer-iframe' + index],
-								submitID = 'LAY-user-front-submit',
-								submit = layero.find('iframe').contents().find('#' + submitID);
-
-							//监听提交
-							iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
-								var field = data.field; //获取提交的字段
-								$.ajax({
-									url: "http://127.0.0.1:8000/users/",
-									type: "post",
-									headers: {
-										"Authorization": "JWT " + localStorage.getItem("cache_token")
-									},
-									dataType: "json",
-									data: {
-										"username": field.user_username,
-										"password": field.user_password,
-										"is_staff": false
-									},
-									success: function(data) {
-										layer.msg('操作成功：新用户' + data.username + '创建成功！', {
-											icon: 1,
-											time: 2000
-										})
-										layer.close(index); //关闭弹层
-										layui.table.reload('LAY-users-manage');
-									},
-									error: function(jqXHR) {
-										var json_responseText = JSON.parse(jqXHR.responseText);
-										if(json_responseText.username) {
-											layer.msg(json_responseText.username[0], {
-												icon: 2,
-												anim: 6
-											});
-											layero.find('iframe').contents().find('#user_username').focus();
-											return false;
-										}
-										if(json_responseText.password) {
-											layer.msg(json_responseText.password[0], {
-												icon: 2,
-												anim: 6
-											});
-											layero.find('iframe').contents().find('#user_password').focus();
-											return false;
-										}
-										if(json_responseText.msg) {
-											layer.msg(json_responseText.msg, {
-												icon: 2,
-												anim: 6
-											});
-											return false;
-										}
-									}
-								});
-							});
-							submit.trigger('click');
-						},
-						btn2: function(index, layero) {
-							layer.close(index); //关闭弹层
-						}
-					});
-				});
 			})
 
 			// 表单修饰
@@ -592,7 +514,7 @@
 				layer.open({
 					type: 2,
 					title: '修改用户',
-					content: 'user_edit.html?id=' + id,
+					content: '../users/user_edit.html?id=' + id,
 					shadeClose: true,
 					maxmin: true,
 					area: ['701px', '438px'],
@@ -750,7 +672,7 @@
 				layer.open({
 					type: 2,
 					title: '设置用户头像',
-					content: 'user_set_avatar.html?id=' + id,
+					content: '../users/user_set_avatar.html?id=' + id,
 					shadeClose: true,
 					maxmin: true,
 					area: ['851px', '623px'],

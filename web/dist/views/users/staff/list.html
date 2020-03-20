@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>学生列表 - 所有</title>
+		<title>教职工列表 - 所有</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -76,7 +76,7 @@
                     		<i class="layui-icon layui-icon-survey"></i> 批量重置密码
                 		</button>
 						<button class="layui-btn layui-btn-sm layui-btn-normal" data-type="add" id="user_create_button">
-                    		<i class="layui-icon layui-icon-add-circle"></i> 创建单个学生
+                    		<i class="layui-icon layui-icon-add-circle"></i> 创建单个教职工
                 		</button>
 					</div>
 					<div style="padding: 10px 0 0 0;">
@@ -109,7 +109,7 @@
 					},
 					where: {
 						'is_active': 'true',
-						'is_staff': 'false'
+						'is_staff': 'true'
 					},
 					limit: 10,
 					limits: [10, 20, 50, 100],
@@ -491,12 +491,12 @@
 					});
 				});
 
-				// 用户"添加学生"按钮
+				// 用户"添加教职工"按钮
 				$('#user_create_button').click(function() {
 					layer.open({
 						type: 2,
 						title: '创建',
-						content: 'user_create.html',
+						content: '../users/user_create.html',
 						shadeClose: true,
 						maxmin: true,
 						area: ['310px', '226px'],
@@ -519,7 +519,7 @@
 									data: {
 										"username": field.user_username,
 										"password": field.user_password,
-										"is_staff": false
+										"is_staff": true
 									},
 									success: function(data) {
 										layer.msg('操作成功：新用户' + data.username + '创建成功！', {
@@ -592,7 +592,7 @@
 				layer.open({
 					type: 2,
 					title: '修改用户',
-					content: 'user_edit.html?id=' + id,
+					content: '../users/user_edit.html?id=' + id,
 					shadeClose: true,
 					maxmin: true,
 					area: ['701px', '438px'],
@@ -750,7 +750,7 @@
 				layer.open({
 					type: 2,
 					title: '设置用户头像',
-					content: 'user_set_avatar.html?id=' + id,
+					content: '../users/user_set_avatar.html?id=' + id,
 					shadeClose: true,
 					maxmin: true,
 					area: ['851px', '623px'],

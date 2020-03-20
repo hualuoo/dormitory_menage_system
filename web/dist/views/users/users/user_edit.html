@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>layuiAdmin 网站用户 iframe 框</title>
+		<title>编辑用户</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -14,17 +14,23 @@
 
 	<body>
 
-		<div class="layui-form layui-form-pane" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 20px 0 75px;">
+		<div class="layui-form layui-form-pane" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 20px 0 46px;">
 			<div class="layui-form-item">
 				<label class="layui-form-label" style="color: #808080;">用户ID</label>
-				<div class="layui-input-inline">
+				<div class="layui-input-inline" style="width: 100px;">
 					<input type="text" name="user_id" id="user_id" placeholder="" autocomplete="off" class="layui-input" disabled="disabled" style="background: #F5F5F5;">
 				</div>
+				<div id="user_is_staff"></div>
+				<div id="user_is_active"></div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label" style="color: #808080;">用户名</label>
-				<div class="layui-input-inline">
+				<div class="layui-input-inline" style="width: 140px;">
 					<input type="text" name="user_username" id="user_username" placeholder="" autocomplete="off" class="layui-input" disabled="disabled" style="background: #F5F5F5;">
+				</div>
+				<label class="layui-form-label" style="color: #808080;">居住的宿舍</label>
+				<div class="layui-input-inline" style="width: 140px;">
+					<input type="text" name="user_lived_dormitory" id="user_lived_dormitory" placeholder="" autocomplete="off" class="layui-input" disabled="disabled" style="background: #F5F5F5;">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -32,8 +38,6 @@
 				<div class="layui-input-inline">
 					<input type="text" name="user_email" id="user_email" lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
 				</div>
-			</div>
-			<div class="layui-form-item">
 				<label class="layui-form-label">真实姓名</label>
 				<div class="layui-input-inline" style="width: 70px;">
 					<input type="text" name="user_first_name" id="user_first_name" lay-verify="firstname" placeholder="姓" autocomplete="off" class="layui-input">
@@ -47,14 +51,12 @@
 				<div class="layui-input-inline">
 					<input type="text" name="user_birthday" id="user_birthday" lay-verify="data" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
 				</div>
-			</div>
-			<div class="layui-form-item">
 				<label class="layui-form-label">手机号码</label>
 				<div class="layui-input-inline">
 					<input type="text" name="user_mobile" id="user_mobile" lay-verify="phone" placeholder="请输入号码" autocomplete="off" class="layui-input">
 				</div>
 			</div>
-			<div class="layui-form-item" lay-filter="sex" pane="" style="width: 297px;">
+			<div class="layui-form-item" lay-filter="sex" pane="" style="width: 606px;">
 				<label class="layui-form-label">选择性别 <a style="color: red;">*</a></label>
 				<div class="layui-input-block">
 					<input type="radio" name="user_gender" value="male" title="男">
@@ -62,6 +64,17 @@
 					<input type="radio" name="user_gender" value="unknown" title="未知">
 				</div>
 			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="color: #808080;">最后登录</label>
+				<div class="layui-input-inline">
+					<input type="text" name="user_last_login" placeholder="" autocomplete="off" class="layui-input" disabled="disabled" style="background: #F5F5F5;">
+				</div>
+				<label class="layui-form-label" style="color: #808080;">创建时间</label>
+				<div class="layui-input-inline">
+					<input type="text" name="user_date_joined" placeholder="" autocomplete="off" class="layui-input" disabled="disabled" style="background: #F5F5F5;">
+				</div>
+			</div>
+			
 			<div class="layui-form-item layui-hide">
 				<input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
 			</div>
@@ -122,8 +135,24 @@
 								"user_last_name": data.last_name,
 								"user_birthday": data.info__birthday,
 								"user_mobile": data.info__mobile,
-								"user_gender": data.info__gender
+								"user_gender": data.info__gender,
+								"user_last_login": data.last_login,
+								"user_date_joined": data.date_joined,
+								"user_lived_dormitory": data.lived_dormitory
 							});
+							if (data.is_staff == false) {
+								$('#user_is_staff').html('<span class="layui-badge layui-bg-green" >学生</span>');
+							} else {
+								$('#user_is_staff').html('<span class="layui-badge layui-bg-cyan" >教职工</span>');
+							}
+							if (data.is_active == false) {
+								$('#user_is_active').html('<span class="layui-badge" >禁用</span>');
+							} else {
+								$('#user_is_active').html('<span class="layui-badge layui-bg-blue" >可用</span>');
+							}
+							if (data.lived_dormitory == null) {
+								$('#user_lived_dormitory').val("未安排");
+							}
 						},
 						error: function(jqXHR) {
 							layer.msg('数据加载错误，请联系管理员处理', {
@@ -134,53 +163,6 @@
 					});
 				}
 			});
-
-			/*
-			//监听指定开关
-			form.on('switch(switchTest)', function(data) {
-				layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
-					offset: '6px'
-				});
-				layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
-			});
-
-			//监听提交
-			form.on('submit(demo1)', function(data) {
-				layer.alert(JSON.stringify(data.field), {
-					title: '最终的提交信息'
-				})
-				return false;
-			});
-
-			//表单取值
-			layui.$('#LAY-component-form-getval').on('click', function() {
-				var data = form.val('example');
-				alert(JSON.stringify(data));
-			});
-			*/
-
-			/*
-			layui.config({
-				base: '../../../layuiadmin/' //静态资源所在路径
-			}).extend({
-				index: 'lib/index' //主入口模块
-			}).use(['index', 'form', 'upload'], function() {
-				var $ = layui.$,
-					form = layui.form,
-					upload = layui.upload;
-
-				upload.render({
-					elem: '#layuiadmin-upload-useradmin',
-					url: layui.setter.base + 'json/upload/demo.js',
-					accept: 'images',
-					method: 'get',
-					acceptMime: 'image/*',
-					done: function(res) {
-						$(this.item).prev("div").children("input").val(res.data.src)
-					}
-				});
-			})
-			*/
 		</script>
 	</body>
 	<script>
