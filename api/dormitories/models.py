@@ -29,13 +29,10 @@ class WaterFees(models.Model):
     """
     宿舍水费
     """
-    dormitory = models.ForeignKey(Dormitory, verbose_name="宿舍", on_delete=models.CASCADE, null=False, related_name='water_fees_dormitory')
-    used_water = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="已用水量(吨)")
-    surplus_water = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="剩余水量(吨)")
-    total_water = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="总共水量(吨)")
-    cost = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="水费(元/吨)")
-    note = models.CharField(verbose_name="备注", max_length=100, blank=True)
-    month = models.DateField(verbose_name="月份")
+    dormitory = models.OneToOneField(Dormitory, verbose_name="宿舍", on_delete=models.CASCADE, null=False,
+                                  related_name='water_fees')
+    have_water_fees = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="现有金额(元)", default=0.00)
+    note = models.CharField(verbose_name="备注", max_length=100, blank=True, null=True)
 
     class Meta:
         verbose_name = "宿舍水费"
@@ -50,8 +47,8 @@ class ElectricityFees(models.Model):
     宿舍电费
     """
     dormitory = models.OneToOneField(Dormitory, verbose_name="宿舍", on_delete=models.CASCADE, null=False,
-                                  related_name='electricity_fees_dormitory')
-    have_electricity_fees = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="现有金额(元)")
+                                  related_name='electricity_fees')
+    have_electricity_fees = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="现有金额(元)", default=0.00)
     note = models.CharField(verbose_name="备注", max_length=100, blank=True, null=True)
 
     class Meta:

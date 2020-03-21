@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>宿舍列表 - 所有</title>
+		<title>宿舍列表 - 未满</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -64,13 +64,12 @@
 				</div>
 
 				<div class="layui-card-body layui-form">
-					<input type="checkbox" name="" title="只显示已满宿舍" lay-filter="only_show_full_dormitories">
 					<div style="float:right">
 						<button class="layui-btn layui-btn-sm layui-btn-normal" data-type="add" id="dormitory_create_button">
                     		<i class="layui-icon layui-icon-add-circle"></i> 创建单个宿舍
                 		</button>
 					</div>
-					<div style="padding: 10px 0 0 0;">
+					<div style="padding: 40px 0 0 0;">
 						<table id="LAY-dormitories-manage" lay-filter="LAY-dormitories-manage"></table>
 					</div>
 				</div>
@@ -98,7 +97,7 @@
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
 					where: {
-						'is_empty': 'all'
+						'is_empty': 'true'
 					},
 					limit: 10,
 					limits: [10, 20, 50, 100],
@@ -368,15 +367,15 @@
 
 			})
 
-			// 表单修饰 "只显示已满宿舍"
+			// 表单修饰 "只显示未满宿舍"
 			layui.use('form', function() {
 				var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
 				form.render();
-				form.on('checkbox(only_show_full_dormitories)', function(data) {
+				form.on('checkbox(only_show_empty_dormitories)', function(data) {
 					if(data.elem.checked) {
 						layui.table.reload('LAY-dormitories-manage', {
 							where: {
-								'is_empty': 'false'
+								'is_empty': 'true'
 							}
 						}, 'data');
 					} else {

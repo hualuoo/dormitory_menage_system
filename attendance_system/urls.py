@@ -25,7 +25,7 @@ from users.views import UserViewset, VerifyCodeViewset, ChangePasswordViewset
 from users.views import getUserFuzzyMailViewset, checkUserMailViewset, sendOldMailCaptchaViewset, confirmOldMailCaptchaViewset, sendNewMailCaptchaViewset, confirmNewMailCaptchaViewset
 
 from dormitories.views import DormitoryViewset, WaterFeesViewset, ElectricityFeesViewset
-from user_operation.views import ElectricityFeesLogViewset, RepairViewset, RepairLogViewset
+from user_operation.views import WaterFeesLogViewset, ElectricityFeesLogViewset, RepairViewset, RepairLogViewset
 from access_control.views import AccessControlViewset
 
 router = DefaultRouter()
@@ -43,6 +43,7 @@ router.register(r'member/security/confirmNewMailCaptcha', confirmNewMailCaptchaV
 router.register(r'users', UserViewset, basename="users")
 router.register(r'dormitories', DormitoryViewset, basename="dormitories")
 router.register(r'water_fees', WaterFeesViewset, basename="water_fees")
+router.register(r'water_fees_log', WaterFeesLogViewset, basename="water_fees_log")
 router.register(r'electricity_fees', ElectricityFeesViewset, basename="electricity_fees")
 router.register(r'electricity_fees_log', ElectricityFeesLogViewset, basename="electricity_fees_log")
 router.register(r'repair', RepairViewset, basename="repair")

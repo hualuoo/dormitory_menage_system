@@ -4,6 +4,21 @@ from datetime import datetime
 from .models import ElectricityFeesLog, Repair, RepairLog
 
 
+class WaterFeesLogSerializer(serializers.ModelSerializer):
+    dormitory_number = serializers.CharField(source='dormitory.number')
+    mode = serializers.ChoiceField(help_text="操作方式", choices=(("add", "加"), ("sub", "减")), default="sub")
+    change_money = serializers.DecimalField(max_digits=5, decimal_places=2, help_text="改变金额(元)")
+    operator__username = serializers.CharField(source='operator.username')
+    operator__first_name = serializers.CharField(source='operator.first_name')
+    operator__last_name = serializers.CharField(source='operator.last_name')
+    add_time = serializers.DateTimeField(help_text="创建时间", default=datetime.now, format="%Y-%m-%d %H:%M:%S")
+    note = serializers.CharField(help_text="备注", max_length=100, allow_blank=True, allow_null=True)
+
+    class Meta:
+        model = ElectricityFeesLog
+        fields = ("id", "dormitory_number", "mode", "change_money", "operator__username", "operator__first_name", "operator__last_name", "add_time", "note", )
+
+
 class ElectricityFeesLogSerializer(serializers.ModelSerializer):
     dormitory_number = serializers.CharField(source='dormitory.number')
     mode = serializers.ChoiceField(help_text="操作方式", choices=(("add", "加"), ("sub", "减")), default="sub")

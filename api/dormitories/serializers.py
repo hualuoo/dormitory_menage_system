@@ -70,6 +70,15 @@ class DormitoryCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('操作失败：房间号前两位与楼层不对应')
         return room
 
+    def create(self, validated_data):
+        dormitory = super(DormitoryCreateSerializer, self).create(validated_data=validated_data)
+        dormitory.save()
+        water_fees = WaterFees.objects.create(dormitory=dormitory)
+        electricity_fees = ElectricityFees.objects.create(dormitory=dormitory)
+        water_fees.save()
+        electricity_fees.save()
+        return dormitory
+
     class Meta:
         model = Dormitory
         fields = "__all__"
@@ -114,70 +123,55 @@ class DormitoryChangeNoteSerializer(serializers.ModelSerializer):
 
 
 class WaterFeesSerializer(serializers.ModelSerializer):
+    """
+    宿舍水费 序列类
+    """
     dormitory_number = serializers.CharField(source='dormitory.number')
-    used_water = serializers.DecimalField(max_digits=5, decimal_places=2)
-    surplus_water = serializers.DecimalField(max_digits=5, decimal_places=2)
-    total_water = serializers.DecimalField(max_digits=5, decimal_places=2)
-    cost = serializers.DecimalField(max_digits=5, decimal_places=2)
-    need_to_pay = serializers.SerializerMethodField()
+    have_water_fees = serializers.DecimalField(max_digits=5, decimal_places=2)
+    have_water = serializers.SerializerMethodField()
     note = serializers.CharField()
-    month = serializers.DateField(help_text="创建时间", format="%Y年%m月份")
 
-    def get_need_to_pay(self, obj):
-        if obj.surplus_water >= 0:
-            return "0"
-        else:
-            # return abs(float(obj.surplus_water)) * float(SystemSetting.objects.filter(code='water_rate').first().content)
-            return round(float(abs(obj.surplus_water)) * float(obj.cost), 2)
+    def get_have_water(self, obj):
+        return round(float(abs(obj.have_water_fees))/float(SystemSetting.objects.filter(code='water_fees').first().content), 2)
 
     class Meta:
-        model = WaterFees
-        fields = ("id", "dormitory_number", "used_water", "surplus_water", "total_water", "cost", "need_to_pay", "note", "month", )
+        model = ElectricityFees
+        fields = ("id", "dormitory_number", "have_water_fees", "have_water", "note", )
 
 
-class WaterFeesChangeCostSerializer(serializers.ModelSerializer):
-    cost = serializers.DecimalField(max_digits=5, decimal_places=2)
-
-    class Meta:
-        model = WaterFees
-        fields = ("cost", )
-
-
-class WaterFeesChangeCostMultipleSerializer(serializers.ModelSerializer):
+class WaterFeesRechargeSerializer(serializers.ModelSerializer):
     """
-    水费 队列检查 序列类
+    宿舍水费 充值 序列类
     """
-    ids = serializers.CharField(help_text="水费ID队列")
-    cost = serializers.DecimalField(max_digits=5, decimal_places=2)
-
-    def validate_ids(self, ids):
-        ids_list = ids.split(',')
-        for i in ids_list:
-            water_rate = WaterFees.objects.filter(id=i)
-            if water_rate.count() == 0:
-                raise serializers.ValidationError('操作失败：ID为' + i + '的水费单不存在')
-        return ids
+    money = serializers.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
-        model = WaterFees
-        fields = ("ids", "cost", )
+        model = ElectricityFees
+        fields = ("money", )
 
 
 class WaterFeesChangeNoteSerializer(serializers.ModelSerializer):
+    """
+    宿舍水费 备注 序列类
+    """
     note = serializers.CharField(help_text="备注", max_length=100, allow_blank=True)
 
     class Meta:
-        model = WaterFees
+        model = ElectricityFees
+        fields = ("note", )
 
 
 class ElectricityFeesSerializer(serializers.ModelSerializer):
+    """
+    宿舍电费 列表 序列类
+    """
     dormitory_number = serializers.CharField(source='dormitory.number')
     have_electricity_fees = serializers.DecimalField(max_digits=5, decimal_places=2)
     have_electricity = serializers.SerializerMethodField()
     note = serializers.CharField()
 
     def get_have_electricity(self, obj):
-        return round(float(abs(obj.have_electricity_fees))/float(SystemSetting.objects.filter(code='water_rate').first().content), 2)
+        return round(float(abs(obj.have_electricity_fees))/float(SystemSetting.objects.filter(code='electricity_fees').first().content), 2)
 
     class Meta:
         model = ElectricityFees
@@ -185,6 +179,9 @@ class ElectricityFeesSerializer(serializers.ModelSerializer):
 
 
 class ElectricityFeesRechargeSerializer(serializers.ModelSerializer):
+    """
+    宿舍电费 充值 序列类
+    """
     money = serializers.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
@@ -193,6 +190,9 @@ class ElectricityFeesRechargeSerializer(serializers.ModelSerializer):
 
 
 class ElectricityFeesChangeNoteSerializer(serializers.ModelSerializer):
+    """
+    宿舍电费 备注 序列类
+    """
     note = serializers.CharField(help_text="备注", max_length=100, allow_blank=True)
 
     class Meta:

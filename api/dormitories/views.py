@@ -9,12 +9,12 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Dormitory, WaterFees, ElectricityFees
 from .serializers import DormitorySerializer, DormitoryCreateSerializer, DormitoryOnChangeTransferSerializer, DormitoryChangeAllowLiveNumberSerializer, DormitoryChangeNoteSerializer
-from .serializers import WaterFeesSerializer, WaterFeesChangeCostSerializer, WaterFeesChangeCostMultipleSerializer, WaterFeesChangeNoteSerializer
+from .serializers import WaterFeesSerializer, WaterFeesRechargeSerializer, WaterFeesChangeNoteSerializer
 from .serializers import ElectricityFeesSerializer, ElectricityFeesRechargeSerializer, ElectricityFeesChangeNoteSerializer
 from users.models import User
-from user_operation.models import ElectricityFeesLog
+from user_operation.models import WaterFeesLog, ElectricityFeesLog
 from system_setting.models import SystemSetting
-from utils.permission import UserIsSuperUser, UserIsSelf, UserIsOwner
+from utils.permission import UserIsSuperUser, DormitoriesIsSelf, WaterFeesIsSelf, ElectricityFeesIsSelf
 # Create your views here.
 
 
@@ -39,13 +39,15 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             return DormitoryChangeAllowLiveNumberSerializer
         if self.action == "change_note":
             return DormitoryChangeNoteSerializer
+        if self.action == "water_fees":
+            return WaterFeesSerializer
         return DormitorySerializer
 
     def get_permissions(self):
         if self.action == "list":
-            return [IsAuthenticated(), UserIsSuperUser()]
+            return [IsAuthenticated()]
         if self.action == "retrieve":
-            return [IsAuthenticated(), UserIsSelf()]
+            return [IsAuthenticated(), DormitoriesIsSelf()]
         if self.action == "create":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "onchange_transfer":
@@ -67,13 +69,17 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         # 获取全部数据
         all_result = self.filter_queryset(self.get_queryset())
 
+        # 如果非管理员，仅搜索该用户
+        if request.user.is_superuser is False:
+            all_result = all_result.filter(Q(number=request.user.lived_dormitory))
+
         # 分页页数
         page = int(request.GET.get('page', '0'))
         # 每页条数
         limit = int(request.GET.get('limit', '0'))
 
         # 是否只显示为满人宿舍
-        only_empty = request.GET.get('only_empty', '')
+        is_empty = request.GET.get('is_empty', '')
 
         # 排序列名
         field = request.GET.get('field', '')
@@ -87,13 +93,10 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         search_room = request.GET.get('search_room', '')
 
         # 是否为满人宿舍
-        if only_empty == 'true':
+        if is_empty == 'true':
             all_result = all_result.filter(~Q(allow_live_number__icontains=F("now_live_number")))
-        if only_empty == 'false':
+        if is_empty == 'false':
             all_result = all_result.filter(Q(allow_live_number__icontains=F("now_live_number")))
-
-        # 替换字符串进行外链查询
-        field = field.replace(".", "__")
 
         # 排序
         if field:
@@ -132,8 +135,13 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
                 'data': serializer.data
             })
 
-    @action(methods=['POST'], detail=True)
+    @action(methods=['GET'], detail=True)
     def get_transfer_data(self, request, *args, **kwargs):
+        """
+            宿舍 居住的用户
+            url: '/dormitories/<pk>/get_transfer_data/'
+            type: 'get'
+        """
         from django.db.models import Q
 
         users_list = []
@@ -160,8 +168,13 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             'data': users_list
         }, status=status.HTTP_200_OK)
 
-    @action(methods=['POST'], detail=True)
+    @action(methods=['GET'], detail=True)
     def get_transfer_value(self, request, *args, **kwargs):
+        """
+            未住进宿舍的用户
+            url: '/dormitories/get_transfer_value/'
+            type: 'post'
+        """
         users_id_list = []
 
         dormitory = self.get_object()
@@ -175,6 +188,11 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
 
     @action(methods=['POST'], detail=True)
     def onchange_transfer(self, request, *args, **kwargs):
+        """
+            调整用户
+            url: '/dormitories/<pk>/onchange_transfer/'
+            type: 'post'
+        """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -222,6 +240,11 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
 
     @action(methods=['POST'], detail=True)
     def change_allow_live_number(self, request, *args, **kwargs):
+        """
+            宿舍 允许居住人数 修改
+            url: '/dormitories/<pk>/change_allow_live_number/'
+            type: 'post'
+        """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -235,6 +258,11 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
 
     @action(methods=['POST'], detail=True)
     def change_note(self, request, *args, **kwargs):
+        """
+            宿舍 备注 修改
+            url: '/dormitories/<pk>/change_note/'
+            type: 'post'
+        """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -251,26 +279,36 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
     """
     宿舍水费 视图类
     """
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = WaterFeesSerializer
     queryset = WaterFees.objects.all()
-    
+
     def get_serializer_class(self):
         if self.action == "list":
             return WaterFeesSerializer
         if self.action == "retrieve":
             return WaterFeesSerializer
-        if self.action == "change_cost":
-            return WaterFeesChangeCostSerializer
-        if self.action == "change_cost_multiple":
-            return WaterFeesChangeCostMultipleSerializer
+        if self.action == "recharge":
+            return WaterFeesRechargeSerializer
         if self.action == "change_note":
             return WaterFeesChangeNoteSerializer
         return WaterFeesSerializer
 
+    def get_permissions(self):
+        if self.action == "list":
+            return [IsAuthenticated()]
+        if self.action == "retrieve":
+            return [IsAuthenticated(), WaterFeesIsSelf()]
+        if self.action == "recharge":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "change_note":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        return []
+
     def list(self, request, *args, **kwargs):
         """
-            显示水费列表
-            url: '/water_rate/'
+            宿舍水费 列表
+            url: '/water_fees/'
             type: 'get'
         """
         from django.db.models import Q, F
@@ -278,13 +316,17 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         # 获取全部数据
         all_result = self.filter_queryset(self.get_queryset())
 
+        # 如果非管理员，仅搜索该用户
+        if request.user.is_superuser is False:
+            all_result = all_result.filter(Q(dormitory=request.user.lived_dormitory))
+
         # 分页页数
         page = int(request.GET.get('page', '0'))
         # 每页条数
         limit = int(request.GET.get('limit', '0'))
 
-        # 是否只显示为水量用尽宿舍
-        only_use_up = request.GET.get('only_use_up', '')
+        # 是否只显示为水费用尽宿舍
+        is_use_up = request.GET.get('is_use_up', '')
 
         # 排序列名
         field = request.GET.get('field', '')
@@ -292,11 +334,10 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         order = request.GET.get('order', '')
         # 模糊搜索关键词
         search_dormitory_number = request.GET.get('search_dormitory_number', '')
-        search_month = request.GET.get('search_month', '')
 
         # 是否只显示为水量用尽宿舍
-        if only_use_up == 'true':
-            all_result = all_result.filter(Q(surplus_water__lt=0))
+        if is_use_up == 'true':
+            all_result = all_result.filter(Q(have_water_fees__lte=0))
 
         # 排序
         if field:
@@ -308,8 +349,6 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         # 搜索
         if search_dormitory_number:
             all_result = all_result.filter(Q(dormitory__number__icontains=search_dormitory_number))
-        if search_month:
-            all_result = all_result.filter(Q(month__icontains=search_month))
 
         # 数据条数
         recordsTotal = all_result.count()
@@ -330,44 +369,34 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
             })
 
     @action(methods=['POST'], detail=True)
-    def change_cost(self, request, *args, **kwargs):
+    def recharge(self, request, *args, **kwargs):
+        """
+        宿舍水费 充值
+        """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        instance.cost = serializer.validated_data["cost"]
+        instance.have_water_fees += serializer.validated_data["money"]
         instance.save()
 
-        return Response({
-            'msg': "操作成功：编辑成功！"
-        }, status=status.HTTP_200_OK)
+        note = "管理员" + self.request.user.username + "代充(" + str(round(float(serializer.validated_data["money"])/float(SystemSetting.objects.filter(code='water_fees').first().content), 2)) +"吨," + str(serializer.validated_data["money"]) +"元" + ")"
+        water_fees_log = WaterFeesLog.objects.create(dormitory=instance.dormitory,
+                                                     mode="add",
+                                                     change_money=serializer.validated_data["money"],
+                                                     operator=self.request.user,
+                                                     note=note)
+        water_fees_log.save()
 
-    @action(methods=['POST'], detail=False)
-    def change_cost_multiple(self, request, *args, **kwargs):
-        """
-            批量修改税费单价
-            url: '/water_rate/change_cost_multiple/'
-            type: 'post'
-            dataType: 'json'
-            data: {
-                'ids': '<pk1>,<pk2>,<pk3>',
-                'cost': '<cost>'
-            }
-        """
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        ids = serializer.validated_data["ids"].split(',')
-        for i in ids:
-            water_rate = WaterFees.objects.filter(id=i).first()
-            water_rate.cost = serializer.validated_data["cost"]
-            water_rate.save()
         return Response({
-            "msg": "操作成功：所选水费单的水费单价已被设置为 " + str(serializer.validated_data["cost"]) + " 元/吨！"
+            'msg': "操作成功：充值成功！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
     def change_note(self, request, *args, **kwargs):
+        """
+        宿舍水费 修改备注
+        """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -384,6 +413,7 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
     """
     宿舍电费 视图类
     """
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = ElectricityFeesSerializer
     queryset = ElectricityFees.objects.all()
 
@@ -398,6 +428,17 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
             return ElectricityFeesChangeNoteSerializer
         return ElectricityFeesSerializer
 
+    def get_permissions(self):
+        if self.action == "list":
+            return [IsAuthenticated()]
+        if self.action == "retrieve":
+            return [IsAuthenticated(), ElectricityFeesIsSelf()]
+        if self.action == "recharge":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "change_note":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        return []
+
     def list(self, request, *args, **kwargs):
         """
             显示电费列表
@@ -409,13 +450,17 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
         # 获取全部数据
         all_result = self.filter_queryset(self.get_queryset())
 
+        # 如果非管理员，仅搜索该用户
+        if request.user.is_superuser is False:
+            all_result = all_result.filter(Q(dormitory=request.user.lived_dormitory))
+
         # 分页页数
         page = int(request.GET.get('page', '0'))
         # 每页条数
         limit = int(request.GET.get('limit', '0'))
 
         # 是否只显示为电量用尽宿舍
-        only_use_up = request.GET.get('only_use_up', '')
+        is_use_up = request.GET.get('is_use_up', '')
 
         # 排序列名
         field = request.GET.get('field', '')
@@ -425,7 +470,7 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
         search_dormitory_number = request.GET.get('search_dormitory_number', '')
 
         # 是否只显示为水量用尽宿舍
-        if only_use_up == 'true':
+        if is_use_up == 'true':
             all_result = all_result.filter(Q(have_electricity_fees__lte=0))
 
         # 排序
@@ -466,7 +511,7 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
         instance.have_electricity_fees += serializer.validated_data["money"]
         instance.save()
 
-        note = "管理员" + self.request.user.username + "代充(" + str(round(float(serializer.validated_data["money"])/float(SystemSetting.objects.filter(code='water_rate').first().content), 2)) +"千瓦时," + str(serializer.validated_data["money"]) +"元" + ")"
+        note = "管理员" + self.request.user.username + "代充(" + str(round(float(serializer.validated_data["money"])/float(SystemSetting.objects.filter(code='electricity_fees').first().content), 2)) +"千瓦时," + str(serializer.validated_data["money"]) +"元" + ")"
         electricity_fees_log = ElectricityFeesLog.objects.create(dormitory=instance.dormitory,
                                                                  mode="add",
                                                                  change_money=serializer.validated_data["money"],

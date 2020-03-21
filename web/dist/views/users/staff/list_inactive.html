@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>教职工列表 - 所有</title>
+		<title>教职工列表 - 禁用</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -137,14 +137,14 @@
 							},
 							{
 								field: 'username',
-								width: '10%',
+								width: '12%',
 								title: '用户名',
 								align: 'center',
 								sort: true
 							},
 							{
 								field: 'email',
-								width: '10%',
+								width: '11%',
 								title: '绑定邮箱',
 								align: 'center',
 								sort: true
@@ -188,15 +188,14 @@
 								templet: '<div>{{d.info__mobile ? d.info__mobile: ""}}</div>'
 							},
 							{
-								field: 'last_login',
-								width: '12%',
-								title: '最后登陆时间',
-								align: 'center',
-								sort: true
+								field: 'lived_dormitory',
+								width: '8%',
+								title: '宿舍',
+								align: 'center'
 							},
 							{
 								field: 'is_staff',
-								width: '5%',
+								width: '6%',
 								title: '身份',
 								align: 'center',
 								templet: function(d) {

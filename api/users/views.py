@@ -18,7 +18,7 @@ from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, 
 from datetime import datetime
 
 from utils import smtp
-from utils.permission import UserIsSuperUser, UserIsSelf, UserIsOwner
+from utils.permission import UserIsSuperUser, UserIsSelf
 
 # Create your views here.
 
@@ -62,7 +62,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
 
     def get_permissions(self):
         if self.action == "list":
-            return [IsAuthenticated(), UserIsSuperUser()]
+            return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), UserIsSelf()]
         if self.action == "create":
@@ -167,6 +167,10 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
 
         # 获取全部数据
         all_result = self.filter_queryset(self.get_queryset())
+
+        # 如果非管理员，仅搜索该用户
+        if request.user.is_superuser is False:
+            all_result = all_result.filter(Q(username=request.user))
 
         # 分页页数
         page = int(request.GET.get('page', '0'))
@@ -588,7 +592,7 @@ class ChangePasswordViewset(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     修改密码
     """
-    permission_classes = (IsAuthenticated, UserIsOwner,)
+    permission_classes = (IsAuthenticated, UserIsSelf,)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = ChangePasswordSerializer
     queryset = User.objects.all()
@@ -760,7 +764,7 @@ class confirmOldMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericView
             "code": "<code>"
         }
     """
-    permission_classes = (IsAuthenticated, UserIsOwner,)
+    permission_classes = (IsAuthenticated, UserIsSelf,)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = confirmMailCaptchaSerializer
 
