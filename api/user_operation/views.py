@@ -53,9 +53,9 @@ class WaterFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, view
             all_result = all_result.filter(Q(dormitory=request.user.lived_dormitory))
 
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
 
         # 根据宿舍编号查询
         search_dormitory_number = request.GET.get('search_dormitory_number', '')
@@ -135,9 +135,9 @@ class ElectricityFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin
             all_result = all_result.filter(Q(dormitory=request.user.lived_dormitory))
 
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
 
         # 根据宿舍编号查询
         search_dormitory_number = request.GET.get('search_dormitory_number', '')
@@ -221,14 +221,14 @@ class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upd
             all_result = all_result.filter(Q(dormitory=request.user.lived_dormitory))
 
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
 
-        # 只显示指定状态
-        status = request.GET.get('status', '')
-        if status and status != "all":
-            all_result = all_result.filter(Q(status=status))
+        # 根据状态查询
+        search_status = request.GET.get('search_status', '')
+        if search_status and search_status != "all":
+            all_result = all_result.filter(Q(status=search_status))
 
         # 根据宿舍编号查询
         search_dormitory_number = request.GET.get('search_dormitory_number', '')
@@ -316,9 +316,9 @@ class RepairLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             all_result = all_result.filter(Q(main_repair=search_repair_id))
 
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
 
         # 排序列名
         field = request.GET.get('field', '')

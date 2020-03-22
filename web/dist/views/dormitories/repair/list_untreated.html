@@ -64,7 +64,7 @@
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
 					where: {
-						'status': 'untreated'
+						'search_status': 'untreated'
 					},
 					limit: 10,
 					limits: [10, 20, 50, 100],
@@ -193,29 +193,7 @@
 						$("#repair_search_button").click();
 					}
 				});
-
 			})
-
-			// 表单修饰 "只显示已完成报修单"
-			layui.use('form', function() {
-				var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
-				form.render();
-				form.on('checkbox(only_complete_repair)', function(data) {
-					if(data.elem.checked) {
-						layui.table.reload('LAY-repair-manage', {
-							where: {
-								'status': 'complete'
-							}
-						}, 'data');
-					} else {
-						layui.table.reload('LAY-repair-manage', {
-							where: {
-								'status': 'all'
-							}
-						}, 'data');
-					}
-				});
-			});
 
 			//"查看"按钮
 			function repair_detailed(id) {

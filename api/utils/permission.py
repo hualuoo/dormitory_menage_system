@@ -55,3 +55,10 @@ class RepairLogIsSelf(BasePermission):
         if request.user.is_superuser:
             return True
         return obj.main_repair.dormitory == request.user.lived_dormitory
+
+
+class AccessControlIsSelf(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_superuser:
+            return True
+        return obj.person == request.user

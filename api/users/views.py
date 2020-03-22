@@ -56,8 +56,12 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             return UserCheckIdsSerializer
         if self.action == "set_avatar":
             return
+        if self.action == "remove_avatar":
+            return
         if self.action == "get_face_list":
             return UserFaceListSerializer
+        if self.action == "set_face":
+            return
         return UserSerializer
 
     def get_permissions(self):
@@ -82,9 +86,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         if self.action == "set_active_multiple":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "set_avatar":
-            return [IsAuthenticated(), UserIsSuperUser()]
+            return [IsAuthenticated(), UserIsSelf()]
+        if self.action == "remove_avatar":
+            return [IsAuthenticated(), UserIsSelf()]
         if self.action == "get_face_list":
-            return [IsAuthenticated(), UserIsSuperUser()]
+            return [IsAuthenticated()]
+        if self.action == "set_face":
+            return [IsAuthenticated(), UserIsSelf()]
         return []
 
     """
@@ -173,9 +181,9 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             all_result = all_result.filter(Q(username=request.user))
 
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
 
         # 是否为非冻结用户
         is_active = request.GET.get('is_active', '')
@@ -407,6 +415,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         """
             上传头像
             url: '/users/<pk>/set_avatar/'
+            type: 'post'
         """
         from utils.save_file import save_img
 
@@ -442,6 +451,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         """
             清除头像
             url: '/users/<pk>/remove_avatar/'
+            type: 'post'
         """
         instance = self.get_object()
         instance.info.avatar = ""
@@ -452,16 +462,32 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
 
     @action(methods=['GET'], detail=False)
     def get_face_list(self, request, *args, **kwargs):
+        """
+            获取人脸列表
+            url: '/users/get_face_list/'
+            type: 'get'
+        """
         from django.db.models import Q
 
         # 获取全部非冻结用户数据
         all_result = self.filter_queryset(self.get_queryset())
         all_result = all_result.filter(Q(is_active=True))
 
+        # 如果非管理员，仅搜索该用户
+        if request.user.is_superuser is False:
+            all_result = all_result.filter(Q(username=request.user))
+
+        # 根据状态查询
+        is_set = request.GET.get('is_set', '')
+        if is_set and is_set == "false":
+            all_result = all_result.filter(Q(face__isnull=True))
+        if is_set and is_set == "true":
+            all_result = all_result.filter(Q(face__isnull=False))
+
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
 
         # 模糊搜索关键词
         search_firstname = request.GET.get('search_firstname', '')
@@ -507,6 +533,11 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
 
     @action(methods=['POST'], detail=True)
     def set_face(self, request, *args, **kwargs):
+        """
+            上传人脸
+            url: '/users/<pk>/set_face/'
+            type: 'post'
+        """
         from utils.save_file import save_img
         from utils import face_recognition
         from attendance_system import settings

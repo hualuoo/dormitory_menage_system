@@ -4,19 +4,35 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .models import AccessControl
 from .serializers import AccessControlSerializer
+from utils.permission import AccessControlIsSelf
 # Create your views here.
 
 
-class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
-    用户 视图类
+    门禁记录 视图类
     """
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = AccessControlSerializer
     queryset = AccessControl.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return AccessControlSerializer
+        if self.action == "retrieve":
+            return AccessControlSerializer
+        return AccessControlSerializer
+
+    def get_permissions(self):
+        if self.action == "list":
+            return [IsAuthenticated()]
+        if self.action == "retrieve":
+            return [IsAuthenticated(), AccessControlIsSelf()]
+        return []
 
     def list(self, request, *args, **kwargs):
         from django.db.models import Q,F
@@ -24,13 +40,22 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         # 获取全部门禁通过记录数据
         all_result = self.filter_queryset(self.get_queryset())
 
+        # 如果非管理员，仅搜索该用户
+        if request.user.is_superuser is False:
+            all_result = all_result.filter(Q(person=request.user))
+
         # 默认按创建时间倒数排序
         all_result = all_result.order_by(F("add_time").desc())
 
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
+
+        # 根据状态查询
+        search_status = request.GET.get('search_status', '')
+        if search_status and search_status != "all":
+            all_result = all_result.filter(Q(status=search_status))
 
         # 模糊搜索关键词
         search_firstname = request.GET.get('search_firstname', '')

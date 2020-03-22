@@ -74,9 +74,9 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             all_result = all_result.filter(Q(number=request.user.lived_dormitory))
 
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
 
         # 是否只显示为满人宿舍
         is_empty = request.GET.get('is_empty', '')
@@ -321,9 +321,9 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
             all_result = all_result.filter(Q(dormitory=request.user.lived_dormitory))
 
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
 
         # 是否只显示为水费用尽宿舍
         is_use_up = request.GET.get('is_use_up', '')
@@ -455,9 +455,9 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
             all_result = all_result.filter(Q(dormitory=request.user.lived_dormitory))
 
         # 分页页数
-        page = int(request.GET.get('page', '0'))
+        page = int(request.GET.get('page', '1'))
         # 每页条数
-        limit = int(request.GET.get('limit', '0'))
+        limit = int(request.GET.get('limit', '10'))
 
         # 是否只显示为电量用尽宿舍
         is_use_up = request.GET.get('is_use_up', '')

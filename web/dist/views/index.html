@@ -203,11 +203,34 @@
 									<cite>门禁管理</cite>
 								</a>
 								<dl class="layui-nav-child">
-									<dd>
-										<a lay-href="users/face/list.html">人脸数据</a>
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;">人脸数据</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="users/face/list.html">人脸列表 - 所有</a>
+											</dd>
+											<dd>
+												<a lay-href="users/face/list_not_set.html">人脸列表 - 未设置</a>
+											</dd>
+											<dd>
+												<a lay-href="users/face/list_set.html">人脸列表 - 已设置</a>
+											</dd>
+										</dl>
 									</dd>
-									<dd>
-										<a lay-href="access_control/access_control/list.html">门禁记录</a>
+
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;">门禁</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="access_control/access_control/list.html">门禁记录 - 所有</a>
+											</dd>
+											<dd>
+												<a lay-href="access_control/access_control/list.html">门禁记录 - 晚归</a>
+											</dd>
+											<dd>
+												<a lay-href="access_control/access_control/list.html">门禁记录 - 异常</a>
+											</dd>
+										</dl>
 									</dd>
 									<dd>
 										<a lay-href="dormitories/water_fees/list.html">异常处理</a>

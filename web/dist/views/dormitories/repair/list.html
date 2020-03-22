@@ -205,13 +205,13 @@
 					if(data.elem.checked) {
 						layui.table.reload('LAY-repair-manage', {
 							where: {
-								'status': 'complete'
+								'search_status': 'complete'
 							}
 						}, 'data');
 					} else {
 						layui.table.reload('LAY-repair-manage', {
 							where: {
-								'status': 'all'
+								'search_status': 'all'
 							}
 						}, 'data');
 					}

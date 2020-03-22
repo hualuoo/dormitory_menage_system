@@ -4,7 +4,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>门禁记录 列表</title>
+		<title>人脸列表 - 已设置</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -64,21 +64,20 @@
 				</div>
 
 				<div class="layui-card-body layui-form">
-					<div id="access_control_flow_div">
-						<ul class="flow-default" id="access_control_flow"></ul>
+					<div id="users_face_flow_div">
+						<ul class="flow-default" id="users_face_flow"></ul>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<script src="../../../layuiadmin/layui/layui.all.js"></script>
-
 		<script src="../../../layuiadmin/js/check-token.js"></script>
 
 		<script>
 			function flow_load(url) {
 				layui.flow.load({
-					elem: '#access_control_flow', //流加载容器
+					elem: '#users_face_flow', //流加载容器
 					done: function(page, next) { //执行下一页的回调
 						var lis = [];
 						//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
@@ -104,33 +103,39 @@
 						});
 
 						layui.each(flow_data.data, function(index, item) {
-							var str = '<div class="layui-col-md2 layui-col-sm4" >' +
-								'<div class="cmdlist-container">' +
-								'<a href="javascript:;" onclick="access_control_detailed(' + item.id + ')">' +
-								'<img src="' + item.photo + '">' +
-								'<div style="position: absolute;margin-right:0px;margin-top:-82px;width:80px;border:1px solid #0000FF;"><img src="' + item.person__face__photo + '"></div>' +
-								'</a>' +
-								'<a href="javascript:;">' +
-								'<div class="cmdlist-text">' +
-								'<p class="info">' + item.person__username + '(' + item.person__first_name + item.person__last_name + ')</br>';
-							if(item.status == "normal") {
-								str += '<span class="layui-badge layui-bg-green">正常</span>';
+							if(item.face__photo == null) {
+								lis.push('<div class="layui-col-md2 layui-col-sm4">' +
+									'<div class="cmdlist-container" style="background: #FDF9F9">' +
+									'<a href="javascript:;" onclick="user_set_face(' + item.id + ')">' +
+									'<img src="http://127.0.0.1:8000/media/users/face_photo/default.png">' +
+									'</a>' +
+									'<a href="javascript:;">' +
+									'<div class="cmdlist-text">' +
+									'<p class="info">' + item.username + '</br>' + item.first_name + ' ' + item.last_name + '</p>' +
+									'<div class="price">' +
+									'<b><i class="layui-icon layui-icon-about"></i>用户未上传人脸</b>' +
+									'</div>' +
+									'</div>' +
+									'</a>' +
+									'</div>' +
+									'</div>');
+							} else {
+								lis.push('<div class="layui-col-md2 layui-col-sm4" >' +
+									'<div class="cmdlist-container">' +
+									'<a href="javascript:;" onclick="user_set_face(' + item.id + ')">' +
+									'<img src="' + item.face__photo + '">' +
+									'</a>' +
+									'<a href="javascript:;">' +
+									'<div class="cmdlist-text">' +
+									'<p class="info">' + item.username + '</br>' + item.first_name + ' ' + item.last_name + '</p>' +
+									'<div class="price">' +
+									'<b>' + item.face__add_time + '</b>' +
+									'</div>' +
+									'</div>' +
+									'</a>' +
+									'</div>' +
+									'</div>');
 							}
-							if(item.status == "later") {
-								str += '<span class="layui-badge layui-bg-orange">晚归</span>';
-							}
-							if(item.status == "abnormal") {
-								str += '<span class="layui-badge">异常</span>';
-							}
-							str += ' 准确率' + item.accuracy + '%</p>' +
-								'<div class="price">' +
-								'<b>' + item.add_time + '</b>' +
-								'</div>' +
-								'</div>' +
-								'</a>' +
-								'</div>' +
-								'</div>'
-							lis.push(str);
 						});
 						var i = flow_data.data.length;
 						while(i % 6 != 0) {
@@ -148,7 +153,7 @@
 			layui.use('flow', function() {
 				var flow = layui.flow;
 
-				flow_load('http://127.0.0.1:8000/access_control/?limit=12&search_status=all');
+				flow_load('http://127.0.0.1:8000/users/get_face_list/?limit=18&is_set=true');
 
 				// 模糊查询"搜索"按钮
 				$('#users_search_button').click(function() {
@@ -159,10 +164,10 @@
 						'&search_email=' + $('#users_search_email').val().trim();
 
 					//执行重载
-					$("#access_control_flow").remove();
-					$("#access_control_flow_div").append("<ul id=\"access_control_flow\"></ul>");
+					$("#users_face_flow").remove();
+					$("#users_face_flow_div").append("<ul id=\"users_face_flow\"></ul>");
 
-					flow_load('http://127.0.0.1:8000/access_control/?limit=12&search_status=all' + url_value);
+					flow_load('http://127.0.0.1:8000/users/get_face_list/?limit=18&is_set=true' + url_value);
 				});
 
 				// 模糊查询"清空"按钮
@@ -174,10 +179,10 @@
 					$('#users_search_email').val("");
 
 					//执行重载
-					$("#access_control_flow").remove();
-					$("#access_control_flow_div").append("<ul id=\"access_control_flow\"></ul>");
+					$("#users_face_flow").remove();
+					$("#users_face_flow_div").append("<ul id=\"users_face_flow\"></ul>");
 
-					flow_load('http://127.0.0.1:8000/access_control/?limit=12&search_status=all');
+					flow_load('http://127.0.0.1:8000/users/get_face_list/?limit=18&is_set=true');
 				});
 
 				//搜索区域DIV回车监听
@@ -192,12 +197,12 @@
 				});
 			});
 
-			// 点击放歌触发
-			function access_control_detailed(id) {
+			// "设置头像"按钮
+			function user_set_face(id) {
 				layer.open({
 					type: 2,
-					title: '门禁信息详情',
-					content: 'access_control_detailed.html?access_control_id=' + id,
+					title: '设置用户人脸',
+					content: 'user_set_face.html?id=' + id,
 					shadeClose: true,
 					maxmin: true,
 					area: ['851px', '623px'],
