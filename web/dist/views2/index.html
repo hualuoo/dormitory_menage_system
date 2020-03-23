@@ -198,19 +198,16 @@
 								</dl>
 							</li>
 							<li data-name="dormitories" class="layui-nav-item">
-								<a href="javascript:;" lay-tips="人脸数据" lay-direction="2">
-									<i class="layui-icon layui-icon-face-smile-fine"></i>
-									<cite>人脸数据</cite>
+								<a href="javascript:;" lay-tips="缴费管理" lay-direction="2">
+									<i class="layui-icon layui-icon-rmb"></i>
+									<cite>缴费管理</cite>
 								</a>
 								<dl class="layui-nav-child">
 									<dd>
-										<a lay-href="users/face/list.html">人脸列表 - 所有</a>
+										<a lay-href="dormitories/water_fees/list.html">水费缴纳</a>
 									</dd>
 									<dd>
-										<a lay-href="users/face/list_not_set.html">人脸列表 - 未设置</a>
-									</dd>
-									<dd>
-										<a lay-href="users/face/list_set.html">人脸列表 - 已设置</a>
+										<a lay-href="dormitories/electricity_fees/list.html">电费缴纳</a>
 									</dd>
 								</dl>
 							</li>
@@ -221,7 +218,22 @@
 								</a>
 								<dl class="layui-nav-child">
 									<dd class="layui-nav-itemed">
-										<a href="javascript:;"><i class="layui-icon layui-icon-auz"></i>门禁记录</a>
+										<a href="javascript:;"><i class="layui-icon layui-icon-face-smile-fine"></i>人脸数据</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="users/face/list.html">人脸列表 - 所有</a>
+											</dd>
+											<dd>
+												<a lay-href="users/face/list_not_set.html">人脸列表 - 未设置</a>
+											</dd>
+											<dd>
+												<a lay-href="users/face/list_set.html">人脸列表 - 已设置</a>
+											</dd>
+										</dl>
+									</dd>
+
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;"><i class="layui-icon layui-icon-auz"></i>门禁</a>
 										<dl class="layui-nav-child">
 											<dd>
 												<a lay-href="access_control/access_control/list.html">门禁记录 - 所有</a>
@@ -237,16 +249,8 @@
 											</dd>
 										</dl>
 									</dd>
-									<dd class="layui-nav-itemed">
-										<a href="javascript:;"><i class="layui-icon layui-icon-survey"></i>识别出错申请</a>
-										<dl class="layui-nav-child">
-											<dd>
-												<a lay-href="access_control/access_control/list.html">申请列表 - 所有</a>
-											</dd>
-											<dd>
-												<a lay-href="access_control/access_control/list_normal.html">申请列表 - 未处理</a>
-											</dd>
-										</dl>
+									<dd>
+										<a lay-href="dormitories/water_fees/list.html">异常处理</a>
 									</dd>
 								</dl>
 							</li>

@@ -5,14 +5,16 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework import status
 
 from .models import AccessControl
-from .serializers import AccessControlSerializer
-from utils.permission import AccessControlIsSelf
+from .serializers import AccessControlSerializer, AccessControlUpdateSerializer
+from utils.permission import UserIsSuperUser, AccessControlIsSelf
 # Create your views here.
 
 
-class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     门禁记录 视图类
     """
@@ -25,6 +27,8 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, vie
             return AccessControlSerializer
         if self.action == "retrieve":
             return AccessControlSerializer
+        if self.action == "update":
+            return AccessControlUpdateSerializer
         return AccessControlSerializer
 
     def get_permissions(self):
@@ -32,6 +36,8 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, vie
             return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), AccessControlIsSelf()]
+        if self.action == "update":
+            return [IsAuthenticated(), UserIsSuperUser()]
         return []
 
     def list(self, request, *args, **kwargs):
@@ -98,3 +104,16 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, vie
                 'recordsNumber': recordsNumber,
                 'data': serializer.data
             })
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        instance.status = serializer.validated_data["status"]
+        instance.note = serializer.validated_data["note"]
+        instance.save()
+
+        return Response({
+            'msg': "操作成功：修改成功！"
+        }, status=status.HTTP_200_OK)

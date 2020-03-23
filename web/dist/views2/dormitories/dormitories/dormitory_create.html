@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>创建单个宿舍</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+	</head>
+
+	<body>
+
+		<div class="layui-form " lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 20px 0 0;">
+			<div class="layui-form-item">
+				<label class="layui-form-label">宿舍编号 <a style="color: red;">*</a></label></label></label>
+				<div class="layui-input-inline" style="width: 100px;">
+					<input type="text" name="dormitory_number" lay-verify="number" placeholder="" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">允许居住数 <a style="color: red;">*</a></label>
+				<div class="layui-input-inline">
+					<div class="layui-input-block" style="width: 100px; right: 74%;">
+						<select name="dormitory_allow_live_number" id="dormitory_allow_live_number" lay-verify="required" lay-filter="dormitory_allow_live_number">
+							<option value=""></option>
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">所在区域 <a style="color: red;">*</a></label></label>
+				<div class="layui-input-inline">
+					<input type="text" name="dormitory_area" lay-verify="area" placeholder="" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">宿舍楼 <a style="color: red;">*</a></label></label>
+				<div class="layui-input-inline">
+					<input type="text" name="dormitory_build" lay-verify="build" placeholder="" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">所在楼层 <a style="color: red;">*</a></label></label>
+				<div class="layui-input-inline">
+					<input type="text" name="dormitory_floor" lay-verify="floor" placeholder="" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">房间号 <a style="color: red;">*</a></label></label>
+				<div class="layui-input-inline">
+					<input type="text" name="dormitory_room" lay-verify="room" placeholder="" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div style="padding: 0 0 0 40px;">
+				<div id="dormitory_lived_transfer" class="demo-transfer"></div>
+			</div>
+			<div class="layui-form-item layui-hide">
+				<input type="button" lay-submit lay-filter="LAY-dormitory-front-submit" id="LAY-dormitory-front-submit" value="确认">
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.all.js"></script>
+		<script src="../../../layuiadmin/js/check-token.js"></script>
+		
+		<script>
+			layui.use(['form'], function() {
+				var form = layui.form;
+
+				form.verify({
+					number: [/^[A-Z0-9]{5,7}$/, '编号须为5~7位的数字和大写英文'],
+					area: [/^[学][一|二|三|四|五|六|七|八|九|十]{1,3}$/, '区域须以<学>字开头，中文数字结尾'],
+					build: [/^[A-Z]{1,1}$/, '宿舍楼须为1位大写英文'],
+					floor: [/^\d{1,2}$/, '楼层须为1~2位数字'],
+					room: [/^\d{3,4}$/, '房间号须为3~4位数字']
+				});
+				
+			});
+
+		</script>
+	</body>
+
+</html>
