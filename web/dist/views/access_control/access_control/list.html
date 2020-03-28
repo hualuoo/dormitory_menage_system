@@ -112,7 +112,7 @@
 								'</a>' +
 								'<a href="javascript:;">' +
 								'<div class="cmdlist-text">' +
-								'<p class="info">' + item.person__username + '(' + item.person__first_name + item.person__last_name + ')</br>';
+								'<p class="info">';
 							if(item.status == "normal") {
 								str += '<span class="layui-badge layui-bg-green">正常</span>';
 							}
@@ -122,7 +122,8 @@
 							if(item.status == "abnormal") {
 								str += '<span class="layui-badge">异常</span>';
 							}
-							str += ' 准确率' + item.accuracy + '%</p>' +
+							str += '编号：<b>' + item.id + '</b></br>' + item.person__username + '(' + item.person__first_name + item.person__last_name + ')' +
+								'</p>' +
 								'<div class="price">' +
 								'<b>' + item.add_time + '</b>' +
 								'</div>' +

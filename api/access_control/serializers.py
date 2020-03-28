@@ -33,3 +33,41 @@ class AccessControlUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccessControl
         fields = ("status", "note", )
+
+
+class AccessControlAbnormalApplicationSerializer(serializers.ModelSerializer):
+    """
+    门禁记录 识别异常申请 序列化类
+    """
+    main_record = AccessControlSerializer()
+    content = serializers.CharField(help_text="申请内容", allow_blank=True)
+    result = serializers.ChoiceField(help_text="状态", choices=(("pending", "待处理"), ("pass", "通过"), ("fail", "未通过")), default="pending")
+    add_time = serializers.DateTimeField(help_text="申请时间", format="%Y-%m-%d %H:%M", default=datetime.now)
+    reply = serializers.CharField(help_text="申请回复", allow_blank=True)
+
+    class Meta:
+        model = AccessControl
+        fields = ("id", "main_record", "content", "result", "add_time", "reply", )
+
+
+class AccessControlAbnormalApplicationUpdateSerializer(serializers.ModelSerializer):
+    """
+    门禁记录 识别异常申请 修改 序列化类
+    """
+    content = serializers.CharField(help_text="申请内容", allow_blank=True)
+
+    class Meta:
+        model = AccessControl
+        fields = ("content", )
+
+
+class AccessControlAbnormalApplicationReplySerializer(serializers.ModelSerializer):
+    """
+    门禁记录 识别异常申请 修改 序列化类
+    """
+    result = serializers.ChoiceField(help_text="状态", choices=(("pending", "待处理"), ("pass", "通过"), ("fail", "未通过")), default="pending")
+    reply = serializers.CharField(help_text="申请回复", allow_blank=True)
+
+    class Meta:
+        model = AccessControl
+        fields = ("result", "reply", )

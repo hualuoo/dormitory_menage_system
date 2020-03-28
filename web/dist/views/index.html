@@ -238,13 +238,43 @@
 										</dl>
 									</dd>
 									<dd class="layui-nav-itemed">
-										<a href="javascript:;"><i class="layui-icon layui-icon-survey"></i>识别出错申请</a>
+										<a href="javascript:;"><i class="layui-icon layui-icon-survey"></i>识别异常申请</a>
 										<dl class="layui-nav-child">
 											<dd>
-												<a lay-href="access_control/access_control/list.html">申请列表 - 所有</a>
+												<a lay-href="access_control/abnormal_application/list.html">申请列表 - 所有</a>
 											</dd>
 											<dd>
-												<a lay-href="access_control/access_control/list_normal.html">申请列表 - 未处理</a>
+												<a lay-href="access_control/abnormal_application/list_pending.html">申请列表 - 未处理</a>
+											</dd>
+										</dl>
+									</dd>
+								</dl>
+							</li>
+							<li data-name="set" class="layui-nav-item">
+								<a href="javascript:;" lay-tips="设置" lay-direction="2">
+									<i class="layui-icon layui-icon-set"></i>
+									<cite>设置</cite>
+								</a>
+								<dl class="layui-nav-child">
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;">系统设置</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="set/system/systemset.html">系统设置</a>
+											</dd>
+											<dd>
+												<a lay-href="set/system/email.html">邮件服务</a>
+											</dd>
+										</dl>
+									</dd>
+									<dd class="layui-nav-itemed">
+										<a href="javascript:;">我的设置</a>
+										<dl class="layui-nav-child">
+											<dd>
+												<a lay-href="set/user/info.html">基本资料</a>
+											</dd>
+											<dd>
+												<a lay-href="set/user/password.html">修改密码</a>
 											</dd>
 										</dl>
 									</dd>

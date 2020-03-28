@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>系统设置</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+	</head>
+
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md12">
+					<div class="layui-card">
+						<div class="layui-card-header">系统设置</div>
+						<div class="layui-card-body" pad15>
+							<div class="layui-form" wid100 lay-filter="layuiadmin-form-useradmin">
+								<div class="layui-form-item">
+									<label class="layui-form-label">水费(元/吨)</label>
+									<div class="layui-input-block">
+										<input type="text" name="water_fees" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">电费(元/千瓦时)</label>
+									<div class="layui-input-block">
+										<input type="text" name="electricity_fees" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-input-block">
+										<button class="layui-btn" lay-submit lay-filter="set_website"><i class="layui-icon layui-icon-layer" ></i>确认保存</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.all.js"></script>
+		<script>
+			layui.use(['form', 'table'], function() {
+				var form = layui.form;
+
+				// 数据加载
+				$.ajax({
+					url: "http://127.0.0.1:8000/system_setting/",
+					type: "get",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					success: function(data) {
+						data.map(function(value, index, arr) {
+							if(value.code == "water_fees") {
+								form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+									"water_fees": value.content
+								});
+							}
+							if(value.code == "electricity_fees") {
+								form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+									"electricity_fees": value.content
+								});
+							}
+						});
+					},
+					error: function(jqXHR) {
+						layer.msg('数据加载错误，请联系管理员处理', {
+							icon: 2,
+							anim: 6
+						});
+					}
+				});
+
+				form.on('submit(set_website)', function(data) {
+					$.ajax({
+						url: "http://127.0.0.1:8000/system_setting/",
+						type: "get",
+						headers: {
+							"Authorization": "JWT " + localStorage.getItem("cache_token")
+						},
+						dataType: "json",
+						success: function(data) {}
+					})
+				})
+			})
+		</script>
+	</body>
+
+</html>
