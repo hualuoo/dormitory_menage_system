@@ -170,14 +170,14 @@
 							},
 							async: false,
 							success: function(data) {
-								layer.msg(data.msg, {
+								layer.msg(data.detail, {
 									icon: 1,
 									time: 2000
 								});
 							},
 							error: function(jqXHR) {
 								var json_responseText = JSON.parse(jqXHR.responseText);
-								layer.msg(json_responseText.error, {
+								layer.msg(json_responseText.detail, {
 									icon: 2,
 									anim: 6,
 									btn: ['明白了'],
@@ -202,7 +202,7 @@
 							"allow_live_number": $('#dormitory_allow_live_number').val()
 						},
 						success: function(data) {
-							layer.msg(data.msg, {
+							layer.msg(data.detail, {
 								icon: 1,
 								time: 2000
 							})
@@ -218,6 +218,18 @@
 										window.location.reload();
 									}
 								});
+								return false;
+							}
+							if(json_responseText.detail) {
+								layer.msg(json_responseText.detail, {
+									icon: 2,
+									anim: 6,
+									btn: ['明白了'],
+									yes: function(index) {
+										window.location.reload();
+									}
+								});
+								return false;
 							}
 						}
 					});

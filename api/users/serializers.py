@@ -122,7 +122,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         if flag is None:
             raise serializers.ValidationError('操作失败：邮箱格式不正确！')
         if User.objects.filter(email=email).count() and self.instance.email != email:
-            raise serializers.ValidationError("该邮箱已被其他账户使用！")
+            raise serializers.ValidationError('操作失败：该邮箱已被其他账户使用！')
         return email
 
     def validate_first_name(self, first_name):
@@ -144,7 +144,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         if flag is None:
             raise serializers.ValidationError('操作失败：请输入正确的手机号！')
         if UserInfo.objects.filter(mobile=mobile).count() and self.instance.info.mobile != mobile:
-            raise serializers.ValidationError("该手机已被其他账户使用")
+            raise serializers.ValidationError('操作失败：该手机已被其他账户使用！')
         return mobile
 
     def update(self, instance, validated_data):
@@ -196,7 +196,7 @@ class UserResetPasswordMultipleSerializer(serializers.ModelSerializer):
         for i in ids_list:
             users = User.objects.filter(id=i)
             if users.count() == 0:
-                raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在')
+                raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在！')
             if users.first() == self.context['request'].user:
                 raise serializers.ValidationError('操作失败：您无法操作自己！')
         return ids
@@ -249,6 +249,36 @@ class UserFaceListSerializer(serializers.ModelSerializer):
         fields = ("id", "username", "first_name", "last_name", "face__photo", "face__add_time", )
 
 
+class UserChangePasswordAdminSerializer(serializers.ModelSerializer):
+    """
+    管理员 修改密码
+    """
+    old_password = serializers.CharField(help_text="旧密码", write_only=True)
+    new_password = serializers.CharField(help_text="新密码", write_only=True)
+
+    def validate_old_password(self, old_password):
+        if self.context['request'].user.check_password(old_password):
+            return old_password
+        else:
+            raise serializers.ValidationError('操作失败：旧密码校验错误！')
+
+    def validate_new_password(self, new_password):
+        flag = re.match(r'(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{8,20}$', new_password)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：密码须为8~20位，数字、字母、字符至少包含两种，且不能包含中文和空格！')
+        return new_password
+
+    def update(self, instance, validated_data):
+        user = self.context['request'].user
+        user.set_password(validated_data["new_password"])
+        user.save()
+        return user
+
+    class Meta:
+        model = User
+        fields = ("old_password", "new_password", )
+
+
 class ChangePasswordSerializer(serializers.ModelSerializer):
     """
     用户密码修改序列类
@@ -286,13 +316,13 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             last_record = verify_records[0]
             five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
             if five_mintes_ago > last_record.create_time:
-                raise serializers.ValidationError("验证码过期")
+                raise serializers.ValidationError('操作失败：验证码过期！')
             if last_record.code != code:
-                raise serializers.ValidationError("验证码错误")
+                raise serializers.ValidationError('操作失败：验证码错误！')
         else:
-            raise serializers.ValidationError("验证码不存在")
+            raise serializers.ValidationError('操作失败：验证码不存在！')
         if not verify_user.check_password(self.initial_data["old_password"]):
-            raise serializers.ValidationError("旧密码错误")
+            raise serializers.ValidationError('操作失败：旧密码错误！')
         return code
 
     def update(self, instance, validated_data):
@@ -327,7 +357,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
 
     def validate_email(self, email):
         if User.objects.filter(email=email).count():
-            raise serializers.ValidationError("该邮箱已被其他账户使用")
+            raise serializers.ValidationError('操作失败：该邮箱已被其他账户使用！')
         return email
 
     def validate_code(self, code):
@@ -336,11 +366,11 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
             last_record = verify_records[0]
             five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
             if five_mintes_ago > last_record.create_time:
-                raise serializers.ValidationError("验证码过期")
+                raise serializers.ValidationError('操作失败：验证码过期！')
             if last_record.code != code:
-                raise serializers.ValidationError("验证码错误")
+                raise serializers.ValidationError('操作失败：验证码错误！')
         else:
-            raise serializers.ValidationError("验证码错误")
+            raise serializers.ValidationError('操作失败：验证码错误！')
         return code
 
     def validate(self, attrs):
@@ -364,7 +394,7 @@ class VerifyCodeSerializer(serializers.Serializer):
 
         # 邮箱是否注册(因修改密码处发送验证码为同一接口，检测邮箱是否已注册放入修改邮箱处进行判断)
         # if UserModel.objects.filter(email=email).count():
-        #     raise serializers.ValidationError("该邮箱已被使用")
+        #     raise serializers.ValidationError('操作失败：该邮箱已被使用！')
 
         # 验证邮箱是否合法
         # EmailField自带验证，无需另外写
@@ -372,7 +402,7 @@ class VerifyCodeSerializer(serializers.Serializer):
         # 验证码发送频率
         one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=1, seconds=0)
         if CaptchaModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
-            raise serializers.ValidationError("距离上一次发送未超过一分钟")
+            raise serializers.ValidationError('操作失败：距离上一次发送未超过一分钟！')
         return email
 
 
@@ -400,7 +430,7 @@ class sendOldMailCaptchaSerializer(serializers.Serializer):
     def validate_email(self, email):
         one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=1, seconds=0)
         if CaptchaModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
-            raise serializers.ValidationError("距离上一次发送未超过一分钟")
+            raise serializers.ValidationError('操作失败：距离上一次发送未超过一分钟！')
         return email
 
     class Meta:
@@ -431,11 +461,11 @@ class confirmMailCaptchaSerializer(serializers.Serializer):
             last_captcha = captcha[0]
             five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
             if five_mintes_ago > last_captcha.create_time:
-                raise serializers.ValidationError({'detail': '该验证码已过期'})
+                raise serializers.ValidationError('操作失败：该验证码已过期！')
             if last_captcha.code != code:
-                raise serializers.ValidationError({'detail': '该验证码错误'})
+                raise serializers.ValidationError('操作失败：该验证码错误！')
         else:
-            raise serializers.ValidationError({'detail': '该邮箱的验证码不存在'})
+            raise serializers.ValidationError('操作失败：该邮箱的验证码不存在！')
         return code
 
     class Meta:
@@ -457,11 +487,11 @@ class sendNewMailCaptchaSerializer(serializers.Serializer):
         """
         # 邮箱是否被使用
         if User.objects.filter(email=email).count():
-            raise serializers.ValidationError({'detail': '该邮箱已被使用'})
+            raise serializers.ValidationError('操作失败：该邮箱已被使用！')
         # 验证码发送频率
         one_mintes_ago = datetime.now() - timedelta(hours=0, minutes=1, seconds=0)
         if CaptchaModel.objects.filter(create_time__gt=one_mintes_ago, email=email).count():
-            raise serializers.ValidationError({'detail': '距离上一次发送未超过一分钟'})
+            raise serializers.ValidationError('操作失败：距离上一次发送未超过一分钟！')
         return email
 
     class Meta:

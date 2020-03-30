@@ -332,7 +332,7 @@
 								'ids': ids
 							},
 							success: function(data) {
-								layer.msg(data.msg, {
+								layer.msg(data.detail, {
 									icon: 1,
 									time: 2000
 								})
@@ -347,8 +347,8 @@
 									});
 									return false;
 								}
-								if(json_responseText.msg) {
-									layer.msg(json_responseText.msg, {
+								if(json_responseText.detail) {
+									layer.msg(json_responseText.detail, {
 										icon: 2,
 										anim: 6
 									});
@@ -388,7 +388,7 @@
 								'ids': ids
 							},
 							success: function(data) {
-								layer.msg(data.msg, {
+								layer.msg(data.detail, {
 									icon: 1,
 									time: 2000
 								})
@@ -403,8 +403,8 @@
 									});
 									return false;
 								}
-								if(json_responseText.msg) {
-									layer.msg(json_responseText.msg, {
+								if(json_responseText.detail) {
+									layer.msg(json_responseText.detail, {
 										icon: 2,
 										anim: 6
 									});
@@ -449,7 +449,7 @@
 									},
 									success: function(data) {
 										layer.close(index);
-										layer.msg(data.msg, {
+										layer.msg(data.detail, {
 											icon: 1,
 											time: 2000
 										})
@@ -471,8 +471,8 @@
 											});
 											return false;
 										}
-										if(json_responseText.msg) {
-											layer.msg(json_responseText.msg, {
+										if(json_responseText.detail) {
+											layer.msg(json_responseText.detail, {
 												icon: 2,
 												anim: 6
 											});
@@ -598,8 +598,8 @@
 										layero.find('iframe').contents().find('#user_gender').focus();
 										return false;
 									}
-									if(json_responseText.msg) {
-										layer.msg(json_responseText.msg, {
+									if(json_responseText.detail) {
+										layer.msg(json_responseText.detail, {
 											icon: 2,
 											anim: 6
 										});
@@ -639,7 +639,7 @@
 								},
 								success: function(data) {
 									layer.close(index);
-									layer.msg(data.msg, {
+									layer.msg(data.detail, {
 										icon: 1,
 										time: 2000
 									})
@@ -654,8 +654,8 @@
 										});
 										return false;
 									}
-									if(json_responseText.msg) {
-										layer.msg(json_responseText.msg, {
+									if(json_responseText.detail) {
+										layer.msg(json_responseText.detail, {
 											icon: 2,
 											anim: 6
 										});
@@ -696,7 +696,7 @@
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
 					success: function(data) {
-						layer.msg(data.msg, {
+						layer.msg(data.detail, {
 							icon: 1,
 							time: 2000
 						})
@@ -704,7 +704,7 @@
 					},
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
-						layer.msg(json_responseText.msg, {
+						layer.msg(json_responseText.detail, {
 							icon: 2,
 							anim: 6
 						});
@@ -722,7 +722,7 @@
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
 					success: function(data) {
-						layer.msg(data.msg, {
+						layer.msg(data.detail, {
 							icon: 1,
 							time: 2000
 						})
@@ -730,7 +730,7 @@
 					},
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
-						layer.msg(json_responseText.msg, {
+						layer.msg(json_responseText.detail, {
 							icon: 2,
 							anim: 6
 						});
@@ -748,7 +748,7 @@
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
 					success: function(data) {
-						layer.msg(data.msg, {
+						layer.msg(data.detail, {
 							icon: 1,
 							time: 2000
 						})
@@ -756,7 +756,7 @@
 					},
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
-						layer.msg(json_responseText.msg, {
+						layer.msg(json_responseText.detail, {
 							icon: 2,
 							anim: 6
 						});

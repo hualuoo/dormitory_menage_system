@@ -82,14 +82,48 @@
 				});
 
 				form.on('submit(set_website)', function(data) {
+					var field = data.field;
 					$.ajax({
-						url: "http://127.0.0.1:8000/system_setting/",
-						type: "get",
+						url: "http://127.0.0.1:8000/system_setting/system_setting_update/",
+						type: "post",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
 						},
 						dataType: "json",
-						success: function(data) {}
+						data: {
+							"water_fees": field.water_fees,
+							"electricity_fees": field.electricity_fees
+						},
+						success: function(data) {
+							layer.msg(data.detail, {
+								icon: 1,
+								time: 2000
+							});
+						},
+						error: function(jqXHR) {
+							var json_responseText = JSON.parse(jqXHR.responseText);
+							if(json_responseText.water_fees) {
+								layer.msg('水费：' + json_responseText.water_fees[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.electricity_fees) {
+								layer.msg('电费：' + json_responseText.electricity_fees[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.detail) {
+								layer.msg(json_responseText.detail, {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+						}
 					})
 				})
 			})

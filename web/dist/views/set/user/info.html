@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>设置我的资料</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+	</head>
+
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md12">
+					<div class="layui-card">
+						<div class="layui-card-header">设置我的资料</div>
+						<div class="layui-card-body" pad15>
+
+							<div class="layui-form" lay-filter="layuiadmin-form-useradmin">
+								<div class="layui-form-item layui-hide">
+									<input type="text" name="id" readonly class="layui-input">
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">我的角色</label>
+									<div class="layui-input-inline">
+										<select name="role" lay-verify="">
+											<option value="1" selected>超级管理员</option>
+											<option value="2" disabled>普通管理员</option>
+											<option value="3" disabled>学生</option>
+										</select>
+									</div>
+									<div class="layui-form-mid layui-word-aux">当前角色不可更改为其它角色</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">用户名</label>
+									<div class="layui-input-inline">
+										<input type="text" name="username" readonly class="layui-input">
+									</div>
+									<div class="layui-form-mid layui-word-aux">不可修改。一般用于后台登入名</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">绑定邮箱</label>
+									<div class="layui-input-inline">
+										<input type="text" name="email" lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">姓名</label>
+									<div class="layui-input-inline" style="width: 70px;">
+										<input type="text" name="first_name" lay-verify="firstname" placeholder="姓" autocomplete="off" class="layui-input">
+									</div>
+									<div class="layui-input-inline" style="width: 110px;">
+										<input type="text" name="last_name" lay-verify="lastname" placeholder="名" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">性别</label>
+									<div class="layui-input-block">
+										<input type="radio" name="gender" value="male" title="男">
+										<input type="radio" name="gender" value="female" title="女">
+										<input type="radio" name="gender" value="unknown" title="未知">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">出生日期</label>
+									<div class="layui-input-inline">
+										<input type="text" name="birthday" id="birthday" lay-verify="data" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">手机号码</label>
+									<div class="layui-input-inline">
+										<input type="text" name="mobile" lay-verify="phone" placeholder="请输入号码" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">头像</label>
+									<div class="layui-input-inline" id="avatar" style="width: 40px;"></div>
+									<div class="layui-form-mid layui-word-aux">点击设置头像</div>
+									<button class="layui-btn layui-btn-primary" id="user_remove_avatar_button">移除头像</button >
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-input-block">
+										<button class="layui-btn" lay-submit lay-filter="update_info">确认修改</button>
+									<button type="reset" class="layui-btn layui-btn-primary" onclick="reload_data();">重新填写</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.all.js"></script>
+
+		<script>
+			layui.use(['form', 'laydate'], function() {
+				var form = layui.form,
+					laydate = layui.laydate;
+				
+				//日期
+				laydate.render({
+					elem: '#birthday'
+				});
+
+				//自定义验证规则
+				form.verify({
+					email: [/(^$)|^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, '邮箱格式不正确'],
+					firstname: [/(^$)|^[\u4E00-\u9FA5]{1,2}$/, '姓必须为1到2个中文'],
+					lastname: [/(^$)|^[\u4E00-\u9FA5]{1,2}$/, '名必须为1到2个中文'],
+					date: [/(^$)|^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/, '日期格式不正确'],
+					phone: [/(^$)|^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/, '请输入正确的手机号'],
+				});
+
+				// 数据加载
+				$.ajax({
+					url: "http://127.0.0.1:8000/users/get_info_self/",
+					type: "get",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					success: function(data) {
+						form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+							"id": data.id,
+							"username": data.username,
+							"email": data.email,
+							"first_name": data.first_name,
+							"last_name": data.last_name,
+							"gender": data.info__gender,
+							"birthday": data.info__birthday,
+							"mobile": data.info__mobile
+						});
+						if(data.info__avatar) {
+							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="' + data.info__avatar + '" onclick="user_set_avatar(' + data.id + ');">');
+						} else {
+							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:8000/media/users/avatar/default.jpg" onclick="user_set_avatar(' + data.id + ');">');
+						}
+						$("#user_remove_avatar_button").attr("onclick", 'user_remove_avatar(' + data.id + ');');
+					},
+					error: function(jqXHR) {
+						layer.msg('数据加载错误，请联系管理员处理', {
+							icon: 2,
+							anim: 6
+						});
+					}
+				});
+
+				// "确认修改"按钮
+				form.on('submit(update_info)', function(data) {
+					var field = data.field;
+					$.ajax({
+						url: "http://127.0.0.1:8000/users/" + field.id + "/",
+						type: "put",
+						headers: {
+							"Authorization": "JWT " + localStorage.getItem("cache_token")
+						},
+						dataType: "json",
+						data: {
+							"email": field.email,
+							"first_name": field.first_name,
+							"last_name": field.last_name,
+							"info__gender": field.gender,
+							"info__birthday": field.birthday,
+							"info__mobile": field.mobile
+						},
+						success: function(data) {
+							layer.msg('操作成功：用户' + field.username + '的信息已修改成功！', {
+								icon: 1,
+								time: 2000
+							})
+							layer.close(index); //关闭弹层
+						},
+						error: function(jqXHR) {
+							var json_responseText = JSON.parse(jqXHR.responseText);
+							if(json_responseText.email) {
+								layer.msg('邮箱：' + json_responseText.email[0], {
+									icon: 2,
+									anim: 6
+								});
+								layero.find('iframe').contents().find('#user_email').focus();
+								return false;
+							}
+							if(json_responseText.first_name) {
+								layer.msg('真实姓名：' + json_responseText.first_name[0], {
+									icon: 2,
+									anim: 6
+								});
+								layero.find('iframe').contents().find('#user_mobile').focus();
+								return false;
+							}
+							if(json_responseText.last_name) {
+								layer.msg('真实姓名：' + json_responseText.last_name[0], {
+									icon: 2,
+									anim: 6
+								});
+								layero.find('iframe').contents().find('#user_first_name').focus();
+								return false;
+							}
+							if(json_responseText.info__gender) {
+								layer.msg('性别：' + json_responseText.info__gender[0], {
+									icon: 2,
+									anim: 6
+								});
+								layero.find('iframe').contents().find('#user_last_name').focus();
+								return false;
+							}
+							if(json_responseText.info__birthday) {
+								layer.msg('出生日期：' + json_responseText.info__birthday[0], {
+									icon: 2,
+									anim: 6
+								});
+								layero.find('iframe').contents().find('#user_birthday').focus();
+								return false;
+							}
+							if(json_responseText.info__mobile) {
+								layer.msg('手机：' + json_responseText.info__mobile[0], {
+									icon: 2,
+									anim: 6
+								});
+								layero.find('iframe').contents().find('#user_gender').focus();
+								return false;
+							}
+							if(json_responseText.detail) {
+								layer.msg(json_responseText.detail, {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+						}
+					});
+				});
+
+			});
+
+			// 重载头像
+			function reload_avatar() {
+				$.ajax({
+					url: "http://127.0.0.1:8000/users/get_info_self/",
+					type: "get",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					success: function(data) {
+						if(data.info__avatar) {
+							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="' + data.info__avatar + '" onclick="user_set_avatar(' + data.id + ');">');
+						} else {
+							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:8000/media/users/avatar/default.jpg" onclick="user_set_avatar(' + data.id + ');">');
+						}
+					},
+					error: function(jqXHR) {
+						layer.msg('数据加载错误，请联系管理员处理', {
+							icon: 2,
+							anim: 6
+						});
+					}
+				});
+			}
+
+			// "设置头像"按钮
+			function user_set_avatar(id) {
+				layer.open({
+					type: 2,
+					title: '设置用户头像',
+					content: '../../users/users/user_set_avatar.html?id=' + id,
+					shadeClose: true,
+					maxmin: true,
+					area: ['851px', '623px'],
+					btn: ['取消'],
+					btn1: function(index, layero) {
+						layer.close(index);
+					},
+					end: function(index, layero) {
+						reload_avatar();
+					}
+				});
+			}
+
+			// "移除头像"按钮
+			function user_remove_avatar(id) {
+				$.ajax({
+					url: "http://127.0.0.1:8000/users/" + id + "/remove_avatar/",
+					type: "post",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					success: function(data) {
+						layer.msg(data.detail, {
+							icon: 1,
+							time: 2000
+						})
+						reload_avatar();
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						layer.msg(json_responseText.detail, {
+							icon: 2,
+							anim: 6
+						});
+						reload_avatar();
+					}
+				});
+			}
+
+			// "重新填写"按钮
+			function reload_data() {
+				$.ajax({
+					url: "http://127.0.0.1:8000/users/get_info_self/",
+					type: "get",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					success: function(data) {
+						layui.form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+							"id": data.id,
+							"username": data.username,
+							"email": data.email,
+							"first_name": data.first_name,
+							"last_name": data.last_name,
+							"gender": data.info__gender,
+							"birthday": data.info__birthday,
+							"mobile": data.info__mobile
+						});
+						if(data.info__avatar) {
+							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="' + data.info__avatar + '" onclick="user_set_avatar(' + data.id + ');">');
+						} else {
+							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:8000/media/users/avatar/default.jpg" onclick="user_set_avatar(' + data.id + ');">');
+						}
+					},
+					error: function(jqXHR) {
+						layer.msg('数据加载错误，请联系管理员处理', {
+							icon: 2,
+							anim: 6
+						});
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

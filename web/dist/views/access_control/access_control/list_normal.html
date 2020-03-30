@@ -96,7 +96,7 @@
 							},
 							error: function(jqXHR) {
 								var json_responseText = JSON.parse(jqXHR.responseText);
-								layer.msg(json_responseText.error, {
+								layer.msg(json_responseText.detail, {
 									icon: 2,
 									anim: 6
 								});
@@ -223,7 +223,7 @@
 									"note": field.access_control_note
 								},
 								success: function(data) {
-									layer.msg(data.msg, {
+									layer.msg(data.detail, {
 										icon: 1,
 										time: 2000
 									})
@@ -232,7 +232,7 @@
 								error: function(jqXHR) {
 									var json_responseText = JSON.parse(jqXHR.responseText);
 									if(json_responseText.status) {
-										layer.msg(json_responseText.status[0], {
+										layer.msg('状态：' + json_responseText.status[0], {
 											icon: 2,
 											anim: 6
 										});
@@ -240,15 +240,15 @@
 										return false;
 									}
 									if(json_responseText.note) {
-										layer.msg(json_responseText.note[0], {
+										layer.msg('备注：' + json_responseText.note[0], {
 											icon: 2,
 											anim: 6
 										});
 										layero.find('iframe').contents().find('#access_control_note').focus();
 										return false;
 									}
-									if(json_responseText.msg) {
-										layer.msg(json_responseText.msg, {
+									if(json_responseText.detail) {
+										layer.msg(json_responseText.detail, {
 											icon: 2,
 											anim: 6
 										});

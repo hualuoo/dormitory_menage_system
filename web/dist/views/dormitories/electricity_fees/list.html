@@ -247,7 +247,7 @@
 						},
 						success: function(data) {
 							layer.close(index);
-							layer.msg(data.msg, {
+							layer.msg(data.detail, {
 								icon: 1,
 								time: 2000
 							})
@@ -304,7 +304,7 @@
 									"note": field.electricity_fees_note
 								},
 								success: function(data) {
-									layer.msg(data.msg, {
+									layer.msg(data.detail, {
 										icon: 1,
 										time: 2000
 									})

@@ -370,5 +370,5 @@ class RepairLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             main_repair.save()
 
         return Response({
-            'msg': "操作成功：回复成功！"
+            "detail": "回复成功！"
         }, status=status.HTTP_200_OK)

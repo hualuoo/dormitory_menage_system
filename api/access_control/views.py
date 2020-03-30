@@ -136,7 +136,7 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         instance.save()
 
         return Response({
-            'msg': "操作成功：修改成功！"
+            "detail": "修改成功！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=False)

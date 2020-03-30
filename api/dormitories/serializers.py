@@ -40,34 +40,34 @@ class DormitoryCreateSerializer(serializers.ModelSerializer):
         import re
         flag = re.match(r'^[A-Z0-9]{5,7}$', number)
         if flag is None:
-            raise serializers.ValidationError('操作失败：编号须为5~7位的数字和大写英文')
+            raise serializers.ValidationError('操作失败：编号须为5~7位的数字和大写英文！')
         if len(Dormitory.objects.filter(number=number)) != 0:
-            raise serializers.ValidationError('操作失败：已存在编号相同的宿舍')
+            raise serializers.ValidationError('操作失败：已存在编号相同的宿舍！')
         return number
 
     def validate_area(self, area):
         import re
         flag = re.match(r'^[学][一|二|三|四|五|六|七|八|九|十]{1,3}$', area)
         if flag is None:
-            raise serializers.ValidationError('操作失败：区域须以<学>字开头，中文数字结尾')
+            raise serializers.ValidationError('操作失败：区域须以<学>字开头，中文数字结尾！')
         return area
 
     def validate_build(self, build):
         import re
         flag = re.match(r'^[A-Z]{1,1}$', build)
         if flag is None:
-            raise serializers.ValidationError('操作失败：宿舍楼须为1位大写英文')
+            raise serializers.ValidationError('操作失败：宿舍楼须为1位大写英文！')
         return build
 
     def validate_room(self, room):
         import re
         flag = re.match(r'^[0-9]{3,4}$', room)
         if flag is None:
-            raise serializers.ValidationError('操作失败：房间号须为3~4位数字')
+            raise serializers.ValidationError('操作失败：房间号须为3~4位数字！')
         if len(room) == 3 and self.initial_data["floor"] != room[0]:
-            raise serializers.ValidationError('操作失败：房间号前一位与楼层不对应')
+            raise serializers.ValidationError('操作失败：房间号前一位与楼层不对应！')
         if len(room) == 4 and self.initial_data["floor"] != room[0:2]:
-            raise serializers.ValidationError('操作失败：房间号前两位与楼层不对应')
+            raise serializers.ValidationError('操作失败：房间号前两位与楼层不对应！')
         return room
 
     def create(self, validated_data):
@@ -93,7 +93,7 @@ class DormitoryOnChangeTransferSerializer(serializers.ModelSerializer):
         for i in ids_list:
             users = User.objects.filter(id=i)
             if users.count() == 0:
-                raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在')
+                raise serializers.ValidationError('操作失败：ID为' + i + '的用户不存在！')
         return ids
 
     class Meta:

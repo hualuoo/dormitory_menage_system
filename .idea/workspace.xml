@@ -2,27 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/access_control/migrations/0005_auto_20200324_1417.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/access_control/migrations/0006_auto_20200324_1637.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/access_control/migrations/0007_auto_20200324_1718.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/access_control/migrations/0008_auto_20200325_1714.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/system_setting/migrations/0005_auto_20200328_2048.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/access_control/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/access_control/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/access_control/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/migrations/0002_auto_20200302_2346.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/migrations/0003_auto_20200304_1913.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/migrations/0004_auto_20200304_1913.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/system_setting/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user_operation/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/12/852050754272c5e50da0702c99162941.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +141,7 @@
       <workItem from="1581833047783" duration="5850000" />
       <workItem from="1581844924356" duration="192092000" />
       <workItem from="1583754811610" duration="12766000" />
-      <workItem from="1583855762209" duration="157537000" />
+      <workItem from="1583855762209" duration="173399000" />
     </task>
     <servers />
   </component>
@@ -235,11 +223,11 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1126" y="615" key="VCS.ChangelistChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1578228897932" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1584758253130">
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1585459605894">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583045107980" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1584758253130" />
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1585459605894" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/attendance_system$clean_migrations.coverage" NAME="clean-migrations Coverage Results" MODIFIED="1583133316467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />

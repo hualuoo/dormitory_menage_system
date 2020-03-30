@@ -12,6 +12,8 @@ from .models import User, UserInfo, UserFace, CaptchaModel
 from .serializers import UserSerializer, UserCreateSerializer, UserCreateMultipleSerializer, UserUpdateSerializer
 from .serializers import UserResetPasswordSerializer, UserResetPasswordMultipleSerializer, UserCheckIdsSerializer
 from .serializers import UserFaceListSerializer
+from .serializers import UserChangePasswordAdminSerializer
+
 from .serializers import VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
 from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
 
@@ -62,6 +64,10 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             return UserFaceListSerializer
         if self.action == "set_face":
             return
+        if self.action == "get_info_self":
+            return UserSerializer
+        if self.action == "change_password_admin":
+            return UserChangePasswordAdminSerializer
         return UserSerializer
 
     def get_permissions(self):
@@ -93,10 +99,14 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             return [IsAuthenticated()]
         if self.action == "set_face":
             return [IsAuthenticated(), UserIsSelf()]
+        if self.action == "get_info_self":
+            return [IsAuthenticated()]
+        if self.action == "change_password_admin":
+            return [IsAuthenticated(), UserIsSuperUser()]
         return []
 
     """
-        显示单个用户信息
+        显示单个用户信息1
         url: '/users/<pk>/'
         type: 'get'
     """
@@ -263,7 +273,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         """
         if request.user == self.get_object():
             return Response({
-                "msg": "操作失败：您无法操作自己！"
+                "detail": "操作失败：您无法操作自己！"
             }, status=status.HTTP_400_BAD_REQUEST)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -272,7 +282,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         instance.set_password(serializer.validated_data["password"])
         instance.save()
         return Response({
-            "msg": "操作成功：用户" + instance.username + "的密码修改成功"
+            "detail": "操作成功：用户" + instance.username + "的密码修改成功！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=False)
@@ -296,7 +306,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             user.set_password(serializer.validated_data["password"])
             user.save()
         return Response({
-            "msg": "操作成功：所选用户账户密码已重置"
+            "detail": "操作成功：所选用户账户密码已重置！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -308,13 +318,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         """
         if request.user == self.get_object():
             return Response({
-                "msg": "操作失败：您无法操作自己！"
+                "detail": "操作失败：您无法操作自己！"
             }, status=status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
         user.is_active = False
         user.save()
         return Response({
-            "msg": "操作成功：用户" + user.username + "已被禁用"
+            "detail": "操作成功：用户" + user.username + "已被禁用！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=False)
@@ -337,7 +347,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             user.is_active = False
             user.save()
         return Response({
-            "msg": "操作成功：所选用户账户已被禁用"
+            "detail": "操作成功：所选用户账户已被禁用！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -349,13 +359,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         """
         if request.user == self.get_object():
             return Response({
-                "msg": "操作失败：您无法操作自己！"
+                "detail": "操作失败：您无法操作自己！"
             }, status=status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
         user.is_active = True
         user.save()
         return Response({
-            "msg": "用户" + user.username + "已被启用"
+            "detail": "用户" + user.username + "已被启用！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=False)
@@ -378,7 +388,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             user.is_active = True
             user.save()
         return Response({
-            "msg": "操作成功：所选用户账户已被启用"
+            "detail": "操作成功：所选用户账户已被启用！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=False)
@@ -407,7 +417,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             info.save()
 
         return Response({
-            "msg": "操作成功：" + str(first_username) + "-" + str(username) + "账户已被创建"
+            "detail": "操作成功：" + str(first_username) + "-" + str(username) + "账户已被创建！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -424,15 +434,15 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         flag = save_img(avatar, "users/avatar")
         if flag == 0:
             return Response({
-                "error": "操作失败：未选择上传的文件"
+                "detail": "操作失败：未选择上传的文件！"
             }, status=status.HTTP_400_BAD_REQUEST)
         if flag == 1:
             return Response({
-                "error": "操作失败：上传的文件超过2Mb"
+                "detail": "操作失败：上传的文件超过2Mb！"
             }, status=status.HTTP_400_BAD_REQUEST)
         if flag == 2:
             return Response({
-                "error": "操作失败：上传的文件不属于图片"
+                "detail": "操作失败：上传的文件不属于图片！"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         instance = self.get_object()
@@ -457,7 +467,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         instance.info.avatar = ""
         instance.info.save()
         return Response({
-            "msg": "操作成功：已清理 " + instance.username + " 账户的头像"
+            "detail": "操作成功：已清理 " + instance.username + " 账户的头像！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=False)
@@ -547,15 +557,15 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         flag = save_img(image, "users/face_photo")
         if flag == 0:
             return Response({
-                "error": "操作失败：未选择上传的文件"
+                "detail": "操作失败：未选择上传的文件！"
             }, status=status.HTTP_400_BAD_REQUEST)
         if flag == 1:
             return Response({
-                "error": "操作失败：上传的文件超过2Mb"
+                "detail": "操作失败：上传的文件超过2Mb！"
             }, status=status.HTTP_400_BAD_REQUEST)
         if flag == 2:
             return Response({
-                "error": "操作失败：上传的文件不属于图片"
+                "detail": "操作失败：上传的文件不属于图片！"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         image_path = settings.MEDIA_ROOT.replace("\\", "/") + "/" + flag
@@ -563,11 +573,11 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
 
         if face_128d_features == 0:
             return Response({
-                "error": "操作失败：未检测到人脸"
+                "detail": "操作失败：未检测到人脸！"
             }, status=status.HTTP_400_BAD_REQUEST)
         if face_128d_features == 1:
             return Response({
-                "error": "操作失败：检测到多张人脸"
+                "detail": "操作失败：检测到多张人脸！"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         face_128d_features_list = []
@@ -587,11 +597,33 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             face.save()
         return Response({
             "code": 0,
-            "msg": "操作成功：人脸数据设置成功",
+            "msg": "操作成功：人脸数据设置成功！",
             "data": {
                 "src": "http://" + request.META['HTTP_HOST'] + "/face_photo/" + flag
             }
         }, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def get_info_self(self, request, *args, **kwargs):
+        """
+            获取自己的信息
+            url: '/users/get_info_self/'
+            type: 'get'
+        """
+        instance = request.user
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    @action(methods=['POST'], detail=False)
+    def change_password_admin(self, request, *args, **kwargs):
+        """
+            修改密码 - 管理员
+            url: '/users/change_password_admin/'
+            type: 'post'
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
 
 
 """
@@ -659,7 +691,7 @@ class VerifyCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
         code_record = CaptchaModel(email=email, code=code)
         code_record.save()
         return Response({
-            "msg": "发送成功"
+            "detail": "发送成功！"
         }, status=status.HTTP_201_CREATED)
 
 
@@ -688,7 +720,7 @@ class getUserFuzzyMailViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         mail = self.request.user.email
         if mail is None:
             return Response({
-                'detail': '未绑定邮箱'
+                "detail": "未绑定邮箱！"
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({
@@ -720,15 +752,15 @@ class checkUserMailViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         if user.email is None:
             return Response({
-                'detail': '未绑定邮箱'
+                "detail": "未绑定邮箱！"
             }, status=status.HTTP_400_BAD_REQUEST)
         if user.email == serializer.validated_data["email"]:
             return Response({
-                "msg": "邮箱校验正确"
+                "detail": "邮箱校验正确！"
             }, status=status.HTTP_200_OK)
         else:
             return Response({
-                'detail': '邮箱校验不正确'
+                "detail": "邮箱校验不正确！"
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -759,7 +791,7 @@ class sendOldMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericViewSet
 
         if user.email is None:
             return Response({
-                'detail': '未绑定邮箱'
+                "detail": "未绑定邮箱！"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         data = request.POST.copy()
@@ -775,11 +807,11 @@ class sendOldMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericViewSet
             code_record = CaptchaModel(email=email, code=code)
             code_record.save()
             return Response({
-                "msg": "发送成功"
+                "detail": "发送成功！"
             }, status=status.HTTP_201_CREATED)
         else:
             return Response({
-                "detail": "发送失败"
+                "detail": "发送失败！"
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -804,7 +836,7 @@ class confirmOldMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericView
 
         if user.email is None:
             return Response({
-                'detail': '未绑定邮箱'
+                "detail": "未绑定邮箱！"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         data = request.data.copy()
@@ -814,7 +846,7 @@ class confirmOldMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericView
         serializer.is_valid(raise_exception=True)
 
         return Response({
-            'msg': '验证码正确'
+            "detail": "验证码正确！"
         }, status=status.HTTP_200_OK)
 
 
@@ -855,7 +887,7 @@ class sendNewMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericViewSet
             code_record = CaptchaModel(email=email, code=code)
             code_record.save()
             return Response({
-                "msg": "发送成功"
+                "detail": "发送成功"
             }, status=status.HTTP_201_CREATED)
         else:
             return Response({
@@ -885,5 +917,5 @@ class confirmNewMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericView
         serializer.is_valid(raise_exception=True)
 
         return Response({
-            'msg': '验证码正确'
+            "detail": "验证码正确！"
         }, status=status.HTTP_200_OK)

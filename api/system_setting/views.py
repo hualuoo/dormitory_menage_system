@@ -50,5 +50,5 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         electricity_fees.save()
 
         return Response({
-            "msg": "保存成功！"
+            "detail": "系统设定已保存！"
         }, status=status.HTTP_200_OK)

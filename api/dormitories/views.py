@@ -165,7 +165,7 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             users_list.append(user_dict.copy())
 
         return Response({
-            'data': users_list
+            "data": users_list
         }, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=True)
@@ -183,7 +183,7 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             users_id_list.append(str(user.id))
 
         return Response({
-            'value': users_id_list
+            "value": users_id_list
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -202,14 +202,14 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         if serializer.validated_data["index"] == 0:
             if len(ids) + len(instance.lived_users.all()) > instance.allow_live_number:
                 return Response({
-                    'error': '操作失败：居住的人数不能超过允许居住的人数！'
+                    "detail": "居住的人数不能超过允许居住的人数！"
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             for i in ids:
                 user = User.objects.filter(id=i).first()
                 if user.lived_dormitory_id is not None:
                     return Response({
-                        'error': '操作失败：ID为' + i + '的用户已居住在' + user.lived_dormitory.number + '内！'
+                        "detail": "ID为' + i + '的用户已居住在' + user.lived_dormitory.number + '内！"
                     }, status=status.HTTP_400_BAD_REQUEST)
                 user.lived_dormitory_id = instance
                 user.save()
@@ -218,7 +218,7 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             instance.save()
 
             return Response({
-                'msg': "操作成功：调整成功！"
+                "detail": "调整成功！"
             }, status=status.HTTP_200_OK)
 
         if serializer.validated_data["index"] == 1:
@@ -226,7 +226,7 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
                 user = User.objects.filter(id=i).first()
                 if user.lived_dormitory_id != instance.id:
                     return Response({
-                        'error': '操作失败：ID为' + i + '的用户未居住在' + instance.number + '内！'
+                        "detail": "ID为" + i + "的用户未居住在" + instance.number + "内！"
                     }, status=status.HTTP_400_BAD_REQUEST)
                 user.lived_dormitory_id = None
                 user.save()
@@ -235,7 +235,7 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             instance.save()
 
             return Response({
-                'msg': "操作成功：调整成功！"
+                "detail": "调整成功！"
             }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -253,7 +253,7 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         instance.save()
 
         return Response({
-            'msg': "操作成功：编辑成功！"
+            "detail": "编辑成功！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -271,7 +271,7 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         instance.save()
 
         return Response({
-            'msg': "操作成功：编辑成功！"
+            "detail": "编辑成功！"
         }, status=status.HTTP_200_OK)
 
 
@@ -389,7 +389,7 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         water_fees_log.save()
 
         return Response({
-            'msg': "操作成功：充值成功！"
+            "detail": "充值成功！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -405,7 +405,7 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         instance.save()
 
         return Response({
-            'msg': "操作成功：编辑成功！"
+            "detail": "编辑成功！"
         }, status=status.HTTP_200_OK)
 
 
@@ -520,7 +520,7 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
         electricity_fees_log.save()
 
         return Response({
-            'msg': "操作成功：充值成功！"
+            "detail": "充值成功！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -533,5 +533,5 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
         instance.save()
 
         return Response({
-            'msg': "操作成功：编辑成功！"
+            "detail": "编辑成功！"
         }, status=status.HTTP_200_OK)
