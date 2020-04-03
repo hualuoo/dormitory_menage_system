@@ -18,19 +18,37 @@
 		<div class="layui-fluid">
 			<div class="layui-row layui-col-space15">
 				<div class="layui-col-md12">
-					<div class="layui-card">
-						<div class="layui-card-header">系统设置</div>
-						<div class="layui-card-body" pad15>
-							<div class="layui-form" wid100 lay-filter="layuiadmin-form-useradmin">
+					<div class="layui-form" wid100 lay-filter="layuiadmin-form-useradmin">
+						<div class="layui-card">
+							<div class="layui-card-header">系统设置</div>
+							<div class="layui-card-body" pad15>
+								<div class="layui-form-item">
+									<div class="layui-form-item">
+										<label class="layui-form-label" style="width: 120px;">首页代办事项列表</label>
+										<div class="layui-input-block">
+											<input type="checkbox" name="todo_list" value="todo[water_fees]" title="待缴水费宿舍">
+											<input type="checkbox" name="todo_list" value="todo[electricity_fees]" title="待缴电费宿舍">
+											<input type="checkbox" name="todo_list" value="todo[repair]" title="待处理报修单">
+											<input type="checkbox" name="todo_list" value="todo[access_control_later]" title="待处理门禁晚归记录">
+											<input type="checkbox" name="todo_list" value="todo[access_control_application]" title="待处理门禁异常申请">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="layui-card">
+							<div class="layui-card-header">资费设置</div>
+							<div class="layui-card-body" pad15>
+
 								<div class="layui-form-item">
 									<label class="layui-form-label">水费(元/吨)</label>
-									<div class="layui-input-block">
+									<div class="layui-input-inline">
 										<input type="text" name="water_fees" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
 									<label class="layui-form-label">电费(元/千瓦时)</label>
-									<div class="layui-input-block">
+									<div class="layui-input-inline">
 										<input type="text" name="electricity_fees" class="layui-input">
 									</div>
 								</div>
@@ -47,6 +65,8 @@
 		</div>
 
 		<script src="../../../layuiadmin/layui/layui.all.js"></script>
+		<script src="../../../layuiadmin/js/check-token.js"></script>
+
 		<script>
 			layui.use(['form', 'table'], function() {
 				var form = layui.form;
@@ -71,7 +91,16 @@
 									"electricity_fees": value.content
 								});
 							}
+							if(value.code == "todo_list") {
+								strs = value.content.split(",")
+								strs.map(function(str, index, arr) {
+									$("[value='" + str + "']:checkbox").each(function() {
+										$(this).attr("checked",true);
+									});
+								});
+							}
 						});
+						form.render();
 					},
 					error: function(jqXHR) {
 						layer.msg('数据加载错误，请联系管理员处理', {
@@ -83,6 +112,14 @@
 
 				form.on('submit(set_website)', function(data) {
 					var field = data.field;
+
+					var todo_list = [];
+					$("[name='todo_list']:checkbox").each(function() {
+						if($(this).is(":checked")) {
+							todo_list.push($(this).attr("value"));
+						}
+					});
+
 					$.ajax({
 						url: "http://127.0.0.1:8000/system_setting/system_setting_update/",
 						type: "post",
@@ -92,13 +129,15 @@
 						dataType: "json",
 						data: {
 							"water_fees": field.water_fees,
-							"electricity_fees": field.electricity_fees
+							"electricity_fees": field.electricity_fees,
+							"todo_list": todo_list.join(",")
 						},
 						success: function(data) {
 							layer.msg(data.detail, {
 								icon: 1,
 								time: 2000
 							});
+							setTimeout('window.location.reload()',1000);
 						},
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
@@ -111,6 +150,13 @@
 							}
 							if(json_responseText.electricity_fees) {
 								layer.msg('电费：' + json_responseText.electricity_fees[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.todo_list) {
+								layer.msg('代办事项列表：' + json_responseText.todo_list[0], {
 									icon: 2,
 									anim: 6
 								});

@@ -72,7 +72,6 @@
 		</div>
 
 		<script src="../../../layuiadmin/layui/layui.all.js"></script>
-
 		<script src="../../../layuiadmin/js/check-token.js"></script>
 
 		<script>
@@ -223,7 +222,7 @@
 									"note": field.access_control_note
 								},
 								success: function(data) {
-									layer.msg(data.layer.msg(json_responseText.msg, {
+									layer.msg(data.detail, {
 										icon: 1,
 										time: 2000
 									})

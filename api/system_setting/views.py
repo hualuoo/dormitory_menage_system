@@ -12,6 +12,9 @@ from .models import SystemSetting
 from .serializers import SystemSettingSerializer, SystemSettingUpdateSerializer
 from utils.permission import UserIsSuperUser
 
+from dormitories.models import WaterFees, ElectricityFees
+from user_operation.models import Repair
+from access_control.models import AccessControl, AccessControlAbnormalApplication
 
 # Create your views here.
 class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -49,6 +52,37 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         electricity_fees.content = serializer.validated_data["electricity_fees"]
         electricity_fees.save()
 
+        todo_list = SystemSetting.objects.filter(code="todo_list").first()
+        todo_list.content = serializer.validated_data["todo_list"]
+        todo_list.save()
+
         return Response({
             "detail": "系统设定已保存！"
         }, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def get_todo_list(self, request, *args, **kwargs):
+        """
+            系统 获取代办事项
+            url: '/system_setting/get_todo_list/'
+            type: 'post'
+        """
+        from django.db.models import Q
+
+        todo_list_str = SystemSetting.objects.filter(code="todo_list").first().content
+        todo_list = todo_list_str.split(',')
+
+        todo_list_json = {}
+        for todo in todo_list:
+            if todo == "todo[water_fees]":
+                todo_list_json['water_fees'] = WaterFees.objects.filter(have_water_fees__lte=0).count()
+            if todo == "todo[electricity_fees]":
+                todo_list_json['electricity_fees'] = ElectricityFees.objects.filter(have_electricity_fees__lte=0).count()
+            if todo == "todo[repair]":
+                todo_list_json['repair'] = Repair.objects.filter(~Q(status="complete")).count()
+            if todo == "todo[access_control_later]":
+                todo_list_json['access_control_later'] = AccessControl.objects.filter(Q(status="later")).count()
+            if todo == "todo[access_control_application]":
+                todo_list_json['access_control_application'] = AccessControlAbnormalApplication.objects.filter(Q(result="pending")).count()
+
+        return Response(todo_list_json, status=status.HTTP_200_OK)

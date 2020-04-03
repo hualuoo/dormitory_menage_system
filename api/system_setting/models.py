@@ -8,7 +8,7 @@ class SystemSetting(models.Model):
     """
     code = models.CharField(verbose_name="代码", max_length=20)
     title = models.CharField(verbose_name="标题", max_length=20)
-    content = models.CharField(verbose_name="内容", max_length=100)
+    content = models.TextField(verbose_name="内容")
     url = models.FileField(verbose_name="链接",upload_to="media/file/", max_length=100, null=True)
     note = models.CharField(verbose_name="备注", max_length=100, null=True)
 

@@ -19,7 +19,8 @@ class SystemSettingSerializer(serializers.ModelSerializer):
 class SystemSettingUpdateSerializer(serializers.ModelSerializer):
     water_fees = serializers.DecimalField(max_digits=5, decimal_places=2, help_text="水费(元/吨)")
     electricity_fees = serializers.DecimalField(max_digits=5, decimal_places=2, help_text="水费(元/吨)")
+    todo_list = serializers.CharField(help_text="代办事项列表")
 
     class Meta:
         model = SystemSetting
-        fields = ("water_fees", "electricity_fees", )
+        fields = ("water_fees", "electricity_fees", "todo_list", )
