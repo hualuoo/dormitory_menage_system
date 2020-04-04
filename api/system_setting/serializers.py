@@ -20,7 +20,13 @@ class SystemSettingUpdateSerializer(serializers.ModelSerializer):
     water_fees = serializers.DecimalField(max_digits=5, decimal_places=2, help_text="水费(元/吨)")
     electricity_fees = serializers.DecimalField(max_digits=5, decimal_places=2, help_text="水费(元/吨)")
     todo_list = serializers.CharField(help_text="代办事项列表")
+    overview_info = serializers.CharField(help_text="概略信息显示")
+
+    def validate_overview_info(self, overview_info):
+        if len(overview_info.split(',')) != 4:
+            raise serializers.ValidationError('操作失败：概略信息显示只能选择四个选项！')
+        return overview_info
 
     class Meta:
         model = SystemSetting
-        fields = ("water_fees", "electricity_fees", "todo_list", )
+        fields = ("water_fees", "electricity_fees", "todo_list", "overview_info", )

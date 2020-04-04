@@ -11,7 +11,7 @@ class User(AbstractUser):
     用户
     """
     email = models.EmailField(max_length=100, blank=True, verbose_name="邮箱")
-    lived_dormitory = models.ForeignKey(Dormitory, on_delete=models.CASCADE, verbose_name="居住宿舍", null=True, related_name='lived_users')
+    lived_dormitory = models.ForeignKey(Dormitory, on_delete=models.SET_NULL, verbose_name="居住宿舍", null=True, related_name='lived_users')
 
     class Meta:
         verbose_name = "用户"

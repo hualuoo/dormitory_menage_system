@@ -7,14 +7,17 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+from datetime import datetime, timedelta
 
 from .models import SystemSetting
 from .serializers import SystemSettingSerializer, SystemSettingUpdateSerializer
 from utils.permission import UserIsSuperUser
 
-from dormitories.models import WaterFees, ElectricityFees
+from dormitories.models import Dormitory, WaterFees, ElectricityFees
 from user_operation.models import Repair
 from access_control.models import AccessControl, AccessControlAbnormalApplication
+from users.models import User
+
 
 # Create your views here.
 class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -56,6 +59,10 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         todo_list.content = serializer.validated_data["todo_list"]
         todo_list.save()
 
+        overview_info = SystemSetting.objects.filter(code="overview_info").first()
+        overview_info.content = serializer.validated_data["overview_info"]
+        overview_info.save()
+
         return Response({
             "detail": "系统设定已保存！"
         }, status=status.HTTP_200_OK)
@@ -65,7 +72,7 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         """
             系统 获取代办事项
             url: '/system_setting/get_todo_list/'
-            type: 'post'
+            type: 'get'
         """
         from django.db.models import Q
 
@@ -86,3 +93,61 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
                 todo_list_json['access_control_application'] = AccessControlAbnormalApplication.objects.filter(Q(result="pending")).count()
 
         return Response(todo_list_json, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def get_overview_info(self, request, *args, **kwargs):
+        """
+            系统 获取系统概略信息
+            url: '/system_setting/get_overview_info/'
+            type: 'get'
+        """
+        from django.db.models import Q,F
+
+        overview_info_str = SystemSetting.objects.filter(code="overview_info").first().content
+        overview_info = overview_info_str.split(',')
+
+        overview_info_json = {}
+        for info in overview_info:
+            if info == "info[student]":
+                overview_info_json['student_count_active'] = User.objects.filter(Q(is_staff=False) & Q(is_active=True)).count()
+                overview_info_json['student_count_total'] = User.objects.filter(Q(is_staff=False)).count()
+            if info == "info[staff]":
+                overview_info_json['staff_count_active'] = User.objects.filter(Q(is_staff=True) & Q(is_active=True)).count()
+                overview_info_json['staff_count_total'] = User.objects.filter(Q(is_staff=True)).count()
+            if info == "info[dormitory]":
+                overview_info_json['dormitory_count_total'] = Dormitory.objects.filter().count()
+                overview_info_json['dormitory_count_empty'] = Dormitory.objects.filter(~Q(allow_live_number__icontains=F("now_live_number"))).count()
+            if info == "info[access_control_day]":
+                overview_info_json['access_control_day'] = AccessControl.objects.filter(Q(add_time__gte=datetime.now().date())).count()
+                overview_info_json['access_control_total'] = AccessControl.objects.filter().count()
+            if info == "info[access_control_week]":
+                # 当前天 显示当前日期是本周第几天
+                day_num = datetime.now().isoweekday()
+                # 计算当前日期所在周一零点零分零秒
+                monday = datetime.now() - timedelta(days=day_num) - timedelta(hours=datetime.now().hour, minutes=datetime.now().minute, seconds=datetime.now().second, microseconds=datetime.now().microsecond)
+                overview_info_json['access_control_week'] = AccessControl.objects.filter(Q(add_time__range=(monday, datetime.now()))).count()
+                overview_info_json['access_control_total'] = AccessControl.objects.filter().count()
+            if info == "info[access_control_month]":
+                overview_info_json['access_control_month'] = AccessControl.objects.filter(Q(add_time__month=datetime.now().month)).count()
+                overview_info_json['access_control_total'] = AccessControl.objects.filter().count()
+
+        return Response(overview_info_json, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def get_backend_server_info(self, request, *args, **kwargs):
+        """
+            系统 获取后端服务器情况
+            url: '/system_setting/get_backend_server_info/'
+            type: 'get'
+        """
+        import psutil
+
+        server_info_json = {'cpu_count': psutil.cpu_count(),
+                            'cpu_percent': psutil.cpu_percent(),
+                            'memory_total': round(psutil.virtual_memory().total/1024/1024),
+                            'memory_used': round(psutil.virtual_memory().used/1024/1024),
+                            'memory_percent': psutil.virtual_memory().percent,
+                            'disk_total': round(psutil.disk_usage("C:\\").total/1024/1024/1024, 2),
+                            'disk_used': round(psutil.disk_usage("C:\\").used/1024/1024/1024, 2),
+                            'disk_percent': psutil.disk_usage("C:\\").percent}
+        return Response(server_info_json, status=status.HTTP_200_OK)

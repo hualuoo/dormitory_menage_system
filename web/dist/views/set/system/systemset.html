@@ -33,6 +33,17 @@
 											<input type="checkbox" name="todo_list" value="todo[access_control_application]" title="待处理门禁异常申请">
 										</div>
 									</div>
+									<div class="layui-form-item">
+										<label class="layui-form-label" style="width: 120px;">首页概略信息显示</label>
+										<div class="layui-input-block">
+											<input type="checkbox" name="overview_info" value="info[student]" title="学生人量">
+											<input type="checkbox" name="overview_info" value="info[staff]" title="教职工人量">
+											<input type="checkbox" name="overview_info" value="info[dormitory]" title="宿舍数量">
+											<input type="checkbox" name="overview_info" value="info[access_control_day]" title="门禁通过人数[本日]">
+											<input type="checkbox" name="overview_info" value="info[access_control_week]" title="门禁通过人数[本周]">
+											<input type="checkbox" name="overview_info" value="info[access_control_month]" title="门禁通过人数[本月]">
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -99,6 +110,14 @@
 									});
 								});
 							}
+							if(value.code == "overview_info") {
+								strs = value.content.split(",")
+								strs.map(function(str, index, arr) {
+									$("[value='" + str + "']:checkbox").each(function() {
+										$(this).attr("checked",true);
+									});
+								});
+							}
 						});
 						form.render();
 					},
@@ -119,6 +138,12 @@
 							todo_list.push($(this).attr("value"));
 						}
 					});
+					var overview_info = [];
+					$("[name='overview_info']:checkbox").each(function() {
+						if($(this).is(":checked")) {
+							overview_info.push($(this).attr("value"));
+						}
+					});
 
 					$.ajax({
 						url: "http://127.0.0.1:8000/system_setting/system_setting_update/",
@@ -130,7 +155,8 @@
 						data: {
 							"water_fees": field.water_fees,
 							"electricity_fees": field.electricity_fees,
-							"todo_list": todo_list.join(",")
+							"todo_list": todo_list.join(","),
+							"overview_info": overview_info.join(",")
 						},
 						success: function(data) {
 							layer.msg(data.detail, {
@@ -157,6 +183,13 @@
 							}
 							if(json_responseText.todo_list) {
 								layer.msg('代办事项列表：' + json_responseText.todo_list[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.overview_info) {
+								layer.msg('概略信息显示：' + json_responseText.overview_info[0], {
 									icon: 2,
 									anim: 6
 								});

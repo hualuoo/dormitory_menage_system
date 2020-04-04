@@ -186,14 +186,13 @@
 						<div class="layui-col-md6">
 							<div class="layui-card">
 								<div class="layui-card-header">
-									活跃用户量
-									<span class="layui-badge layui-bg-blue layuiadmin-badge">个</span>
+									活跃学生数
 								</div>
 								<div class="layui-card-body layuiadmin-card-list">
 									<p class="layuiadmin-big-font">123</p>
 									<p>
-										总计用户量
-										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-flag"></i></span>
+										总计学生数
+										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-user"></i></span>
 									</p>
 								</div>
 							</div>
@@ -202,14 +201,13 @@
 						<div class="layui-col-md6">
 							<div class="layui-card">
 								<div class="layui-card-header">
-									访问量
-									<span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+									活跃教职工数
 								</div>
 								<div class="layui-card-body layuiadmin-card-list">
 									<p class="layuiadmin-big-font">9,999,666</p>
 									<p>
-										总计访问量
-										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-flag"></i></span>
+										总计教职工数
+										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-group"></i></span>
 									</p>
 								</div>
 							</div>
@@ -218,14 +216,13 @@
 						<div class="layui-col-md6">
 							<div class="layui-card">
 								<div class="layui-card-header">
-									访问量
-									<span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+									宿舍数
 								</div>
 								<div class="layui-card-body layuiadmin-card-list">
 									<p class="layuiadmin-big-font">9,999,666</p>
 									<p>
-										总计访问量
-										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-flag"></i></span>
+										未满宿舍数
+										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-tree"></i></span>
 									</p>
 								</div>
 							</div>
@@ -233,13 +230,13 @@
 						<div class="layui-col-md6">
 							<div class="layui-card">
 								<div class="layui-card-header">
-									访问量
-									<span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+									门禁访问量
+									<span class="layui-badge layui-bg-blue layuiadmin-badge">日</span>
 								</div>
 								<div class="layui-card-body layuiadmin-card-list">
 									<p class="layuiadmin-big-font">9,999,666</p>
 									<p>
-										总计访问量
+										总计门禁访问量
 										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-flag"></i></span>
 									</p>
 								</div>
@@ -248,31 +245,23 @@
 
 						<div class="layui-col-md12">
 							<div class="layui-card">
-								<div class="layui-card-header">效果报告</div>
-								<div class="layui-card-body layadmin-takerates">
-									<div class="layui-progress" lay-showPercent="yes">
-										<h3>转化率（日同比 28% <span class="layui-edge layui-edge-top" lay-tips="增长" lay-offset="-15"></span>）</h3>
-										<div class="layui-progress-bar" lay-percent="65%"></div>
-									</div>
-									<div class="layui-progress" lay-showPercent="yes">
-										<h3>签到率（日同比 11% <span class="layui-edge layui-edge-bottom" lay-tips="下降" lay-offset="-15"></span>）</h3>
-										<div class="layui-progress-bar" lay-percent="32%"></div>
-									</div>
+								<div class="layui-card-header">服务器实时监控
+									<button class="layui-badge layuiadmin-badge layui-btn layui-bg-blue" data-type="add" onclick="get_server_info()">
+                    					刷新
+                					</button>
 								</div>
-							</div>
-						</div>
-
-						<div class="layui-col-md12">
-							<div class="layui-card">
-								<div class="layui-card-header">实时监控</div>
 								<div class="layui-card-body layadmin-takerates">
 									<div class="layui-progress" lay-showPercent="yes">
-										<h3>CPU使用率</h3>
-										<div class="layui-progress-bar" lay-percent="58%"></div>
+										<h3 id="cpu_count">CPU使用率</h3>
+										<div class="layui-progress-bar" id="cpu_percent" lay-percent="0%"></div>
 									</div>
 									<div class="layui-progress" lay-showPercent="yes">
-										<h3>内存占用率</h3>
-										<div class="layui-progress-bar layui-bg-red" lay-percent="90%"></div>
+										<h3 id="memory_total">内存占用率</h3>
+										<div class="layui-progress-bar" id="memory_percent" lay-percent="0%"></div>
+									</div>
+									<div class="layui-progress" lay-showPercent="yes">
+										<h3 id="disk_total">硬盘使用率</h3>
+										<div class="layui-progress-bar" id="disk_percent" lay-percent="0%"></div>
 									</div>
 								</div>
 							</div>
@@ -325,6 +314,7 @@
 
 		<script src="../../layuiadmin/layui/layui.all.js?t=1"></script>
 		<script>
+			// 获取 "待办事项"
 			$.ajax({
 				url: "http://127.0.0.1:8000/system_setting/get_todo_list/",
 				type: "get",
@@ -381,7 +371,7 @@
 								'</li>';
 							i++;
 						}
-						if(i % 4 == 0) {
+						if(i % 4 == 0 && i != 4) {
 							str += '</ul><ul class="layui-row layui-col-space10">';
 						}
 					});
@@ -395,6 +385,54 @@
 					});
 				}
 			});
+			
+			// 获取 "系统概略信息"
+
+			// 获取 "后端服务器信息"
+			function get_backend_server_info() {
+				$.ajax({
+					url: "http://127.0.0.1:8000/system_setting/get_backend_server_info/",
+					type: "get",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					success: function(data) {
+						$('#cpu_count').html('CPU使用率(物理核心数：' + data.cpu_count + ')');
+						$('#cpu_percent').attr('lay-percent', data.cpu_percent + '%');
+						$('#memory_total').html('内存占用率(' + data.memory_used + '/' + data.memory_total + 'MB)');
+						$('#memory_percent').attr('lay-percent', data.memory_percent + '%');
+						$('#disk_total').html('硬盘使用率(' + data.disk_used + '/' + data.disk_total + 'GB)');
+						$('#disk_percent').attr('lay-percent', data.disk_percent + '%');
+
+						if(data.cpu_percent > 50) {
+							$('#cpu_percent').attr('class', 'layui-progress-bar layui-bg-orange');
+						}
+						if(data.cpu_percent > 80) {
+							$('#cpu_percent').attr('class', 'layui-progress-bar layui-bg-red');
+						}
+						if(data.memory_percent > 50) {
+							$('#memory_percent').attr('class', 'layui-progress-bar layui-bg-orange');
+						}
+						if(data.memory_percent > 80) {
+							$('#memory_percent').attr('class', 'layui-progress-bar layui-bg-red');
+						}
+						if(data.disk_percent > 50) {
+							$('#disk_percent').attr('class', 'layui-progress-bar layui-bg-orange');
+						}
+						if(data.disk_percent > 80) {
+							$('#disk_percent').attr('class', 'layui-progress-bar layui-bg-red');
+						}
+						layui.element.init();
+					}
+				});
+			}
+			
+			// 定时获取服务器内容
+			get_backend_server_info();
+			var ref = setInterval(function() {
+				get_backend_server_info();
+			}, 5000);
 
 			layui.config({
 				base: '../../layuiadmin/' //静态资源所在路径
