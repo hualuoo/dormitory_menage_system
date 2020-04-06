@@ -124,7 +124,8 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
                 # 当前天 显示当前日期是本周第几天
                 day_num = datetime.now().isoweekday()
                 # 计算当前日期所在周一零点零分零秒
-                monday = datetime.now() - timedelta(days=day_num) - timedelta(hours=datetime.now().hour, minutes=datetime.now().minute, seconds=datetime.now().second, microseconds=datetime.now().microsecond)
+                # monday = datetime.now() - timedelta(days=day_num) - timedelta(hours=datetime.now().hour, minutes=datetime.now().minute, seconds=datetime.now().second, microseconds=datetime.now().microsecond)
+                monday = datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
                 overview_info_json['access_control_week'] = AccessControl.objects.filter(Q(add_time__range=(monday, datetime.now()))).count()
                 overview_info_json['access_control_total'] = AccessControl.objects.filter().count()
             if info == "info[access_control_month]":
@@ -151,3 +152,46 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
                             'disk_used': round(psutil.disk_usage("C:\\").used/1024/1024/1024, 2),
                             'disk_percent': psutil.disk_usage("C:\\").percent}
         return Response(server_info_json, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def data_overview_date(self, request, *args, **kwargs):
+        """
+            系统 获取后端服务器情况
+            url: '/system_setting/data_overview_date/'
+            type: 'get'
+        """
+
+        data_overview_start_date = SystemSetting.objects.filter(code="data_overview_start_date").first().content
+        start_date = datetime.strptime(data_overview_start_date, "%Y-%m-%d")
+
+        date = []
+        i = 0
+        while start_date.__le__(datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")):
+            date.append(start_date.strftime("%Y-%m-%d"))
+            start_date += timedelta(days=1)
+            i += 1
+
+        print(i)
+
+        return Response({
+            "date": date
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def data_overview_data(self, request, *args, **kwargs):
+        """
+            系统 获取后端服务器情况
+            url: '/system_setting/data_overview_data/'
+            type: 'get'
+        """
+        data_overview_start_date = SystemSetting.objects.filter(code="data_overview_start_date").first().content
+        start_date = datetime.strptime(data_overview_start_date, "%Y-%m-%d")
+
+        data = []
+        while start_date.__le__(datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")):
+            data.append(AccessControl.objects.filter(add_time__range=(start_date.date(), (start_date + timedelta(days=1)))).count())
+            start_date += timedelta(days=1)
+
+        return Response({
+            "data": data
+        }, status=status.HTTP_200_OK)

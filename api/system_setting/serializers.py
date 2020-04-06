@@ -24,7 +24,7 @@ class SystemSettingUpdateSerializer(serializers.ModelSerializer):
 
     def validate_overview_info(self, overview_info):
         if len(overview_info.split(',')) != 4:
-            raise serializers.ValidationError('操作失败：概略信息显示只能选择四个选项！')
+            raise serializers.ValidationError('概略信息显示只能选择四个选项！')
         return overview_info
 
     class Meta:

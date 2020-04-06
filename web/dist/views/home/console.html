@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 		<script type="text/javascript" charset="utf8" src="../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" charset="utf8" src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 	</head>
 
 	<body>
@@ -147,18 +148,20 @@
 						</div>
 
 						<div class="layui-col-md12">
-							<div class="layui-card">
+							<div class="layui-card" style="height: 440px;">
 								<div class="layui-card-header">数据概览</div>
 								<div class="layui-card-body">
-
-									<div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-dataview">
+									<div class="layui-carousel layadmin-carousel layadmin-backlog">
+										<div style="height: 360px; padding: 0 50px 0 0;" id="data_overview_01">
+										</div>
+									</div>
+									<!--<div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-dataview">
 										<div carousel-item id="LAY-index-dataview">
-											<div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+											<div id="data_overview_01"><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
 											<div></div>
 											<div></div>
 										</div>
-									</div>
-
+									</div>-->
 								</div>
 							</div>
 							<div class="layui-card">
@@ -183,70 +186,13 @@
 
 				<div class="layui-col-md4">
 					<div class="layui-row layui-col-space15">
-						<div class="layui-col-md6">
-							<div class="layui-card">
-								<div class="layui-card-header">
-									活跃学生数
-								</div>
-								<div class="layui-card-body layuiadmin-card-list">
-									<p class="layuiadmin-big-font">123</p>
-									<p>
-										总计学生数
-										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-user"></i></span>
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<div class="layui-col-md6">
-							<div class="layui-card">
-								<div class="layui-card-header">
-									活跃教职工数
-								</div>
-								<div class="layui-card-body layuiadmin-card-list">
-									<p class="layuiadmin-big-font">9,999,666</p>
-									<p>
-										总计教职工数
-										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-group"></i></span>
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<div class="layui-col-md6">
-							<div class="layui-card">
-								<div class="layui-card-header">
-									宿舍数
-								</div>
-								<div class="layui-card-body layuiadmin-card-list">
-									<p class="layuiadmin-big-font">9,999,666</p>
-									<p>
-										未满宿舍数
-										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-tree"></i></span>
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="layui-col-md6">
-							<div class="layui-card">
-								<div class="layui-card-header">
-									门禁访问量
-									<span class="layui-badge layui-bg-blue layuiadmin-badge">日</span>
-								</div>
-								<div class="layui-card-body layuiadmin-card-list">
-									<p class="layuiadmin-big-font">9,999,666</p>
-									<p>
-										总计门禁访问量
-										<span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-flag"></i></span>
-									</p>
-								</div>
-							</div>
+						<div class="layui-row layui-col-space15" id="overview_info">
 						</div>
 
 						<div class="layui-col-md12">
 							<div class="layui-card">
 								<div class="layui-card-header">服务器实时监控
-									<button class="layui-badge layuiadmin-badge layui-btn layui-bg-blue" data-type="add" onclick="get_server_info()">
+									<button class="layui-badge layuiadmin-badge layui-btn layui-bg-blue" data-type="add" onclick="get_backend_server_info()">
                     					刷新
                 					</button>
 								</div>
@@ -313,6 +259,8 @@
 		</div>
 
 		<script src="../../layuiadmin/layui/layui.all.js?t=1"></script>
+		<script src="../../layuiadmin/js/check-token.js"></script>
+
 		<script>
 			// 获取 "待办事项"
 			$.ajax({
@@ -385,8 +333,121 @@
 					});
 				}
 			});
-			
+
 			// 获取 "系统概略信息"
+			$.ajax({
+				url: "http://127.0.0.1:8000/system_setting/get_overview_info/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					var str = "";
+					$.each(data, function(key, val) {
+						if(key == "student_count_active") {
+							str += '<div class="layui-col-md6">' +
+								'<div class="layui-card">' +
+								'<div class="layui-card-header">' +
+								'可用学生人数' +
+								'</div>' +
+								'<div class="layui-card-body layuiadmin-card-list">' +
+								'<p class="layuiadmin-big-font">' + val + '</p>' +
+								'<p>' +
+								'总计学生人数' +
+								'<span class="layuiadmin-span-color">' + data['student_count_total'] + ' <i class="layui-inline layui-icon layui-icon-user"></i></span>' +
+								'</p>' +
+								'</div>' +
+								'</div>' +
+								'</div>';
+						}
+						if(key == "staff_count_active") {
+							str += '<div class="layui-col-md6">' +
+								'<div class="layui-card">' +
+								'<div class="layui-card-header">' +
+								'可用教职工人数' +
+								'</div>' +
+								'<div class="layui-card-body layuiadmin-card-list">' +
+								'<p class="layuiadmin-big-font">' + val + '</p>' +
+								'<p>' +
+								'总计教职工人数' +
+								'<span class="layuiadmin-span-color">' + data['staff_count_total'] + ' <i class="layui-inline layui-icon layui-icon-group"></i></span>' +
+								'</p>' +
+								'</div>' +
+								'</div>' +
+								'</div>';
+						}
+						if(key == "dormitory_count_total") {
+							str += '<div class="layui-col-md6">' +
+								'<div class="layui-card">' +
+								'<div class="layui-card-header">' +
+								'宿舍数量' +
+								'</div>' +
+								'<div class="layui-card-body layuiadmin-card-list">' +
+								'<p class="layuiadmin-big-font">' + val + '</p>' +
+								'<p>' +
+								'未满宿舍数量' +
+								'<span class="layuiadmin-span-color">' + data['dormitory_count_empty'] + ' <i class="layui-inline layui-icon layui-icon-tree"></i></span>' +
+								'</p>' +
+								'</div>' +
+								'</div>' +
+								'</div>';
+						}
+						if(key == "access_control_day") {
+							str += '<div class="layui-col-md6">' +
+								'<div class="layui-card">' +
+								'<div class="layui-card-header">' +
+								'门禁通过人数' +
+								'<span class="layui-badge layui-bg-blue layuiadmin-badge">日</span>' +
+								'</div>' +
+								'<div class="layui-card-body layuiadmin-card-list">' +
+								'<p class="layuiadmin-big-font">' + val + '</p>' +
+								'<p>' +
+								'总计门禁通过人数' +
+								'<span class="layuiadmin-span-color">' + data['access_control_total'] + ' <i class="layui-inline layui-icon layui-icon-template"></i></span>' +
+								'</p>' +
+								'</div>' +
+								'</div>' +
+								'</div>';
+						}
+						if(key == "access_control_week") {
+							str += '<div class="layui-col-md6">' +
+								'<div class="layui-card">' +
+								'<div class="layui-card-header">' +
+								'门禁通过人数' +
+								'<span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>' +
+								'</div>' +
+								'<div class="layui-card-body layuiadmin-card-list">' +
+								'<p class="layuiadmin-big-font">' + val + '</p>' +
+								'<p>' +
+								'总计门禁通过人数' +
+								'<span class="layuiadmin-span-color">' + data['access_control_total'] + ' <i class="layui-inline layui-icon layui-icon-template"></i></span>' +
+								'</p>' +
+								'</div>' +
+								'</div>' +
+								'</div>';
+						}
+						if(key == "access_control_month") {
+							str += '<div class="layui-col-md6">' +
+								'<div class="layui-card">' +
+								'<div class="layui-card-header">' +
+								'门禁通过人数' +
+								'<span class="layui-badge layui-bg-blue layuiadmin-badge">月</span>' +
+								'</div>' +
+								'<div class="layui-card-body layuiadmin-card-list">' +
+								'<p class="layuiadmin-big-font">' + val + '</p>' +
+								'<p>' +
+								'总计门禁通过人数' +
+								'<span class="layuiadmin-span-color">' + data['access_control_total'] + ' <i class="layui-inline layui-icon layui-icon-template"></i></span>' +
+								'</p>' +
+								'</div>' +
+								'</div>' +
+								'</div>';
+						}
+					});
+					$('#overview_info').html(str);
+				}
+			});
 
 			// 获取 "后端服务器信息"
 			function get_backend_server_info() {
@@ -424,21 +485,143 @@
 							$('#disk_percent').attr('class', 'layui-progress-bar layui-bg-red');
 						}
 						layui.element.init();
+					},
+					error: function(jqXHR) {
+						layer.msg('数据加载错误，请联系管理员处理', {
+							icon: 2,
+							anim: 6
+						});
 					}
 				});
 			}
-			
-			// 定时获取服务器内容
+
+			// 每10秒定时获取服务器内容
 			get_backend_server_info();
 			var ref = setInterval(function() {
 				get_backend_server_info();
-			}, 5000);
+			}, 10000);
 
 			layui.config({
 				base: '../../layuiadmin/' //静态资源所在路径
 			}).extend({
 				index: 'lib/index' //主入口模块
 			}).use(['index', 'console']);
+
+			var myChart = echarts.init(document.getElementById('data_overview_01'));
+
+			// 指定图表的配置项和数据
+			var data_overview_date = [];
+			var data_overview_data = [];
+
+			$.ajax({
+				url: "http://127.0.0.1:8000/system_setting/data_overview_date/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				async: false,
+				success: function(data) {
+					data_overview_date = data.date
+				},
+				error: function(jqXHR) {
+					layer.msg('数据加载错误，请联系管理员处理', {
+						icon: 2,
+						anim: 6
+					});
+				}
+			});
+			
+			$.ajax({
+				url: "http://127.0.0.1:8000/system_setting/data_overview_data/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				async: false,
+				success: function(data) {
+					data_overview_data = data.data
+				},
+				error: function(jqXHR) {
+					layer.msg('数据加载错误，请联系管理员处理', {
+						icon: 2,
+						anim: 6
+					});
+				}
+			});
+			
+			option = {
+				tooltip: {
+					trigger: 'axis',
+					position: function(pt) {
+						return [pt[0], '10%'];
+					}
+				},
+				title: {
+					left: 'center',
+					text: '门禁流量图',
+				},
+				toolbox: {
+					feature: {
+						dataZoom: {
+							yAxisIndex: 'none'
+						},
+						restore: {},
+						saveAsImage: {}
+					}
+				},
+				xAxis: {
+					type: 'category',
+					boundaryGap: false,
+					data: data_overview_date
+				},
+				yAxis: {
+					type: 'value',
+					boundaryGap: [0, '100%']
+				},
+				dataZoom: [{
+					type: 'inside',
+					start: 80,
+					end: 100
+				}, {
+					start: 0,
+					end: 10,
+					handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+					handleSize: '80%',
+					handleStyle: {
+						color: '#fff',
+						shadowBlur: 3,
+						shadowColor: 'rgba(0, 0, 0, 0.6)',
+						shadowOffsetX: 2,
+						shadowOffsetY: 2
+					}
+				}],
+				series: [{
+					name: '人次',
+					type: 'line',
+					smooth: true,
+					symbol: 'none',
+					sampling: 'average',
+					itemStyle: {
+						color: 'rgb(255, 70, 131)'
+					},
+					areaStyle: {
+						color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+							offset: 0,
+							color: 'rgb(255, 158, 68)'
+						}, {
+							offset: 1,
+							color: 'rgb(255, 70, 131)'
+						}])
+					},
+					data: data_overview_data
+				}]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+			
 		</script>
 	</body>
 
