@@ -178,7 +178,7 @@
 								icon: 1,
 								time: 2000
 							})
-							layer.close(index); //关闭弹层
+							setTimeout('window.location.reload()', 1000);
 						},
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);

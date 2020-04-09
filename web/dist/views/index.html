@@ -30,7 +30,7 @@
 							</a>
 						</li>
 						<li class="layui-nav-item layui-hide-xs" lay-unselect>
-							<a href="http://www.layui.com/admin/" target="_blank" title="前台">
+							<a href="http://baidu.com/" target="_blank" title="前台">
 								<i class="layui-icon layui-icon-website"></i>
 							</a>
 						</li>
@@ -39,20 +39,18 @@
 								<i class="layui-icon layui-icon-refresh-3"></i>
 							</a>
 						</li>
-						<li class="layui-nav-item layui-hide-xs" lay-unselect>
-							<input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="template/search.html?keywords=">
-						</li>
+						<!--<li class="layui-nav-item layui-hide-xs" lay-unselect>
+							<input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="https://www.baidu.com/">
+						</li>-->
 					</ul>
 					<ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
 
-						<li class="layui-nav-item" lay-unselect>
+						<!--<li class="layui-nav-item" lay-unselect>
 							<a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心">
 								<i class="layui-icon layui-icon-notice"></i>
-
-								<!-- 如果有新消息，则显示小圆点 -->
 								<span class="layui-badge-dot"></span>
 							</a>
-						</li>
+						</li>-->
 						<li class="layui-nav-item layui-hide-xs" lay-unselect>
 							<a href="javascript:;" layadmin-event="theme">
 								<i class="layui-icon layui-icon-theme"></i>
@@ -63,11 +61,7 @@
 								<i class="layui-icon layui-icon-note"></i>
 							</a>
 						</li>
-						<li class="layui-nav-item layui-hide-xs" lay-unselect>
-							<a href="javascript:;" layadmin-event="fullscreen">
-								<i class="layui-icon layui-icon-screen-full"></i>
-							</a>
-						</li>
+						
 						<li class="layui-nav-item" lay-unselect>
 							<a href="javascript:;">
 								<cite id="header_username"></cite>
@@ -85,10 +79,14 @@
 								</dd>
 							</dl>
 						</li>
-
 						<li class="layui-nav-item layui-hide-xs" lay-unselect>
-							<a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+							<a href="javascript:;" layadmin-event="fullscreen">
+								<i class="layui-icon layui-icon-screen-full"></i>
+							</a>
 						</li>
+						<!--<li class="layui-nav-item layui-hide-xs" lay-unselect>
+							<a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+						</li>-->
 						<li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
 							<a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
 						</li>
@@ -111,12 +109,6 @@
 								<dl class="layui-nav-child">
 									<dd data-name="console" class="layui-this">
 										<a lay-href="home/console.html">控制台</a>
-									</dd>
-									<dd data-name="console">
-										<a lay-href="home/homepage1.html">主页一</a>
-									</dd>
-									<dd data-name="console">
-										<a lay-href="home/homepage2.html">主页二</a>
 									</dd>
 								</dl>
 							</li>

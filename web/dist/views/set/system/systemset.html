@@ -24,7 +24,7 @@
 							<div class="layui-card-body" pad15>
 								<div class="layui-form-item">
 									<div class="layui-form-item">
-										<label class="layui-form-label" style="width: 120px;">首页代办事项列表</label>
+										<label class="layui-form-label" style="width: 150px;">首页代办事项列表</label>
 										<div class="layui-input-block">
 											<input type="checkbox" name="todo_list" value="todo[water_fees]" title="待缴水费宿舍">
 											<input type="checkbox" name="todo_list" value="todo[electricity_fees]" title="待缴电费宿舍">
@@ -34,7 +34,7 @@
 										</div>
 									</div>
 									<div class="layui-form-item">
-										<label class="layui-form-label" style="width: 120px;">首页概略信息显示</label>
+										<label class="layui-form-label" style="width: 150px;">首页概略信息显示</label>
 										<div class="layui-input-block">
 											<input type="checkbox" name="overview_info" value="info[student]" title="学生人量">
 											<input type="checkbox" name="overview_info" value="info[staff]" title="教职工人量">
@@ -42,6 +42,13 @@
 											<input type="checkbox" name="overview_info" value="info[access_control_day]" title="门禁通过人数[本日]">
 											<input type="checkbox" name="overview_info" value="info[access_control_week]" title="门禁通过人数[本周]">
 											<input type="checkbox" name="overview_info" value="info[access_control_month]" title="门禁通过人数[本月]">
+										</div>
+										<div class="layui-form-mid layui-word-aux">只可以选择四个</div>
+									</div>
+									<div class="layui-form-item">
+										<label class="layui-form-label" style="width: 150px;">门禁流量图起始时间</label>
+										<div class="layui-input-inline">
+											<input type="text" name="data_overview_start_date" id="data_overview_start_date" lay-verify="data" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
 										</div>
 									</div>
 								</div>
@@ -79,8 +86,14 @@
 		<script src="../../../layuiadmin/js/check-token.js"></script>
 
 		<script>
-			layui.use(['form', 'table'], function() {
-				var form = layui.form;
+			layui.use(['form', 'laydate'], function() {
+				var form = layui.form,
+					laydate = layui.laydate;
+
+				//日期
+				laydate.render({
+					elem: '#data_overview_start_date'
+				});
 
 				// 数据加载
 				$.ajax({
@@ -106,7 +119,7 @@
 								strs = value.content.split(",")
 								strs.map(function(str, index, arr) {
 									$("[value='" + str + "']:checkbox").each(function() {
-										$(this).attr("checked",true);
+										$(this).attr("checked", true);
 									});
 								});
 							}
@@ -114,8 +127,13 @@
 								strs = value.content.split(",")
 								strs.map(function(str, index, arr) {
 									$("[value='" + str + "']:checkbox").each(function() {
-										$(this).attr("checked",true);
+										$(this).attr("checked", true);
 									});
+								});
+							}
+							if(value.code == "data_overview_start_date") {
+								form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+									"data_overview_start_date": value.content
 								});
 							}
 						});
@@ -156,14 +174,15 @@
 							"water_fees": field.water_fees,
 							"electricity_fees": field.electricity_fees,
 							"todo_list": todo_list.join(","),
-							"overview_info": overview_info.join(",")
+							"overview_info": overview_info.join(","),
+							"data_overview_start_date": field.data_overview_start_date
 						},
 						success: function(data) {
 							layer.msg(data.detail, {
 								icon: 1,
 								time: 2000
 							});
-							setTimeout('window.location.reload()',1000);
+							setTimeout('window.location.reload()', 1000);
 						},
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
@@ -190,6 +209,13 @@
 							}
 							if(json_responseText.overview_info) {
 								layer.msg('概略信息显示：' + json_responseText.overview_info[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.data_overview_start_date) {
+								layer.msg('门禁流量图起始时间：' + json_responseText.data_overview_start_date[0], {
 									icon: 2,
 									anim: 6
 								});

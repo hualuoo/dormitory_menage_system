@@ -63,6 +63,10 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         overview_info.content = serializer.validated_data["overview_info"]
         overview_info.save()
 
+        data_overview_start_date = SystemSetting.objects.filter(code="data_overview_start_date").first()
+        data_overview_start_date.content = serializer.validated_data["data_overview_start_date"]
+        data_overview_start_date.save()
+
         return Response({
             "detail": "系统设定已保存！"
         }, status=status.HTTP_200_OK)
@@ -165,13 +169,9 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         start_date = datetime.strptime(data_overview_start_date, "%Y-%m-%d")
 
         date = []
-        i = 0
         while start_date.__le__(datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")):
             date.append(start_date.strftime("%Y-%m-%d"))
             start_date += timedelta(days=1)
-            i += 1
-
-        print(i)
 
         return Response({
             "date": date
