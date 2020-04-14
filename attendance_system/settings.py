@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'access_control.apps.AccessControlConfig',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
