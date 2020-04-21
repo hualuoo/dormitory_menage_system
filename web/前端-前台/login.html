@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+		<!-- ali_afs.js -->
+		<script type="text/javascript" charset="utf-8" src="//g.alicdn.com/sd/ncpc/nc.js?t=2015052012"></script>
+	</head>
+
+	<body class="pb12 fadeIn animated">
+		<header class="ui-header clearfix w75 pl3 pr3 h8 f46  color8 bg-color-primary t-c">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				登录
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<style>
+			.formheader {
+				line-height: 0.7rem;
+			}
+			
+			.formheader span {
+				display: inline-block;
+			}
+			
+			.formheader input {
+				border: none;
+			}
+		</style>
+		<div class="p3 f30 f30 w75">
+			<form>
+				<div class="t-c pt2 pb2">
+					用户名：
+					<input type="text" class="w59  form-control" id="username" placeholder="用户名/邮箱" max="20" />
+				</div>
+				<div class="t-c pt2 pb2">
+					密&emsp;码：
+					<input type="password" class="w59  form-control" id="password" placeholder="密码" min="6" max="20" />
+				</div>
+				<div class="pt2 pb2">
+					<center>
+						<div id="your-dom-id" class="nc-container"></div>
+					</center>
+					<!--No-Captcha渲染的位置，其中 class 中必须包含 nc-container-->
+				</div>
+				<div class="t-c mt5">
+					<input type="button" class="btn f30 btn-primary radius10 p2 w50" value="登录" id="login_button" />
+				</div>
+			</form>
+		</div>
+		<!-- 底部导航 -->
+		<nav class="demo-bottomNav mt6 w75 h12 pt1 t-c f28 bg-color8 o-h clearfix">
+			<div class="w15 fl">
+				<a href="index.html">
+					<i class="f46 icon iconfont icon-home_light"></i>
+					<p>首页</p>
+				</a>
+			</div>
+			<div class="w15 fl">
+				<a href="list-button.html">
+					<i class="f46 icon iconfont icon-comment"></i>
+					<p>左滑</p>
+				</a>
+			</div>
+			<div class="w15 fl">
+				<a href="list.html">
+					<i class="f46 icon iconfont icon-rank"></i>
+					<p>列表</p>
+				</a>
+			</div>
+			<div class="w15 fl">
+				<a href="comment.html">
+					<i class="f46 icon iconfont icon-list"></i>
+					<p>评论</p>
+				</a>
+			</div>
+			<div class="w15 fl">
+				<a href="my.html">
+					<i class="f46 icon iconfont icon-servicefill"></i>
+					<p>我的</p>
+				</a>
+			</div>
+		</nav>
+
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+		<script>
+			// 阿里云验证
+			var nc_token = ["FFFF0N00000000008F12", (new Date()).getTime(), Math.random()].join(':');
+			var nc_SessionId = '',
+				nc_Sig = '';
+			var NC_Opt = {
+				renderTo: "#your-dom-id",
+				appkey: "FFFF0N00000000008F12",
+				scene: "nc_login",
+				token: nc_token,
+				customWidth: 334,
+				trans: {
+					"key1": "code0"
+				},
+				elementID: ["usernameID"],
+				is_Opt: 0,
+				language: "cn",
+				isEnabled: true,
+				timeout: 3000,
+				times: 5,
+				apimap: {
+					// 'analyze': '//a.com/nocaptcha/analyze.jsonp',
+					// 'get_captcha': '//b.com/get_captcha/ver3',
+					// 'get_captcha': '//pin3.aliyun.com/get_captcha/ver3'
+					// 'get_img': '//c.com/get_img',
+					// 'checkcode': '//d.com/captcha/checkcode.jsonp',
+					// 'umid_Url': '//e.com/security/umscript/3.2.1/um.js',
+					// 'uab_Url': '//aeu.alicdn.com/js/uac/909.js',
+					// 'umid_serUrl': 'https://g.com/service/um.json'
+				},
+				callback: function(data) {
+					nc_SessionId = data.csessionid;
+					nc_Sig = data.sig;
+				}
+			}
+			var nc = new noCaptcha(NC_Opt)
+			nc.upLang('cn', {
+				_startTEXT: "请按住滑块，拖动到最右边",
+				_yesTEXT: "验证通过",
+				_error300: "哎呀，出错了，点击<a href=\"javascript:__nc.reset()\">刷新</a>再来一次",
+				_errorNetwork: "网络不给力，请<a href=\"javascript:__nc.reset()\">点击刷新</a>",
+			})
+
+			// localStorage读取
+			var cache_token = "";
+			var cache_username = "";
+			var cache_password = "";
+			if(localStorage.getItem("cache_token") != null) {
+				cache_token = localStorage.getItem("cache_token");
+			}
+			if(localStorage.getItem("cache_username") != null) {
+				cache_username = localStorage.getItem("cache_username");
+				$('#username').val(cache_username);
+			}
+
+			// jwt判断
+			if(cache_token != "") {
+				$.ajax({
+					url: "http://127.0.0.1:8000/token-verify/",
+					type: "post",
+					dataType: "json",
+					data: {
+						"token": cache_token
+					},
+					success: function(data) {
+						layer.open({
+							content: '检测到' + data.username + '已登录，正在跳转到登录后的页面',
+							skin: 'msg',
+							time: 1 //1秒后自动关闭
+						});
+						setTimeout(function() {
+							location.href = "index.html";
+						}, 1000);
+					},
+					error: function(jqXHR) {
+						localStorage.removeItem("cache_token");
+					}
+				});
+			}
+
+			// 登录
+			$('#login_button').click(function() {
+				if($('#username').val() == "" || $.trim($('#username').val()).length == 0) {
+					layer.open({
+						content: '用户名不能为空',
+						btn: '我知道了'
+					});
+					$('#username').focus();
+					return false;
+				}
+				if($('#password').val() == "" || $.trim($('#password').val()).length == 0) {
+					layer.open({
+						content: '密码不能为空',
+						btn: '我知道了'
+					});
+					$('#password').focus();
+					return false;
+				}
+				if(nc_SessionId == '') {
+					layer.open({
+						content: '请先通过滑动验证',
+						btn: '我知道了'
+					});
+				}
+				$.ajax({
+					url: "http://127.0.0.1:8000/login/",
+					type: "post",
+					dataType: "json",
+					data: {
+						"username": $('#username').val(),
+						"password": $('#password').val(),
+						"session_id": nc_SessionId,
+						"sig": nc_Sig,
+						"token": nc_token,
+						"scene": "nc_login"
+
+					}, //数据为登录名和登录密码
+					beforeSend: function() {
+						document.getElementById("login_button").value = "登录中";
+					},
+					success: function(data) {
+						// 默认将 token  用户名存入 localStorage
+						localStorage.setItem("cache_token", data.token);
+						localStorage.setItem("cache_username", $('#username').val());
+						layer.open({
+							content: data.username + '，欢迎登录',
+							skin: 'msg',
+							time: 1 //1秒后自动关闭
+						});
+						setTimeout(function() {
+							location.href = "index.html";
+						}, 1000);
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						localStorage.removeItem("cache_token");
+						localStorage.setItem("cache_username", $('#username').val());
+						if(json_responseText.detail != null) {
+							layer.open({
+								content: json_responseText.detail[0],
+								btn: '我知道了'
+							});
+						}
+						if(json_responseText.non_field_errors != null) {
+							layer.open({
+								content: json_responseText.non_field_errors[0],
+								btn: '我知道了'
+							});
+						}
+						document.getElementById("login_button").value = "登录";
+					}
+				});
+			});
+		</script>
+
+		<style type="text/css">
+			.userbox {
+				line-height: 2em;
+				background: url(img/s5.jpg) center 40% no-repeat;
+				background-size: cover
+			}
+			
+			.userbox-l img {
+				border: 2px solid #fff;
+			}
+			
+			li {
+				line-height: 2.5em;
+				border-top: 1px solid #F1F1F1;
+				border-bottom: 1px solid #F1F1F1;
+				margin-top: -1px;
+			}
+			
+			li a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+
+	</body>
+
+</html>

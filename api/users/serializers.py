@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
     id = serializers.IntegerField(help_text="ID")
     username = serializers.CharField(help_text="用户名")
-    email = serializers.CharField(help_text="邮箱")
+    email = serializers.SerializerMethodField(help_text="邮箱")
     first_name = serializers.CharField(help_text="姓")
     last_name = serializers.CharField(help_text="名")
     last_login = serializers.DateTimeField(help_text="最后登录时间", format="%Y-%m-%d %H:%M:%S")
@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
     info__birthday = serializers.DateField(source='info.birthday', help_text="出生年月")
     info__gender = serializers.ChoiceField(source='info.gender', help_text="性别",
                                            choices=(("male", "男"), ("female", "女"), ("unknown", "未知")))
-    info__mobile = serializers.CharField(source='info.mobile', help_text="电话", allow_blank=True, max_length=11)
+    info__mobile = serializers.SerializerMethodField(help_text="电话")
     info__avatar = serializers.ImageField(source='info.avatar', help_text="照片")
     lived_dormitory = serializers.SerializerMethodField()
 
@@ -31,6 +31,30 @@ class UserSerializer(serializers.ModelSerializer):
             return obj.lived_dormitory.number
         else:
             return None
+
+    def get_email(self, obj):
+        mail = obj.email
+        if mail == "":
+            return mail
+        if self.context['request'].user.is_superuser:
+            return mail
+        else:
+            end = mail.index("@")
+            if end % 2 == 1:
+                start = int((end - 1) / 2)
+            else:
+                start = int(end / 2)
+            fuzzyMail = mail.replace(mail[start:end], "****")
+            return "".join(fuzzyMail)
+
+    def get_info__mobile(self, obj):
+        mobile = obj.info.mobile
+        if mobile == "":
+            return mobile
+        if self.context['request'].user.is_superuser:
+            return mobile
+        else:
+            return "".join(mobile[0:3]) + "****" + "".join(mobile[7:11])
 
     class Meta:
         model = User
@@ -107,13 +131,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     """
     用户 修改 序列化类
     """
-    email = serializers.EmailField(help_text="邮箱", allow_blank=True, max_length=100)
+    email = serializers.EmailField(help_text="邮箱", allow_blank=True, required=False, max_length=100)
     first_name = serializers.CharField(help_text="姓", allow_blank=True, max_length=4)
     last_name = serializers.CharField(help_text="名", allow_blank=True, max_length=4)
     info__birthday = serializers.DateField(source='info.birthday', help_text="出生年月", allow_null=True, required=False)
     info__gender = serializers.ChoiceField(source='info.gender', help_text="性别",
                                            choices=(("male", "男"), ("female", "女"), ("unknown", "未知")))
-    info__mobile = serializers.CharField(source='info.mobile', help_text="电话", allow_blank=True, max_length=11)
+    info__mobile = serializers.CharField(source='info.mobile', help_text="电话", required=False, allow_blank=True, max_length=11)
 
     def validate_email(self, email):
         if len(email) == 0:
@@ -148,17 +172,18 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return mobile
 
     def update(self, instance, validated_data):
-        instance.email = validated_data.get('email', instance.email)
+        if self.instance.is_superuser:
+            instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.save()
         if self.initial_data['info__birthday'] == "":
-            print(self.initial_data['info__birthday'])
             instance.info.birthday = None
         else:
             instance.info.birthday = self.initial_data['info__birthday']
         instance.info.gender = self.initial_data['info__gender']
-        instance.info.mobile = self.initial_data['info__mobile']
+        if 'info__mobile' in self.initial_data:
+            instance.info.mobile = self.initial_data['info__mobile']
         instance.info.save()
         return instance
 
@@ -277,6 +302,35 @@ class UserChangePasswordAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("old_password", "new_password", )
+
+
+class SecurityCheckOldEmailSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=100, help_text="邮箱")
+
+    class Meta:
+        model = User
+        fields = ("email", )
+
+
+class SecurityConfirmOldEmailSerializer(serializers.ModelSerializer):
+    captcha = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, help_text="验证码")
+
+    def validate_captcha(self, captcha):
+        captcha_list = CaptchaModel.objects.filter(email=self.initial_data["email"]).order_by("-create_time")
+        if captcha_list:
+            last_captcha = captcha_list[0]
+            five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+            if five_mintes_ago > last_captcha.create_time:
+                raise serializers.ValidationError('操作失败：验证码过期！')
+            if last_captcha.code != captcha:
+                raise serializers.ValidationError('操作失败：验证码错误！')
+        else:
+            raise serializers.ValidationError('操作失败：验证码错误！')
+        return captcha
+
+    class Meta:
+        model = User
+        fields = ("captcha", )
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):

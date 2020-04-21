@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>全屏切换</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- swiper -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.5/css/swiper.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.5/js/swiper.min.js"></script>
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="fadeIn animated color4">
+		<!-- Swiper -->
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<font class="color-primary">全屏切换</font>基于swiper插件
+				</div>
+				<div class="swiper-slide">Slide 2
+					<a href="index.html" class="color-primary">点击回到首页</a>
+				</div>
+				<div class="swiper-slide">Slide 3
+					<a href="index.html" class="color-primary">点击回到首页</a>
+				</div>
+				<div class="swiper-slide">Slide 4
+					<a href="index.html" class="color-primary">点击回到首页</a>
+				</div>
+				<div class="swiper-slide">Slide 5
+					<a href="index.html" class="color-primary">点击回到首页</a>
+				</div>
+				<div class="swiper-slide">Slide 6
+					<a href="index.html" class="color-primary">点击回到首页</a>
+				</div>
+				<div class="swiper-slide">Slide 7
+					<a href="index.html" class="color-primary">点击回到首页</a>
+				</div>
+				<div class="swiper-slide">Slide 8
+					<a href="index.html" class="color-primary">点击回到首页</a>
+				</div>
+				<div class="swiper-slide">Slide 9
+					<a href="index.html" class="color-primary">点击回到首页</a>
+				</div>
+				<div class="swiper-slide">Slide 10
+					<a href="index.html" class="color-primary">点击回到首页</a>
+				</div>
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+		<!-- Initialize Swiper -->
+		<script>
+			$(function() {
+				var swiper = new Swiper('.swiper-container', {
+					direction: 'vertical',
+					pagination: {
+						el: '.swiper-pagination',
+						clickable: true,
+					},
+				});
+			})
+		</script>
+		<style>
+			html,
+			body {
+				position: relative;
+				height: 100%;
+			}
+			
+			body {
+				background: #eee;
+			}
+			
+			.swiper-container {
+				width: 100%;
+				height: 100%;
+			}
+			
+			.swiper-slide {
+				text-align: center;
+				font-size: 18px;
+				background: #fff;
+				/* Center slide text vertically */
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-box-pack: center;
+				-ms-flex-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				-webkit-box-align: center;
+				-ms-flex-align: center;
+				-webkit-align-items: center;
+				align-items: center;
+			}
+		</style>
+	</body>
+
+</html>

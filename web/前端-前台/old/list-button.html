@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="fadeIn animated">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c o-h">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				好友列表
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<div class="searchBox m2">
+			<i class="icon iconfont icon-search f44"></i>
+			<!-- type=search 的input，会在手机键盘上生成一个搜索按钮 -->
+			<input type="search" class="f30 radius15 form-control w71" placeholder="请输入内容" />
+		</div>
+		<div class="f36 color3 bg-color7 t-c">
+			<ul id="swiper" class="o-h clearfix">
+				<li class="item h14">
+					<div class="w75 fl">
+						<div class="fl w14 p2">
+							<img src="img/user2.jpg" class="w10 radius-o" />
+						</div>
+						<div class="fl w61 t-l pt2 color4">
+							<div class="f36 clearfix">
+								<p class="fr w9 f28 mr2 t-r">12:01</p>
+								<p class="fl w49 color3">小糖豆</p>
+							</div>
+							<p class="f28 nowrap">你起床了吗？大懒虫！</p>
+						</div>
+					</div>
+					<div class="btnbox fl">
+						<div class="w15 bg-color-warning">
+							<i class="icon iconfont icon-fanhuidingbu"></i>
+						</div>
+						<div class="w15 bg-color-danger">
+							<i class="icon iconfont icon-deletefill"></i>
+						</div>
+					</div>
+				</li>
+				<li class="item h14">
+					<div class="w75 fl">
+						<div class="fl w14 p2">
+							<img src="img/s1.jpg" class="w10 h10 radius-o" />
+						</div>
+						<div class="fl w61 t-l pt2 color4">
+							<div class="f36 clearfix">
+								<p class="fr w9 f28 mr2 t-r">昨天</p>
+								<p class="fl w49 color3">Angelina</p>
+							</div>
+							<p class="f28 nowrap">我家断电了！[笑哭]</p>
+						</div>
+					</div>
+					<div class="btnbox fl">
+						<div class="w15 bg-color-warning">
+							<i class="icon iconfont icon-fanhuidingbu"></i>
+						</div>
+						<div class="w15 bg-color-danger">
+							<i class="icon iconfont icon-deletefill"></i>
+						</div>
+					</div>
+				</li>
+				<li class="item h14">
+					<div class="w75 fl">
+						<div class="fl w14 p2">
+							<img src="img/s3.jpg" class="w10 h10 radius-o" />
+						</div>
+						<div class="fl w61 t-l pt2 color4">
+							<div class="f36 clearfix">
+								<p class="fr w9 f28 mr2 t-r">昨天</p>
+								<p class="fl w49 color3">麦当娜</p>
+							</div>
+							<p class="f28 nowrap">起床！！请我吃麦当劳！</p>
+						</div>
+					</div>
+					<div class="btnbox fl">
+						<div class="w15 bg-color-warning">
+							<i class="icon iconfont icon-fanhuidingbu"></i>
+						</div>
+						<div class="w15 bg-color-danger">
+							<i class="icon iconfont icon-deletefill"></i>
+						</div>
+					</div>
+				</li>
+				<li class="item h14">
+					<div class="w75 fl">
+						<div class="fl w14 p2">
+							<img src="img/user.jpg" class="w10 radius-o" />
+						</div>
+						<div class="fl w61 t-l pt2 color4">
+							<div class="f36 clearfix">
+								<p class="fr w9 f28 mr2 t-r">星期五</p>
+								<p class="fl w49 color3">风一样的男人</p>
+							</div>
+							<p class="f28 nowrap">周末出去爬山吗，最近打算锻炼身体！我打算自驾去密云一趟，外挂你啊！</p>
+						</div>
+					</div>
+					<div class="btnbox fl">
+						<div class="w15 bg-color-warning">
+							<i class="icon iconfont icon-fanhuidingbu"></i>
+						</div>
+						<div class="w15 bg-color-danger">
+							<i class="icon iconfont icon-deletefill"></i>
+						</div>
+					</div>
+				</li>
+				<li class="item h14">
+					<div class="w75 fl">
+						<div class="fl w14 p2">
+							<img src="img/s2.jpg" class="w10 h10 radius-o" />
+						</div>
+						<div class="fl w61 t-l pt2 color4">
+							<div class="f36 clearfix">
+								<p class="fr w9 f28 mr2 t-r">昨天</p>
+								<p class="fl w49 color3">隔壁大叔</p>
+							</div>
+							<p class="f28 nowrap">小伙子你很有音乐天赋，但请不要在半夜在窗户上拉小提琴！</p>
+						</div>
+					</div>
+					<div class="btnbox fl">
+						<div class="w15 bg-color-warning">
+							<i class="icon iconfont icon-fanhuidingbu"></i>
+						</div>
+						<div class="w15 bg-color-danger">
+							<i class="icon iconfont icon-deletefill"></i>
+						</div>
+					</div>
+				</li>
+				<li class="item h14">
+					<div class="w75 fl">
+						<div class="fl w14 p2">
+							<img src="img/s4.jpg" class="w10 h10 radius-o" />
+						</div>
+						<div class="fl w61 t-l pt2 color4">
+							<div class="f36 clearfix">
+								<p class="fr w9 f28 mr2 t-r">昨天</p>
+								<p class="fl w49 color3">阿妹</p>
+							</div>
+							<p class="f28 nowrap">我有一只漂亮的发卡！</p>
+						</div>
+					</div>
+					<div class="btnbox fl">
+						<div class="w15 bg-color-warning">
+							<i class="icon iconfont icon-fanhuidingbu"></i>
+						</div>
+						<div class="w15 bg-color-danger">
+							<i class="icon iconfont icon-deletefill"></i>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="t-c f28 color5 m2">
+			没有更多内容
+		</div>
+		<style type="text/css">
+			.searchBox {
+				position: relative;
+			}
+			
+			.searchBox i {
+				position: absolute;
+				right: 0;
+				line-height: 1.7em;
+				right: 0.2rem;
+			}
+			
+			.searchBox input {
+				font-size: 0.34rem;
+			}
+			
+			ul {
+				border-top: 1px solid #F1F1F1;
+				line-height: 1.4em;
+			}
+			
+			.item {
+				width: 10.5rem;
+				border-bottom: 1px solid #F1F1F1;
+			}
+			
+			.btnbox {
+				height: 100%;
+				line-height: 1.4rem;
+				color: #fff;
+			}
+			
+			.btnbox div {
+				cursor: pointer;
+				float: left;
+			}
+		</style>
+		<script type="text/javascript">
+			var startPos = endPos = {};
+			$("#swiper li").on("touchstart", function(event) {
+				startPos = {
+					x: event.targetTouches[0].pageX,
+					y: event.targetTouches[0].pageY
+				}
+			});
+			$("#swiper li").on("touchmove", function(event) {
+				endPos = {
+					x: event.targetTouches[0].pageX - startPos.x,
+					y: event.targetTouches[0].pageY - startPos.y
+				};
+				//阻止横向滑动浏览器默认事件，竖直方向不阻止，否则无法上下翻动网页了
+				isScrolling = Math.abs(endPos.x) < Math.abs(endPos.y) ? 1 : 0;
+				if(isScrolling === 0) {
+					event.preventDefault();
+				}
+				/*
+				 * 1、以下设定触发的阈值，滑动每一个li不会有拖动效果，但是功能已经实现
+				 * 2、如果希望有拖动跟随效果，可以利用endPos.x的值来设定 margin-left 的值
+				 * 2、当然拖动范围是和按钮宽度有关，由于按钮宽度是rem单位，做对比需要用到 flexible.px2rem() 函数转化 endPos.x做对比				 
+				 */
+				Math.abs(endPos.x) < 40 ? endPos.x = 0 : endPos.x;
+			});
+			$("#swiper li").on("touchend", function(event) {
+				if(endPos.x < 0) {
+					$(this).animate({
+						'margin-left': '-3rem'
+					}, 200, 'linear');
+				} else {
+					$(this).animate({
+						'margin-left': '0'
+					}, 200, 'linear');
+				}
+			})
+		</script>
+		<!-- 底部导航 -->
+		<nav class="demo-bottomNav mt6 w75 h12 pt1 t-c f28 bg-color8 o-h clearfix">
+			<div class="w15 fl">
+				<a href="index.html">
+					<i class="f46 icon iconfont icon-home_light"></i>
+					<p>首页</p>
+				</a>
+			</div>
+			<div class="w15 fl">
+				<a href="list-button.html">
+					<i class="f46 icon iconfont icon-comment"></i>
+					<p>左滑</p>
+				</a>
+			</div>
+			<div class="w15 fl">
+				<a href="list.html">
+					<i class="f46 icon iconfont icon-rank"></i>
+					<p>列表</p>
+				</a>
+			</div>
+			<div class="w15 fl">
+				<a href="comment.html">
+					<i class="f46 icon iconfont icon-list"></i>
+					<p>评论</p>
+				</a>
+			</div>
+			<div class="w15 fl">
+				<a href="my.html">
+					<i class="f46 icon iconfont icon-servicefill"></i>
+					<p>我的</p>
+				</a>
+			</div>
+		</nav>
+		<style type="text/css">
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</body>
+
+</html>

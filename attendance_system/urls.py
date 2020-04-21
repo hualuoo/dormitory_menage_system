@@ -21,8 +21,7 @@ from rest_framework.routers import DefaultRouter
 from django.views.static import serve
 from attendance_system.settings import MEDIA_ROOT
 
-from users.views import UserViewset, VerifyCodeViewset, ChangePasswordViewset
-from users.views import getUserFuzzyMailViewset, checkUserMailViewset, sendOldMailCaptchaViewset, confirmOldMailCaptchaViewset, sendNewMailCaptchaViewset, confirmNewMailCaptchaViewset
+from users.views import UserViewset, SecurityViewset
 
 from dormitories.views import DormitoryViewset, WaterFeesViewset, ElectricityFeesViewset
 from user_operation.views import WaterFeesLogViewset, ElectricityFeesLogViewset, RepairViewset, RepairLogViewset
@@ -31,15 +30,8 @@ from system_setting.views import SystemSettingViewset
 
 router = DefaultRouter()
 # router.register(r'users', UsersViewset, basename="users")
-router.register(r'code', VerifyCodeViewset, basename="code")
+# router.register(r'code', VerifyCodeViewset, basename="code")
 # router.register(r'changepassword', ChangePasswordViewset, basename="changepassword")
-
-router.register(r'member/security/getUserFuzzyMail', getUserFuzzyMailViewset, basename="getUserFuzzyMail")
-router.register(r'member/security/checkUserMail', checkUserMailViewset, basename="checkUserMail")
-router.register(r'member/security/sendOldMailCaptcha', sendOldMailCaptchaViewset, basename="sendOldMailCaptcha")
-router.register(r'member/security/confirmOldMailCaptcha', confirmOldMailCaptchaViewset, basename="confirmOldMailCaptcha")
-router.register(r'member/security/sendNewMailCaptcha', sendNewMailCaptchaViewset, basename="sendNewMailCaptcha")
-router.register(r'member/security/confirmNewMailCaptcha', confirmNewMailCaptchaViewset, basename="confirmNewMailCaptcha")
 
 router.register(r'users', UserViewset, basename="users")
 router.register(r'dormitories', DormitoryViewset, basename="dormitories")
@@ -50,9 +42,9 @@ router.register(r'electricity_fees_log', ElectricityFeesLogViewset, basename="el
 router.register(r'repair', RepairViewset, basename="repair")
 router.register(r'repair_log', RepairLogViewset, basename="repair_log")
 router.register(r'access_control', AccessControlViewset, basename="access_control")
-
 router.register(r'system_setting', SystemSettingViewset, basename="system_setting")
 
+router.register(r'member/security', SecurityViewset, basename="security")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

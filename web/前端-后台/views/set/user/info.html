@@ -83,7 +83,7 @@
 									<label class="layui-form-label">头像</label>
 									<div class="layui-input-inline" id="avatar" style="width: 40px;"></div>
 									<div class="layui-form-mid layui-word-aux">点击设置头像</div>
-									<button class="layui-btn layui-btn-primary" id="user_remove_avatar_button">移除头像</button >
+									<button class="layui-btn layui-btn-primary" id="user_remove_avatar_button">移除头像</button>
 								</div>
 								<div class="layui-form-item">
 									<div class="layui-input-block">
@@ -148,7 +148,7 @@
 						$("#user_remove_avatar_button").attr("onclick", 'user_remove_avatar(' + data.id + ');');
 					},
 					error: function(jqXHR) {
-						layer.msg('数据加载错误，请联系管理员处理', {
+						layer.msg('数据加载错误，请尝试重新登录', {
 							icon: 2,
 							anim: 6
 						});
@@ -183,7 +183,7 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.email) {
-								layer.msg('邮箱：' + json_responseText.email[0], {
+								layer.msg(json_responseText.email[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -191,7 +191,7 @@
 								return false;
 							}
 							if(json_responseText.first_name) {
-								layer.msg('真实姓名：' + json_responseText.first_name[0], {
+								layer.msg(json_responseText.first_name[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -199,7 +199,7 @@
 								return false;
 							}
 							if(json_responseText.last_name) {
-								layer.msg('真实姓名：' + json_responseText.last_name[0], {
+								layer.msg(json_responseText.last_name[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -207,7 +207,7 @@
 								return false;
 							}
 							if(json_responseText.info__gender) {
-								layer.msg('性别：' + json_responseText.info__gender[0], {
+								layer.msg(json_responseText.info__gender[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -215,7 +215,7 @@
 								return false;
 							}
 							if(json_responseText.info__birthday) {
-								layer.msg('出生日期：' + json_responseText.info__birthday[0], {
+								layer.msg(json_responseText.info__birthday[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -223,7 +223,7 @@
 								return false;
 							}
 							if(json_responseText.info__mobile) {
-								layer.msg('手机：' + json_responseText.info__mobile[0], {
+								layer.msg(json_responseText.info__mobile[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -231,7 +231,7 @@
 								return false;
 							}
 							if(json_responseText.detail) {
-								layer.msg(json_responseText.detail, {
+								layer.msg('操作失败：' + json_responseText.detail, {
 									icon: 2,
 									anim: 6
 								});
@@ -260,7 +260,7 @@
 						}
 					},
 					error: function(jqXHR) {
-						layer.msg('数据加载错误，请联系管理员处理', {
+						layer.msg('数据加载错误，请尝试重新登录', {
 							icon: 2,
 							anim: 6
 						});
@@ -340,7 +340,7 @@
 						}
 					},
 					error: function(jqXHR) {
-						layer.msg('数据加载错误，请联系管理员处理', {
+						layer.msg('数据加载错误，请尝试重新登录', {
 							icon: 2,
 							anim: 6
 						});

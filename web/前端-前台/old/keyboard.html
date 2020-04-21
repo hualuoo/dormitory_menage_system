@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+		<!--软键盘-->
+		<script type="text/javascript" src="plugins/webKeyBoard.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="fadeIn animated bg-color7">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c o-h">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				调用软键盘
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<div class="f36">
+			<input type="password" class="form-control w69 m3 mt6 radius10" placeholder="获取焦点触发" />
+			<span class="h8 w69 m3 btn btn-primary radius10">点击弹出软键盘</span>
+		</div>
+		<script type="text/javascript">
+			/*
+			 * 软键盘暴露的方法有：
+			 * 1. obj.showKeyBoard();  打开软键盘
+			 * 2. obj.hideKeyBoard();  关闭软键盘
+			 * 3. obj.reset(msg);	      重置软键盘，并提示相关信息，一般用户验证码错误，参数msg可不传
+			 * 注意：目前只支持一个页面一个软键盘
+			 */
+			$(function() {
+				var mykeyboard = $.keyboard({
+					num: 6,
+					title: "支付密码",
+					msg: "正在验证支付密码",
+					skin: "jianpan",
+					links: "<a href='/'>忘记密码？</a>",
+					callback: function(data) {
+						console.log(data);
+						setTimeout(function() {
+							mykeyboard.reset("支付密码错误，请重新输入！");
+						}, 3000)
+					}
+				});
+				$("input").focus(function() {
+					mykeyboard.showKeyBoard();
+					document.activeElement.blur();
+				});
+				$("span.btn").click(function() {
+					mykeyboard.showKeyBoard();
+				});
+			})
+		</script>
+	</body>
+
+</html>

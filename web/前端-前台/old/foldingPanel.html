@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="fadeIn animated">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				折叠面板
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<br />
+		<h2 class="t-c f34 color3">普通折叠面板</h2><br />
+		<div class="f30 m2 color3">
+			<dl class="o-h">
+				<dt class="pl3 pr3 f34"><i class="pr1 icon iconfont icon-fold"></i>讲一个笑话</dt>
+				<dd class="p2 pl3 pr3 bg-color7">明天爸爸生日，我问老公带点什么礼物回去？老公想了想说：“就带着我们最真诚的祝福吧。”我。。。</dd>
+			</dl>
+			<dl class="o-h">
+				<dt class="pl3 pr3 f34"><i class="pr1 icon iconfont icon-fold"></i>学姐你冷吗</dt>
+				<dd class="p2 pl3 pr3 bg-color7"> 大一时，有个学弟追我，在室友的起哄下，我和他出去看了一场电影。那时候是初冬，进场的时候不太冷，看完电影出来有点冷，学弟可能看出来了，问我：学姐，很冷吗？然后拉开他的羽绒服拉链，在我以为他要把衣服给我的时候，他对我说：你看，我都穿保暖衣了……</dd>
+			</dl>
+			<dl class="o-h">
+				<dt class="pl3 pr3 f34"><i class="pr1 icon iconfont icon-fold"></i>这是为什么</dt>
+				<dd class="p2 pl3 pr3 bg-color7"> 突然想到一个问题：西游记中玉帝只有十万天兵天将，而天蓬元帅有八十万天河水军，天蓬元帅为什么不反玉帝自己做玉帝呢?哥们儿一句话：因为八十万是水军。</dd>
+			</dl>
+			<dl class="o-h">
+				<dt class="pl3 pr3 f34"><i class="pr1 icon iconfont icon-fold"></i>什么情况</dt>
+				<dd class="p2 pl3 pr3 bg-color7"> 想吃火腿肠了，不过我在看电视，懒得动，懒得去拿，就喊老公：老公，我想吃火腿肠，帮我拿一根。 结果这货很激动地直接过来了……</dd>
+			</dl>
+		</div>
+		<br />
+		<h2 class="t-c f34 color3">普通表格</h2>
+		<div class="m3 w69 f30 color3 nowrap o-s">
+			<table>
+				<tr>
+					<th>名字</th>
+					<th>语文</th>
+					<th>数学</th>
+					<th>英语</th>
+					<th>化学</th>
+					<th>生物</th>
+					<th>物理</th>
+					<th>地理</th>
+					<th>历史</th>
+					<th>总分</th>
+				</tr>
+				<tr>
+					<td>刘全蛋</td>
+					<td>88分</td>
+					<td>59分</td>
+					<td>90分</td>
+					<td>10分</td>
+					<td>69分</td>
+					<td>100分</td>
+					<td>70分</td>
+					<td>90分</td>
+					<td>490分</td>
+				</tr>
+				<tr>
+					<td>李大嘴</td>
+					<td>88分</td>
+					<td>59分</td>
+					<td>90分</td>
+					<td>10分</td>
+					<td>69分</td>
+					<td>100分</td>
+					<td>70分</td>
+					<td>90分</td>
+					<td>490分</td>
+				</tr>
+				<tr>
+					<td>郭芙蓉</td>
+					<td>88分</td>
+					<td>59分</td>
+					<td>90分</td>
+					<td>10分</td>
+					<td>69分</td>
+					<td>100分</td>
+					<td>70分</td>
+					<td>90分</td>
+					<td>490分</td>
+				</tr>
+			</table>
+		</div>
+		<br />
+		<h2 class="t-c f34 color3">使用面板代替table表格</h2><br />
+		<div class="f30 m2 color3">
+			<dl>
+				<dt class="t-c bg-color6 f36">考试成绩表</dt>
+			</dl>
+			<dl class="o-h">
+				<dt class="pl3 pr3 f34"><i class="pr1 icon iconfont icon-fold"></i>张一毛</dt>
+				<dd class="p2 pl3 pr3 bg-color7 clearfix">
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">语文:</p>
+						<p class="fl col-7">88分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">数学:</p>
+						<p class="fl col-7">59分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">英语:</p>
+						<p class="fl col-7">90分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">化学:</p>
+						<p class="fl col-7">10分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">生物:</p>
+						<p class="fl col-7">69分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">物理:</p>
+						<p class="fl col-7">100分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">地理:</p>
+						<p class="fl col-7">70分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">历史:</p>
+						<p class="fl col-7">90分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">总分:</p>
+						<p class="fl col-7">490分</p>
+					</div>
+				</dd>
+			</dl>
+			<dl class="o-h">
+				<dt class="pl3 pr3 f34"><i class="pr1 icon iconfont icon-fold"></i>刘全蛋</dt>
+				<dd class="p2 pl3 pr3 bg-color7 clearfix">
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">语文:</p>
+						<p class="fl col-7">88分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">数学:</p>
+						<p class="fl col-7">59分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">英语:</p>
+						<p class="fl col-7">90分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">化学:</p>
+						<p class="fl col-7">10分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">生物:</p>
+						<p class="fl col-7">69分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">物理:</p>
+						<p class="fl col-7">100分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">地理:</p>
+						<p class="fl col-7">70分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">历史:</p>
+						<p class="fl col-7">90分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">总分:</p>
+						<p class="fl col-7">490分</p>
+					</div>
+				</dd>
+			</dl>
+			<dl class="o-h">
+				<dt class="pl3 pr3 f34"><i class="pr1 icon iconfont icon-fold"></i>李大嘴</dt>
+				<dd class="p2 pl3 pr3 bg-color7 clearfix">
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">语文:</p>
+						<p class="fl col-7">88分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">数学:</p>
+						<p class="fl col-7">59分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">英语:</p>
+						<p class="fl col-7">90分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">化学:</p>
+						<p class="fl col-7">10分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">生物:</p>
+						<p class="fl col-7">69分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">物理:</p>
+						<p class="fl col-7">100分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">地理:</p>
+						<p class="fl col-7">70分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">历史:</p>
+						<p class="fl col-7">90分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">总分:</p>
+						<p class="fl col-7">490分</p>
+					</div>
+				</dd>
+			</dl>
+			<dl class="o-h">
+				<dt class="pl3 pr3 f34"><i class="pr1 icon iconfont icon-fold"></i>郭芙蓉</dt>
+				<dd class="p2 pl3 pr3 bg-color7 clearfix">
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">语文:</p>
+						<p class="fl col-7">88分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">数学:</p>
+						<p class="fl col-7">59分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">英语:</p>
+						<p class="fl col-7">90分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">化学:</p>
+						<p class="fl col-7">10分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">生物:</p>
+						<p class="fl col-7">69分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">物理:</p>
+						<p class="fl col-7">100分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">地理:</p>
+						<p class="fl col-7">70分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">历史:</p>
+						<p class="fl col-7">90分</p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-5 t-r">总分:</p>
+						<p class="fl col-7">490分</p>
+					</div>
+				</dd>
+			</dl>
+		</div>
+		<br /><br />
+		<style>
+			dl {
+				border: 1px solid #efeeee;
+				margin-top: -1px
+			}
+			
+			dt {
+				line-height: 2em;
+				cursor: pointer;
+			}
+			
+			dd {
+				border-top: 1px solid #efeeee;
+				display: none;
+				line-height: 1.8em
+			}
+		</style>
+		<script type="text/javascript">
+			$('dl dt').live('tap', function() {
+				$(this).siblings('dd').toggle();
+				$(this).children('i').toggleClass('icon-fold icon-unfold');
+			});
+		</script>
+	</body>
+
+</html>

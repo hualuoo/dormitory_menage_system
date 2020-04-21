@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- ui css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- 字体图标 -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="pb12 fadeIn animated">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c">
+			<div class="ui-header-l fl w5">
+				<b class="icon iconfont icon-sortlight"></b>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				引用、下划线、返回顶部
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<div class="p3 f30">
+			<h2 class="t-c f40 color3 mb4 mt4">引用块</h2>
+			<hr />
+			<blockquote class="mb6 mt4 normal">
+				<p class="f32">这是一个blockquote块，提示用的！</p>
+			</blockquote>
+			<blockquote class="mb6">
+				<p class="f32">默认是主色调，但是你可以引用normal来清除掉，实现用辅助色样式</p>
+			</blockquote>
+			<blockquote class="mb6 blockquote-primary">
+				<p class="f32">不同颜色的 blockquote-primary</p>
+			</blockquote>
+			<blockquote class="mb6 blockquote-success">
+				<p class="f32">不同颜色的 blockquote-success</p>
+			</blockquote>
+			<blockquote class="mb6 blockquote-info">
+				<p class="f32">不同颜色的 blockquote-info</p>
+			</blockquote>
+			<blockquote class="mb6 blockquote-warning">
+				<p class="f32">不同颜色的 blockquote-warning</p>
+			</blockquote>
+			<blockquote class="mb12 blockquote-danger">
+				<p class="f32">不同颜色的 blockquote-danger</p>
+			</blockquote>
+			<h2 class="t-c f40 color3 mb4">下划线</h2>
+			<p class="t-l f28 color4">细线</p>
+			<hr />
+			<p class="t-l f28 color4 mt4">粗线</p>
+			<hr class="lg" />
+			<blockquote class="mb6 mt4 blockquote-primary">
+				<p class="f32">实际意义中，粗的下划线并不是各个屏幕下都加粗的，而是在渲染过程中，最小只能渲染一像素，所以在屏幕小得情况下，粗线和细线是相同的。</p>
+			</blockquote>
+		</div>
+		<!-- 返回顶部 -->
+		<div class="ui-scrollTop radius-o bg-color-primary w10 h10 t-c pt1 f50 color8" onclick="goTop();">
+			<i class="icon iconfont icon-fanhuidingbu "></i>
+		</div>
+		<style>
+			.ui-scrollTop {
+				position: fixed;
+				right: 0.2rem;
+				bottom: 0.5rem;
+				cursor: pointer;
+			}
+		</style>
+	</body>
+
+</html>

@@ -19,9 +19,11 @@ class SystemSettingSerializer(serializers.ModelSerializer):
 class SystemSettingUpdateSerializer(serializers.ModelSerializer):
     water_fees = serializers.DecimalField(max_digits=5, decimal_places=2, help_text="水费(元/吨)")
     electricity_fees = serializers.DecimalField(max_digits=5, decimal_places=2, help_text="水费(元/吨)")
-    todo_list = serializers.CharField(help_text="代办事项列表")
-    overview_info = serializers.CharField(help_text="概略信息显示")
-    data_overview_start_date = serializers.DateField(help_text="首页数据概览起始日期", format="%Y-%m-%d")
+    todo_list = serializers.CharField(help_text="控制台代办事项列表")
+    overview_info = serializers.CharField(help_text="控制台概略信息显示")
+    data_overview_start_date = serializers.DateField(help_text="控制台数据概览起始日期", format="%Y-%m-%d")
+    notice_title = serializers.CharField(help_text="首页公告标题")
+    notice_content = serializers.CharField(help_text="首页公告内容")
 
     def validate_overview_info(self, overview_info):
         if len(overview_info.split(',')) != 4:
@@ -30,4 +32,4 @@ class SystemSettingUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SystemSetting
-        fields = ("water_fees", "electricity_fees", "todo_list", "overview_info", "data_overview_start_date", )
+        fields = ("water_fees", "electricity_fees", "todo_list", "overview_info", "data_overview_start_date", "notice_title", "notice_content", )

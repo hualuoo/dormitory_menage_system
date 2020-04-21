@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>全屏切换</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- swiper -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.5/css/swiper.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.5/js/swiper.min.js"></script>
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="fadeIn animated color3">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c o-h">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				tab切换
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+
+		<div class="tabBox m3 f28">
+			<section class="swiper-container h60">
+				<div class="tabindexList">
+					<span class="p2 pl4 pr4 bg-color4 bg-color5 color8">选项卡1</span>
+					<span class="p2 pl4 pr4 bg-color4 color8">选项卡2</span>
+					<span class="p2 pl4 pr4 bg-color4 color8">选项卡3</span>
+				</div>
+				<div class="swiper-wrapper">
+					<div class="swiper-slide bg-color5 p4">内容选项卡1<br /><br />切换基于swiper插件，更多插件的用法请参考swiper官网！</div>
+					<div class="swiper-slide bg-color5 p4">内容选项卡2</div>
+					<div class="swiper-slide bg-color5 p4">内容选项卡3</div>
+				</div>
+			</section>
+		</div>
+		<style>
+			.tabindexList span {
+				display: inline-block;
+				cursor: pointer;
+			}
+		</style>
+		<script>
+			var swiper = new Swiper('.swiper-container', {
+				on: {
+					slideChangeTransitionStart: function() {
+						$(".tabindexList span").removeClass("bg-color5").eq(this.activeIndex).addClass("bg-color5");
+					}
+				}
+			});
+			$(".tabindexList span").click(function() {
+				var index = $(this).index();
+				$(".tabindexList span").removeClass("bg-color5").eq(index).addClass("bg-color5");
+				swiper.slideTo(index, 300, false);
+			})
+		</script>
+	</body>
+
+</html>

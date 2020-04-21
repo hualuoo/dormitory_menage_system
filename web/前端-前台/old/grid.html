@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>栅格化</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="pb1 fadeIn animated color4">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				栅格化
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<div class="t-c f28 p6 color4 bg-color6">
+			<h2 class="color-danger f46">
+				栅格化系统
+			</h2>
+			<p>使用栅格化，轻松排版每个模块！</p>
+		</div>
+		<div class="w73 m1 color8 t-c clearfix f36 boxs">
+			<div class="w21 h21 mr1 pt4 fl bg-color-primary">
+				<i class="f60 icon iconfont icon-dialog"></i>
+				<br /> 模块布局
+			</div>
+			<div class="w51 mb1 fl clearfix">
+				<div class="w25 h10 mr1 fl bg-color-success">
+					<i class="icon iconfont icon-servicefill"></i> 可定宽高
+				</div>
+				<div class="w25 h10 fl bg-color-info">
+					<i class="icon iconfont icon-list"></i> 方便快捷
+				</div>
+			</div>
+			<div class="w51 fl clearfix">
+				<div class="w25 h10 mr1 fl bg-color-warning">
+					<i class="icon iconfont icon-ic_view_carousel_px"></i> 灵活易懂
+				</div>
+				<div class="w25 h10 fl bg-color-danger">
+					<i class="icon iconfont icon-cartfill"></i> 好学好用
+				</div>
+			</div>
+		</div>
+		<br />
+		<h2 class="t-c f40 color3">混合形式的栅格化</h2><br />
+		<div class="grid mb2 t-c f36 clearfix">
+			<div class="box col-6 h10">col-6</div>
+			<div class="box col-6 h10">col-6</div>
+		</div>
+		<div class="grid mb2 t-c f36 clearfix">
+			<div class="box col-4 h10">col-4</div>
+			<div class="box col-4 h10">col-4</div>
+			<div class="box col-4 h10">col-4</div>
+		</div>
+		<div class="grid mb2 t-c f36 clearfix">
+			<div class="box col-3 h10">col-3</div>
+			<div class="box col-3 h10">col-3</div>
+			<div class="box col-3 h10">col-3</div>
+			<div class="box col-3 h10">col-3</div>
+		</div>
+		<div class="w75 grid mb2 t-c f36 clearfix">
+			<div class="w15 box h10 fl">w15</div>
+			<div class="w15 box h10 fl">w15</div>
+			<div class="w15 box h10 fl">w15</div>
+			<div class="w15 box h10 fl">w15</div>
+			<div class="w15 box h10 fl">w15</div>
+		</div>
+		<div class="grid mb2 t-c f36 clearfix">
+			<div class="box col-2 h10">col-2</div>
+			<div class="box col-2 h10">col-2</div>
+			<div class="box col-2 h10">col-2</div>
+			<div class="box col-2 h10">col-2</div>
+			<div class="box col-2 h10">col-2</div>
+			<div class="box col-2 h10">col-2</div>
+		</div>
+		<div class="grid mb2 t-c f28 clearfix">
+			<div class="box col-1 h10">col-1</div>
+			<div class="box col-2 h10">col-2</div>
+			<div class="box col-3 h10">col-3</div>
+			<div class="box col-6 h10">col-6</div>
+		</div><br />
+		<style>
+			.boxs .w51,
+			.grid {
+				line-height: 1rem;
+			}
+			
+			.grid .box {
+				border: 1px solid #f1f1f1;
+			}
+		</style>
+	</body>
+
+</html>

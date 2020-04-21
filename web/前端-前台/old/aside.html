@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- ui css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- 字体图标 -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- swiper -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.5/css/swiper.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.5/js/swiper.min.js"></script>
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="fadeIn animated">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c o-h">
+			<div class="ui-header-l fl w5">
+				<b class="icon iconfont icon-sortlight"></b>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				快速预览
+			</div>
+			<div class="ui-header-r fl w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<div class="t-c p6 f46 color5">
+			请在开发者模式下模拟触摸！
+			<br /><br />
+			<span class="btn btn-primary btnLeft f32 p2 w22 radius10">
+				左侧弹出
+			</span>
+			<span class="btn btn-primary btnRight f32 p2 w22 radius10">
+				右侧弹出
+			</span>
+			<br /><br />
+			<span class="btn btn-primary btnTop f32 p2 w22 radius10">
+				顶部弹出
+			</span>
+			<span class="btn btn-primary btnBottom f32 p2 w22 radius10">
+				底部弹出
+			</span><br /><br />
+			<a href="index.html" class="btn btn-primary f32 p2 w22 radius10">回到首页</a>
+		</div>
+		<!-- aside left-->
+		<aside class="ui-aside asideLift w40 bg-color-primary"></aside>
+		<!-- aside right -->
+		<aside class="ui-aside asideRight w40 bg-color-primary"></aside>
+		<!-- aside top -->
+		<aside class="ui-aside asideTop h50 w75 bg-color-primary"></aside>
+		<!-- aside bottom -->
+		<aside class="ui-aside asideBottom h50 w75 bg-color-primary"></aside>
+
+		<script type="text/javascript">
+			//左侧
+			var asideLift = $(".asideLift").asideUi({
+				hasmask: true,
+				size: "4rem",
+				position: "left",
+				sidertime: 300
+			});
+			$(".ui-header-l,.btnLeft").tap(function(event) {
+				asideLift.toggle();
+				event.preventDefault();
+			});
+
+			//右侧
+			var asideRight = $(".asideRight").asideUi({
+				size: "4rem",
+				position: "right",
+			});
+			$(".btnRight").tap(function(event) {
+				asideRight.toggle();
+				event.preventDefault();
+			});
+
+			//顶部
+			var asideTop = $(".asideTop").asideUi({
+				size: "5rem",
+				position: "top",
+			});
+			$(".btnTop").tap(function(event) {
+				asideTop.toggle();
+				event.preventDefault();
+			});
+
+			//底部
+			var asideBottom = $(".asideBottom").asideUi({
+				size: "5rem",
+				position: "bottom",
+			});
+			$(".btnBottom").tap(function(event) {
+				asideBottom.toggle();
+				event.preventDefault();
+			});
+		</script>
+	</body>
+
+</html>

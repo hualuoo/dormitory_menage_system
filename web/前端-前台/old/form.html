@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- mobileSelect -->
+		<link rel="stylesheet" type="text/css" href="plugins/mobileSelect/mobileSelect.css">
+		<script src="plugins/mobileSelect/mobileSelect.js" type="text/javascript"></script>
+		<!-- icheck -->
+		<script src="plugins/icheck/icheck.js" type="text/javascript" charset="utf-8"></script>
+		<!-- noUiSlider -->
+		<link rel="stylesheet" type="text/css" href="plugins/noUiSlider.10.0.0/nouislider.css" />
+		<script src="plugins/noUiSlider.10.0.0/nouislider.js" type="text/javascript" charset="utf-8"></script>
+		<!-- switchery -->
+		<link rel="stylesheet" type="text/css" href="plugins/switchery/switchery.css"/>
+		<script src="plugins/switchery/switchery.js" type="text/javascript" charset="utf-8"></script>
+		<!-- iconfont -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="pb12 fadeIn animated">
+		<header class="formheader w75 h11 f30 color8 bg-color-primary">
+			<div class="ml3 mr3 pt2">
+				<div class="h7 w7 fl">
+					<a href="index.html" class="icon color8 f46 iconfont icon-home_light"></a>
+				</div>
+				<input type="text" class="h7 w54 fl bg-color8 form-control" placeholder="请输入搜索内容" />
+				<span class="h7 f38 w8 bg-color-info fl t-c">
+					<i class="icon iconfont icon-search"></i>
+				</span>
+			</div>
+		</header>
+		<style>
+			.formheader {
+				line-height: 0.7rem;
+			}
+			
+			.formheader span {
+				display: inline-block;
+			}
+			
+			.formheader input {
+				border: none;
+			}
+		</style>
+		<div class="p3 f30 f30 w75">
+			<form>
+				<div class="pt2 pb2">
+					姓名：
+					<input type="text" class="w59  form-control" placeholder="输入姓名" />
+				</div>
+				<div>
+					年龄：
+					<input type="number" class="w59  form-control" min="16" max="100" />
+				</div>
+				<div class="pt2 pb2">
+					邮箱：
+					<input type="email" class="w59  form-control" placeholder="输入邮箱" />
+				</div>
+				<div>
+					地址：
+					<div id="selectBox" class="form-control w59 h7" style="display: inline-block; background: url(img/select.png) center right no-repeat; background-size:auto 100%;">
+						<span class="color3">请选择</span>
+					</div>
+				</div>
+				<div class="mt4 mb4">
+					性别：
+					<label class="mr3"><input type="radio" class="check" name="sex" />男</label>
+					<label class="mr3"><input type="radio" class="check" name="sex" />女</label>
+				</div>
+				<div>
+					爱好：
+					<label class="mr3"><input type="checkbox" name="aihao" class="check" />逛街</label>
+					<label class="mr3"><input type="checkbox" name="aihao" class="check"/>看电影</label>
+					<label class="mr3"><input type="checkbox" name="aihao" class="check"/>玩游戏</label>
+				</div>
+				<div class="mt4 mb4">
+					范围：
+					<div id="noUiSlider" class="w59" style=" display: inline-block; vertical-align: middle;"></div>
+				</div>
+				<div>
+					滑块：
+					<input type="checkbox" class="js-switch" checked />
+				</div>
+				<div class="mt4 mb4">
+					备注：
+					<textarea class="w59 h20 form-control" placeholder="备注内容"></textarea>
+				</div>
+				<div class="t-c mt5">
+					<input type="submit" class="btn f30 btn-primary radius10 p2 w50" value="提交表单" />
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript">
+			var addressArr = [{
+					id: '1',
+					value: '河南',
+					childs: [{
+							id: '11',
+							value: '信阳'
+						},
+						{
+							id: '12',
+							value: '南阳'
+						},
+						{
+							id: '13',
+							value: '洛阳'
+						},
+						{
+							id: '14',
+							value: '驻马店'
+						},
+						{
+							id: '15',
+							value: '漯河'
+						}
+					]
+				},
+				{
+					id: '2',
+					value: '湖北',
+					childs: [{
+							id: '21',
+							value: '武汉'
+						},
+						{
+							id: '22',
+							value: '黄石'
+						},
+						{
+							id: '23',
+							value: '襄樊'
+						},
+						{
+							id: '24',
+							value: '荆州'
+						},
+						{
+							id: '25',
+							value: '鄂州'
+						}
+					]
+				},
+				{
+					id: '3',
+					value: '河北',
+					childs: [{
+							id: '31',
+							value: '石家庄'
+						},
+						{
+							id: '32',
+							value: '唐山'
+						},
+						{
+							id: '33',
+							value: '秦皇岛'
+						},
+						{
+							id: '34',
+							value: '邯郸'
+						},
+						{
+							id: '35',
+							value: '邢台'
+						}
+					]
+				}
+			]
+			//mobileselect 下拉选择框
+			var mobileSelect1 = new MobileSelect({
+				trigger: '#selectBox',
+				title: '单项选择',
+				wheels: [{
+					data: addressArr
+				}],
+				position: [1, 1], //初始化定位 打开时默认选中的哪个 如果不填默认为0
+				callback: function(indexArr, data) {
+					console.log(data);
+				}
+			});
+			//icheck 多选框插件
+			$('.check').iCheck({
+				checkboxClass: 'ui-checkbox check-primary',
+				radioClass: 'ui-radio check-primary'
+			});
+			//noUiSlider 滑块
+			var slider = document.getElementById('noUiSlider');
+			noUiSlider.create(slider, {
+				start: [20, 80],
+				connect: true,
+				range: {
+					'min': 0,
+					'max': 100
+				}
+			});
+			//switchery
+			var elem = document.querySelector('.js-switch');
+			var switchery = new Switchery(elem,{ size: 'small' });			
+		</script>
+	</body>
+
+</html>

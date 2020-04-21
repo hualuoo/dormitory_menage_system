@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+		<!-- photoswipe -->
+		<link rel="stylesheet" type="text/css" href="plugins/photoswipe/photoswipe.css" />
+		<link rel="stylesheet" type="text/css" href="plugins/photoswipe/default-skin/default-skin.css" />
+		<script src="plugins/photoswipe/photoswipe.js" type="text/javascript" charset="utf-8"></script>
+		<script src="plugins/photoswipe/photoswipe-ui-default.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body class="fadeIn animated">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c o-h">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				滑动相册
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<h2 class="t-c mt4 f40 color3">PhotoSwipe</h2><br />
+		<div class="f36 t-c picbox" id="Gallery">
+			<div class="col-4"><img src="img/s1.jpg" data-w="300" data-h="425" /></div>
+			<div class="col-4"><img src="img/s2.jpg" data-w="300" data-h="425" /></div>
+			<div class="col-4"><img src="img/s3.jpg" data-w="300" data-h="425" /></div>
+			<div class="col-4"><img src="img/s4.jpg" data-w="300" data-h="425" /></div>
+			<div class="col-4"><img src="img/s5.jpg" data-w="300" data-h="425" /></div>
+		</div>
+		<style type="text/css">
+			.picbox img {
+				width: 96%;
+				padding: 4% 2%;
+				cursor: pointer;
+			}
+		</style>
+		<!-- 下面是相册切换的必备代码 -->
+		<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="pswp__bg"></div>
+			<div class="pswp__scroll-wrap">
+				<div class="pswp__container">
+					<div class="pswp__item"></div>
+					<div class="pswp__item"></div>
+					<div class="pswp__item"></div>
+				</div>
+				<div class="pswp__ui pswp__ui--hidden">
+					<div class="pswp__top-bar">
+						<div class="pswp__counter"></div>
+						<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+						<button class="pswp__button pswp__button--share" title="Share"></button>
+						<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+						<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+						<div class="pswp__preloader">
+							<div class="pswp__preloader__icn">
+								<div class="pswp__preloader__cut">
+									<div class="pswp__preloader__donut"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+						<div class="pswp__share-tooltip"></div>
+					</div>
+					<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+					<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+					<div class="pswp__caption">
+						<div class="pswp__caption__center"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var openPhotoSwipe = function() {
+				var pswpElement = document.querySelectorAll('.pswp')[0];
+				var items = [];
+				$("#Gallery img").each(function() {
+					var obj = {
+						src: $(this).attr("src"),
+						w: $(this).data("w"),
+						h: $(this).data("h")
+					}
+					items.push(obj);
+				})
+				var options = {
+					history: false,
+					focus: false,
+					showAnimationDuration: 0,
+					hideAnimationDuration: 0
+				};
+				var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+				gallery.init();
+			};
+			$("#Gallery").click(function() {
+				openPhotoSwipe();
+			})
+		</script>
+
+	</body>
+
+</html>

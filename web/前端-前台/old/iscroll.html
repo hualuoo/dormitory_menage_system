@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- iscroll -->
+		<script src="plugins/iscroll-probe.js" type="text/javascript"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="fadeIn animated">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				iScroll
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<div id="scrollbox" class="color2 f30">
+			<div class="boxs">
+				<div class="refresh p1 t-c">
+					<img src="img/timg.gif" class="w6" />
+				</div>
+				<ul id="iscroll">
+					<li class="p1">
+						<img src="img/meng.jpg" class="w73" /><br />
+						<div class="bg-color6 p1">中国梦标题<span class="color4">（第1次加载）</span></div>
+					</li>
+					<li class="p1">
+						<img src="img/meng.jpg" class="w73" /><br />
+						<div class="bg-color6 p1">中国梦标题<span class="color4">（第1次加载）</span></div>
+					</li>
+					<li class="p1">
+						<img src="img/meng.jpg" class="w73" /><br />
+						<div class="bg-color6 p1">中国梦标题<span class="color4">（第1次加载）</span></div>
+					</li>
+				</ul>
+				<div class="loading t-c p1">
+					<img src="img/timg.gif" class="w6" />
+				</div>
+			</div>
+		</div>
+		<style>
+			#scrollbox {
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				top: 0.8rem;
+				overflow: hidden;
+			}
+			
+			.refresh,
+			.loading {
+				display: none;
+			}
+		</style>
+		<script type="text/javascript">
+			$(function() {
+				var isPulled = false; //控制ajax的开关变量
+				var page = 1;
+				var buttonHeight = $(".loading").height();
+				myScroll = new IScroll('#scrollbox', {
+					probeType: 1,
+					tap: true,
+					click: false,
+					mouseWheel: true,
+					scrollbars: true,
+					fadeScrollbars: true,
+					interactiveScrollbars: false,
+					keyBindings: false,
+					deceleration: 0.0002
+				});
+
+				//监听方向
+				myScroll.on('scroll', function() {
+					if(this.y >= 60) {
+						$(".refresh").show();
+						myScroll.refresh();
+						isPulled = true;
+						page = 1;
+					}
+					if(this.maxScrollY - this.y >= 60) {
+						$(".loading").show();
+						myScroll.refresh();
+						isPulled = true;
+						page++;
+					}
+				});
+				//松手触发ajax
+				myScroll.on('scrollEnd', function() {
+					if(isPulled) {
+						isPulled = false;
+						getDate();
+					}
+				});
+				//ajax
+				function getDate() {
+					$.ajax({
+						url: "/mini/plugins/json.json",
+						type: 'get',
+						data: '',
+						dataType: "json",
+						success: function(data) {
+							$(".loading,.refresh").hide();
+							if(page == 1) {
+								$("#iscroll").html("");
+							}
+							for(i = 0; i < data.piclist.length; i++) {
+								$("#iscroll").append('<li class="p1"><img src="' + data.piclist[i].imgsrc + '" class="w73" /><br /><div class="bg-color6 p1">' + data.piclist[i].text + '<span class="color4">（第' + page + '次加载）</span></div></li>');
+							}
+							myScroll.refresh();
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							console.log(XMLHttpRequest.status + "  " + XMLHttpRequest.readyState + "" + errorThrown);
+						}
+					});
+				}
+				getDate();
+				//阻止浏览器默认
+				document.addEventListener('touchmove', function(e) {
+					e.preventDefault();
+				}, false);
+			})
+		</script>
+	</body>
+
+</html>

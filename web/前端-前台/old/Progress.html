@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="fadeIn animated bg-color7">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c o-h">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				进度条
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<div class="m3 color4 f32 progresslist">
+			<p>默认：</p>
+			<progress max="100" value="60"></progress><br /><br />
+			<p>插件默认：</p>
+			<progress class="ui-progress" max="100" value="30"></progress>
+			<p>皮肤primary：</p>
+			<progress class="ui-progress" max="100" value="40"></progress>
+			<p>皮肤success：</p>
+			<progress class="ui-progress" max="100" value="50"></progress>
+			<p>皮肤info：</p>
+			<progress class="ui-progress" max="100" value="60"></progress>
+			<p>皮肤warning：</p>
+			<progress class="ui-progress" max="100" value="70"></progress>
+			<p>皮肤danger：</p>
+			<progress class="ui-progress" max="100" value="80"></progress>
+		</div>
+		<style>
+			progress {
+				width: 100%;
+			}
+			.progresslist {
+				line-height: 2em;
+			}
+		</style>
+		<script type="text/javascript">
+			$(".ui-progress").eq(0).progressUi();
+			$(".ui-progress").eq(1).progressUi({
+				skin: "primary"
+			});
+			$(".ui-progress").eq(2).progressUi({
+				skin: "success"
+			});
+			$(".ui-progress").eq(3).progressUi({
+				skin: "info"
+			});
+			$(".ui-progress").eq(4).progressUi({
+				skin: "warning"
+			});
+			$(".ui-progress").eq(5).progressUi({
+				skin: "danger"
+			});
+		</script>
+	</body>
+
+</html>

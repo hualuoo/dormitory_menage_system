@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 def login_smtp(user):
     subject = '主题'  # 主题
     message = '内容'  # 内容
-    sender = '考勤系统<i@hualuoo.com>'
+    sender = '宿舍门禁管理系统<i@hualuoo.com>'
     receiver = [user[0].email]  # 目标邮箱
     now_time = datetime.datetime.now()
     now_time_str = datetime.datetime.strftime(now_time, '%Y-%m-%d %H:%M:%S')
@@ -17,7 +17,7 @@ def login_smtp(user):
 def code_smtp(email, code):
     subject = '主题'  # 主题
     message = '内容'  # 内容
-    sender = '考勤系统<i@hualuoo.com>'
+    sender = '宿舍门禁管理系统<i@hualuoo.com>'
     receiver = [email]  # 目标邮箱
     now_time = datetime.datetime.now()
     now_time_str = datetime.datetime.strftime(now_time, '%Y-%m-%d %H:%M:%S')

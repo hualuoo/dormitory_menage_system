@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- ui css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- 瀑布流 -->
+		<script src="plugins/myflow.js" type="text/javascript"></script>
+		<!-- 字体图标 -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="t-c fadeIn animated">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-primary t-c">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				瀑布流
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<div class="t-c f28 p6 color4 bg-color6">
+			<h2 class="color-danger f46">
+				myflow.js
+			</h2>
+			<p>一只简单实用的响应式瀑布流插件！</p>
+		</div>
+		<div class="myflowBox color4 f30"></div>
+		<div class="mt2 mb4 f28">
+			<span class="btn btn-primary radius10 w71 p2 jiazai">点击加载</span>
+		</div>
+		<style type="text/css">
+			.myflowBox {
+				line-height: 2em;
+				border-bottom: 1px solid #ccc;
+			}
+			
+			.ui-myflow-item {
+				padding-top: 0.2rem;
+			}
+			
+			.ui-myflow-item:first-child {
+				border-right: 1px solid #ccc;
+			}
+			
+			.ui-myflow-item:last-child {
+				border-left: 1px solid #ccc;
+				margin-left: -1px;
+			}
+		</style>
+		<script type="text/javascript">
+			var page = 0;
+			$(".jiazai").click(function() {
+				page++;
+				$(".myflowBox").myflow({
+					url: "plugins/json.json",
+					data: {
+						page: page
+					},
+					colspan: 2,
+					//clearlist:true,
+					template: function(data) {
+						var html = "<dl class='pb1'>";
+						html += "	<dt>";
+						html += "		<img src='" + data.imgsrc + "' class='w33'/>";
+						html += "		</dt>";
+						html += "	<dd>" + data.text + "</dd>";
+						html += "</dl>";
+						return html;
+					},
+					dataArr: function(data) {
+						return data.piclist;
+					}
+				});
+			}).click();
+		</script>
+		<!-- 返回顶部 -->
+		<div class="ui-scrollTop radius-o bg-color-warning w10 h10 t-c pt1 f50 color8" onclick="goTop();">
+			<i class="icon iconfont icon-fanhuidingbu "></i>
+		</div>
+		<style>
+			.ui-scrollTop {
+				position: fixed;
+				right: 0.2rem;
+				bottom: 0.5rem;
+				cursor: pointer;
+			}
+		</style>
+	</body>
+
+</html>

@@ -3,9 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/utils/jwt_custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/jwt_custom.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/system_setting/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/system_setting/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/utils/smtp.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/smtp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/rest_framework_jwt/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/rest_framework_jwt/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/face_photo/2020/03/21/441bd49f143236533052726cef92e7ee.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/face_photo/2020/03/21/960fb68e8870574100c853822c1c1c57.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/11/b556964dcd9bd2c1fc0315ae0bece796.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/12/1918243a203ce0a38359f20fc856c958.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/photo/2020/02/12/b556964dcd9bd2c1fc0315ae0bece796.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/photo/default.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/attendance_system_web/member/changepassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/attendance_system_web/member/changepassword.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,16 +46,22 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/api/system_setting/migrations" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/media/system/banner" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\project\attendance_system\media\system\banner" />
       <recent name="C:\project\attendance_system\api\system_setting\migrations" />
       <recent name="C:\project\attendance_system\media\users\access_control" />
       <recent name="C:\project\attendance_system\api\user_operation" />
       <recent name="C:\project\attendance_system\api\users\backup" />
-      <recent name="C:\project\attendance_system\api\dormitories" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\project\attendance_system\api\system_setting" />
@@ -54,7 +71,7 @@
       <recent name="C:\project\attendance_system\api\utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.start_app">
+  <component name="RunManager" selected="Django server.attendance_system">
     <configuration name="clean-migrations" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="attendance_system" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -99,6 +116,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="views" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="attendance_system" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/system_setting" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/system_setting/views.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="attendance_system" type="Python.DjangoServer" factoryName="Django server">
       <module name="attendance_system" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -125,6 +164,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.views" />
         <item itemvalue="Python.start_app" />
         <item itemvalue="Python.clean-migrations" />
       </list>
@@ -159,7 +199,8 @@
       <workItem from="1581833047783" duration="5850000" />
       <workItem from="1581844924356" duration="192092000" />
       <workItem from="1583754811610" duration="12766000" />
-      <workItem from="1583855762209" duration="232859000" />
+      <workItem from="1583855762209" duration="255382000" />
+      <workItem from="1587362878582" duration="22208000" />
     </task>
     <servers />
   </component>
@@ -188,70 +229,43 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1310" y="664" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1582179444313" />
-    <state x="952" y="497" key="#com.intellij.ide.util.MemberChooser" timestamp="1578306338854">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="952" y="497" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1578306338854" />
     <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1586442549849">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1586442549849" />
-    <state x="1290" y="480" key="FileChooserDialogImpl" timestamp="1578227371539">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1587478654067">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1290" y="480" key="FileChooserDialogImpl/0.0.2560.1400@0.0.2560.1400" timestamp="1578227371539" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1586860072297">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1587478654067" />
+    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1587478654067">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="213" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1586860072297" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1586860072297">
+    <state width="2517" height="288" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
+    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1587478654067" />
+    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1587478654067">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="213" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1586860072297" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1586860072297">
+    <state width="2517" height="288" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
+    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1587478654067" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1587478654067">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="213" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1586860072297" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1586860072297">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="2517" height="213" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583044549724" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1586860072297" />
-    <state width="1530" height="308" key="GridCell.Tab.1.bottom" timestamp="1578405388665">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="1530" height="308" key="GridCell.Tab.1.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1578405388665" />
-    <state width="1530" height="308" key="GridCell.Tab.1.center" timestamp="1578405388665">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="1530" height="308" key="GridCell.Tab.1.center/0.0.2560.1400@0.0.2560.1400" timestamp="1578405388665" />
-    <state width="1530" height="308" key="GridCell.Tab.1.left" timestamp="1578405388665">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="1530" height="308" key="GridCell.Tab.1.left/0.0.2560.1400@0.0.2560.1400" timestamp="1578405388665" />
-    <state width="1530" height="308" key="GridCell.Tab.1.right" timestamp="1578405388665">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="1530" height="308" key="GridCell.Tab.1.right/0.0.2560.1400@0.0.2560.1400" timestamp="1578405388665" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1587478654067" />
     <state x="576" y="261" key="SettingsEditor" timestamp="1582024039431">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="576" y="261" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1582024039431" />
     <state x="768" y="351" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1581839323807" />
-    <state x="1126" y="615" key="VCS.ChangelistChooser" timestamp="1578228897932">
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1587389021186">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1126" y="615" key="VCS.ChangelistChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1578228897932" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1586010863621">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1583045107980" />
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587389021186" />
     <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1586010863621" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/attendance_system$views.coverage" NAME="views Coverage Results" MODIFIED="1587298539517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/system_setting" />
     <SUITE FILE_PATH="coverage/attendance_system$clean_migrations.coverage" NAME="clean-migrations Coverage Results" MODIFIED="1583133316467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
     <SUITE FILE_PATH="coverage/attendance_system$start_app.coverage" NAME="start_app Coverage Results" MODIFIED="1586442482188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
   </component>

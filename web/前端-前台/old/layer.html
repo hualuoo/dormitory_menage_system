@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css"/>
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="pb12 fadeIn animated">
+		<header class="ui-header clearfix w75 pl3 pr3 h8 f46  color8 bg-color-primary t-c">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="icon color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				Layer For Mobile
+			</div>
+			<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>
+		</header>
+		<br /><br />
+		<div class="p3 f30">
+			<span class="p2 mb4 btn radius5 btn-primary">信息框</span>
+			<span class="p2 mb4 btn radius5 btn-success">提示</span>
+			<span class="p2 mb4 btn radius5 btn-info">询问层</span>
+			<span class="p2 mb4 btn radius5 btn-warning">底部对话框</span>
+			<span class="p2 mb4 btn radius5 btn-danger">底部提示</span>
+			<span class="p2 mb4 btn radius5 btn-primary">自定义标题风格</span>
+			<span class="p2 mb4 btn radius5 btn-success">页面层</span>
+			<span class="p2 mb4 btn radius5 btn-info">loadding层</span>
+			<span class="p2 mb4 btn radius5 btn-warning">加载层</span>
+			<span class="p2 mb4 btn radius5 btn-primary">底部弹出完整对话框</span>
+		</div>
+		<script type="text/javascript">
+			//简单的信息层 
+			$(".btn").eq(0).click(function() {
+				layer.open({
+					content: '简单的提示信息',
+					btn: '我知道了'
+				});
+			})
+			//提示层msg
+			$(".btn").eq(1).click(function() {
+				layer.open({
+					content: 'hello layer',
+					skin: 'msg',
+					time: 2 //2秒后自动关闭
+				});
+			})
+			//询问层
+			$(".btn").eq(2).click(function() {
+				layer.open({
+					content: '您确定要刷新一下本页面吗？',
+					btn: ['刷新', '不要'],
+					yes: function(index) {
+						location.reload();
+						layer.close(index);
+					}
+				});
+			})
+			//底部询问层
+			$(".btn").eq(3).click(function() {
+				layer.open({
+					content: '这是一个底部弹出的询问提示',
+					btn: ['删除', '取消'],
+					skin: 'footer',
+					yes: function(index) {
+						layer.open({
+							content: '执行删除操作'
+						})
+					}
+				});
+			})
+			//底部提示层
+			$(".btn").eq(4).click(function() {
+				layer.open({
+					content: '一个没有任何按钮的底部提示',
+					skin: 'footer'
+				});
+			})
+			//自定义标题风格层
+			$(".btn").eq(5).click(function() {
+				layer.open({
+					title: [
+						'我是标题',
+						'background-color: #FF4351; color:#fff;'
+					],
+					content: '标题风格任你定义。'
+				});
+			})
+			//页面层
+			$(".btn").eq(6).click(function() {
+				layer.open({
+					type: 1,
+					content: '可传入任何内容，支持html。一般用于手机页面中',
+					anim: 'up',
+					style: 'position:fixed; bottom:0; left:0; width: 100%; height: 200px; padding:10px 0; border:none;'
+				});
+			})
+			//loadding 层
+			$(".btn").eq(7).click(function() {
+				layer.open({
+					type: 2
+				});
+			})
+			//加载层
+			$(".btn").eq(8).click(function() {
+				layer.open({
+					type: 2,
+					content: '加载中'
+				});
+			})
+			//底部弹出的完整对话框
+			$(".btn").eq(9).click(function() {
+				layer.open({
+					title: [
+						'我是标题',
+						'background-color:#8DCE16; color:#fff;'
+					],
+					anim: 'up',
+					content: '展现的是全部结构',
+					btn: ['确认', '取消']
+				});
+			})
+		</script>
+	</body>
+
+</html>

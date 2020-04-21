@@ -136,7 +136,7 @@
 							"token": cache_token
 						},
 						success: function(data) {
-							layer.msg('检测到您已登录' + data.username + '，正在跳转到登录后的页面');
+							layer.msg('检测到' + data.username + '已登录，正在跳转到登录后的页面');
 							setTimeout(function() {
 								location.href = "index.html";
 							}, 1000);
@@ -160,7 +160,7 @@
 				//提交
 				form.on('submit(LAY-user-login-submit)', function(data) {
 					if(nc_SessionId == '') {
-						layer.msg('请先滑动验证再登录', {
+						layer.msg('请先通过滑动验证', {
 							icon: 2,
 							anim: 6
 						});

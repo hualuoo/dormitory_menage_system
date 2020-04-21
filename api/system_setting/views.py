@@ -67,6 +67,14 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         data_overview_start_date.content = serializer.validated_data["data_overview_start_date"]
         data_overview_start_date.save()
 
+        notice_title = SystemSetting.objects.filter(code="notice_title").first()
+        notice_title.content = serializer.validated_data["notice_title"]
+        notice_title.save()
+
+        notice_content = SystemSetting.objects.filter(code="notice_content").first()
+        notice_content.content = serializer.validated_data["notice_content"]
+        notice_content.save()
+
         return Response({
             "detail": "系统设定已保存！"
         }, status=status.HTTP_200_OK)
@@ -195,3 +203,55 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Response({
             "data": data
         }, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def get_banner(self, request, *args, **kwargs):
+        """
+        系统 获取前端Banner
+            url: '/system_setting/get_index_data/'
+            type: 'get'
+        """
+        from django.db.models import Q
+        all_result = self.filter_queryset(self.get_queryset())
+        all_result = all_result.filter(Q(code__icontains="banner") | Q(code__icontains="notice_"))
+        queryset = self.filter_queryset(all_result)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(methods=['POST'], detail=False)
+    def upload_banner(self, request, *args, **kwargs):
+        """
+            系统 更新前台首页Banner
+            url: '/system_setting/upload_banner/'
+            type: 'get'
+        """
+        from utils.save_file import save_img
+
+        avatar = request.FILES.get("file")
+
+        flag = save_img(avatar, "system/banner")
+        if flag == 0:
+            return Response({
+                "detail": "操作失败：未选择上传的文件！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if flag == 1:
+            return Response({
+                "detail": "操作失败：上传的文件超过2Mb！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if flag == 2:
+            return Response({
+                "detail": "操作失败：上传的文件不属于图片！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        code = request.GET.get('code', '')
+        instance = SystemSetting.objects.filter(code=code).first()
+        instance.url = flag
+        instance.save()
+        return Response({
+            "code": 0,
+            "msg": "操作成功：" + code + "上传成功",
+            "data": {
+                "src": "http://" + request.META['HTTP_HOST'] + "/media/" + flag
+            }
+        }, status=status.HTTP_200_OK)
+
