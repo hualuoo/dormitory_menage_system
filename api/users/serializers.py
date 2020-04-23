@@ -305,32 +305,233 @@ class UserChangePasswordAdminSerializer(serializers.ModelSerializer):
 
 
 class SecurityCheckOldEmailSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(max_length=100, help_text="邮箱")
+    old_email = serializers.EmailField(max_length=100, help_text="邮箱")
+
+    def validate_old_email(self, old_email):
+        if self.context['request'].user.email is None:
+            raise serializers.ValidationError('校验失败：该账户未绑定邮箱，无法进行该操作！')
+        if self.context['request'].user.email != old_email:
+            raise serializers.ValidationError('校验失败：邮箱输入错误！')
+        else:
+            return old_email
 
     class Meta:
         model = User
-        fields = ("email", )
+        fields = ("old_email", )
 
 
 class SecurityConfirmOldEmailSerializer(serializers.ModelSerializer):
-    captcha = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, help_text="验证码")
+    old_captcha = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, help_text="验证码")
 
-    def validate_captcha(self, captcha):
-        captcha_list = CaptchaModel.objects.filter(email=self.initial_data["email"]).order_by("-create_time")
+    def validate_old_captcha(self, old_captcha):
+        if self.context['request'].user.email is None:
+            raise serializers.ValidationError('操作失败：该账户未绑定邮箱！')
+        captcha_list = CaptchaModel.objects.filter(email=self.context['request'].user.email).order_by("-create_time")
         if captcha_list:
             last_captcha = captcha_list[0]
-            five_mintes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
-            if five_mintes_ago > last_captcha.create_time:
-                raise serializers.ValidationError('操作失败：验证码过期！')
-            if last_captcha.code != captcha:
-                raise serializers.ValidationError('操作失败：验证码错误！')
+            five_minutes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+            if five_minutes_ago > last_captcha.create_time:
+                raise serializers.ValidationError('该验证码过期，请重新获取！')
+            if last_captcha.code != old_captcha:
+                raise serializers.ValidationError('该验证码错误，请检查输入！')
         else:
-            raise serializers.ValidationError('操作失败：验证码错误！')
-        return captcha
+            raise serializers.ValidationError('验证码错误，请检查输入！')
+        return old_captcha
 
     class Meta:
         model = User
-        fields = ("captcha", )
+        fields = ("old_captcha", )
+
+
+class SecurityChangeMobileSerializer(serializers.ModelSerializer):
+    old_captcha = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, help_text="验证码")
+    new_mobile = serializers.CharField(required=True, write_only=True, max_length=11, min_length=11, help_text="新手机")
+
+    def validate_old_captcha(self, old_captcha):
+        if self.context['request'].user.email is None:
+            raise serializers.ValidationError('该账户未绑定邮箱！')
+        captcha_list = CaptchaModel.objects.filter(email=self.context['request'].user.email).order_by("-create_time")
+        if captcha_list:
+            last_captcha = captcha_list[0]
+            five_minutes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+            if five_minutes_ago > last_captcha.create_time:
+                raise serializers.ValidationError('该验证码过期，请重新获取！')
+            if last_captcha.code != old_captcha:
+                raise serializers.ValidationError('该验证码错误，请检查输入！')
+        else:
+            raise serializers.ValidationError('验证码错误，请检查输入！')
+        return old_captcha
+
+    def validate_new_mobile(self, new_mobile):
+        flag = re.match(r'(^$)|^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$', new_mobile)
+        if flag is None:
+            raise serializers.ValidationError('请输入正确的手机号！')
+        if self.context['request'].user.info.mobile == new_mobile:
+            raise serializers.ValidationError('新手机号码与旧手机相同！')
+        if UserInfo.objects.filter(mobile=new_mobile).count():
+            raise serializers.ValidationError('该手机已被其他账户使用！')
+        return new_mobile
+
+    class Meta:
+        model = User
+        fields = ("old_captcha", "new_mobile", )
+
+
+class SecurityChangePasswordSerializer(serializers.ModelSerializer):
+    old_captcha = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, help_text="验证码")
+    new_password = serializers.CharField(help_text="密码", write_only=True)
+
+    def validate_old_captcha(self, old_captcha):
+        if self.context['request'].user.email is None:
+            raise serializers.ValidationError('该账户未绑定邮箱！')
+        captcha_list = CaptchaModel.objects.filter(email=self.context['request'].user.email).order_by("-create_time")
+        if captcha_list:
+            last_captcha = captcha_list[0]
+            five_minutes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+            if five_minutes_ago > last_captcha.create_time:
+                raise serializers.ValidationError('该验证码过期，请重新获取！')
+            if last_captcha.code != old_captcha:
+                raise serializers.ValidationError('该验证码错误，请检查输入！')
+        else:
+            raise serializers.ValidationError('验证码错误，请检查输入！')
+        return old_captcha
+
+    def validate_new_password(self, new_password):
+        flag = re.match(r'(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{8,20}$', new_password)
+        if flag is None:
+            raise serializers.ValidationError('操作失败：密码须为8~20位，数字、字母、字符至少包含两种，且不能包含中文和空格！')
+        if self.context['request'].user.check_password(new_password):
+            raise serializers.ValidationError('操作失败：新密码不能与旧密码相同！')
+        return new_password
+
+    class Meta:
+        model = User
+        fields = ("old_captcha", "new_password", )
+
+
+class SecuritySendNewEmailCaptchaSerializer(serializers.ModelSerializer):
+    old_captcha = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, help_text="验证码")
+    new_email = serializers.EmailField(max_length=100, help_text="新邮箱")
+
+    def validate_old_captcha(self, old_captcha):
+        if self.context['request'].user.email is None:
+            raise serializers.ValidationError('该账户未绑定邮箱！')
+        captcha_list = CaptchaModel.objects.filter(email=self.context['request'].user.email).order_by("-create_time")
+        if captcha_list:
+            last_captcha = captcha_list[0]
+            five_minutes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+            if five_minutes_ago > last_captcha.create_time:
+                raise serializers.ValidationError('该验证码过期，请重新获取！')
+            if last_captcha.code != old_captcha:
+                raise serializers.ValidationError('该验证码错误，请检查输入！')
+        else:
+            raise serializers.ValidationError('验证码错误，请检查输入！')
+        return old_captcha
+
+    def validate_new_email(self, new_email):
+        if self.context['request'].user.email == new_email:
+            raise serializers.ValidationError('新邮箱与旧邮箱相同！')
+        if User.objects.filter(email=new_email).count():
+            raise serializers.ValidationError('该邮箱已被其他账户使用！')
+        return new_email
+
+    class Meta:
+        model = User
+        fields = ("old_captcha", "new_email", )
+
+
+class SecurityChangeEmailSerializer(serializers.ModelSerializer):
+    new_email = serializers.EmailField(max_length=100, help_text="新邮箱")
+    new_captcha = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, help_text="验证码")
+
+    def validate_new_email(self, new_email):
+        if self.context['request'].user.email == new_email:
+            raise serializers.ValidationError('新邮箱与旧邮箱相同！')
+        if User.objects.filter(email=new_email).count():
+            raise serializers.ValidationError('该邮箱已被其他账户使用！')
+        return new_email
+
+    def validate_new_captcha(self, new_captcha):
+        captcha_list = CaptchaModel.objects.filter(email=self.initial_data['new_email']).order_by("-create_time")
+        if captcha_list:
+            last_captcha = captcha_list[0]
+            five_minutes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+            if five_minutes_ago > last_captcha.create_time:
+                raise serializers.ValidationError('该验证码过期，请重新获取！')
+            if last_captcha.code != new_captcha:
+                raise serializers.ValidationError('该验证码错误，请检查输入！')
+        else:
+            raise serializers.ValidationError('验证码错误，请检查输入！')
+        return new_captcha
+
+    class Meta:
+        model = User
+        fields = ("new_email", "new_captcha", )
+
+
+class SecurityCheckAccountPasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(help_text="密码", write_only=True)
+
+    def validate_password(self, password):
+        if self.context['request'].user.check_password(password):
+            return password
+        else:
+            raise serializers.ValidationError('密码输入错误')
+
+    class Meta:
+        model = User
+        fields = ("password", )
+
+
+class SecuritySendBindEmailCaptchaSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(help_text="密码", write_only=True)
+    bind_email = serializers.EmailField(max_length=100, help_text="新邮箱")
+
+    def validate_password(self, password):
+        if self.context['request'].user.check_password(password):
+            return password
+        else:
+            raise serializers.ValidationError('密码输入错误')
+
+    def validate_bind_email(self, bind_email):
+        if self.context['request'].user.email:
+            raise serializers.ValidationError('该账户已有绑定邮箱！')
+        if User.objects.filter(email=bind_email).count():
+            raise serializers.ValidationError('该邮箱已被其他账户使用！')
+        return bind_email
+
+    class Meta:
+        model = User
+        fields = ("password", "bind_email", )
+
+
+class SecurityBindEmailSerializer(serializers.ModelSerializer):
+    bind_email = serializers.EmailField(max_length=100, help_text="新邮箱")
+    bind_captcha = serializers.CharField(required=True, write_only=True, max_length=6, min_length=6, help_text="验证码")
+
+    def validate_bind_email(self, bind_email):
+        if self.context['request'].user.email:
+            raise serializers.ValidationError('该账户已有绑定邮箱！')
+        if User.objects.filter(email=bind_email).count():
+            raise serializers.ValidationError('该邮箱已被其他账户使用！')
+        return bind_email
+
+    def validate_bind_captcha(self, bind_captcha):
+        captcha_list = CaptchaModel.objects.filter(email=self.initial_data['bind_email']).order_by("-create_time")
+        if captcha_list:
+            last_captcha = captcha_list[0]
+            five_minutes_ago = datetime.now() - timedelta(hours=0, minutes=5, seconds=0)
+            if five_minutes_ago > last_captcha.create_time:
+                raise serializers.ValidationError('该验证码过期，请重新获取！')
+            if last_captcha.code != bind_captcha:
+                raise serializers.ValidationError('该验证码错误，请检查输入！')
+        else:
+            raise serializers.ValidationError('验证码错误，请检查输入！')
+        return bind_captcha
+
+    class Meta:
+        model = User
+        fields = ("bind_email", "bind_captcha",)
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):

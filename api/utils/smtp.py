@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 
 
 def login_smtp(user):
-    subject = '主题'  # 主题
+    subject = '宿舍门禁管理系统 - 登录提醒'  # 主题
     message = '内容'  # 内容
     sender = '宿舍门禁管理系统<i@hualuoo.com>'
     receiver = [user[0].email]  # 目标邮箱
@@ -15,7 +15,7 @@ def login_smtp(user):
 
 
 def code_smtp(email, code):
-    subject = '主题'  # 主题
+    subject = '宿舍门禁管理系统 - 验证码'  # 主题
     message = '内容'  # 内容
     sender = '宿舍门禁管理系统<i@hualuoo.com>'
     receiver = [email]  # 目标邮箱

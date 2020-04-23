@@ -216,7 +216,7 @@ class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upd
         # 获取全部数据
         all_result = self.filter_queryset(self.get_queryset())
 
-        # 如果非管理员，仅搜索该用户
+        # 如果非管理员，仅搜索该用户的宿舍
         if request.user.is_superuser is False:
             all_result = all_result.filter(Q(dormitory=request.user.lived_dormitory))
 

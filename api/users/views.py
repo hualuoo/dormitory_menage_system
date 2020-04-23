@@ -14,12 +14,14 @@ from .serializers import UserResetPasswordSerializer, UserResetPasswordMultipleS
 from .serializers import UserFaceListSerializer
 from .serializers import UserChangePasswordAdminSerializer
 
-from .serializers import SecurityCheckOldEmailSerializer
+from .serializers import SecurityCheckOldEmailSerializer, SecurityConfirmOldEmailSerializer, SecurityChangeMobileSerializer, SecuritySendNewEmailCaptchaSerializer
+from .serializers import SecurityChangeEmailSerializer, SecurityChangePasswordSerializer
+from .serializers import SecurityCheckAccountPasswordSerializer, SecuritySendBindEmailCaptchaSerializer, SecurityBindEmailSerializer
 
 from .serializers import VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
 from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
 
-from datetime import datetime
+from datetime import datetime,timedelta
 
 from utils import smtp
 from utils.permission import UserIsSuperUser, UserIsSelf
@@ -641,13 +643,45 @@ class SecurityViewset(viewsets.GenericViewSet):
             return SecurityCheckOldEmailSerializer
         if self.action == "send_old_email_captcha":
             return SecurityCheckOldEmailSerializer
+        if self.action == "confirm_old_email_captcha":
+            return SecurityConfirmOldEmailSerializer
+        if self.action == "change_mobile":
+            return SecurityChangeMobileSerializer
+        if self.action == "change_password":
+            return SecurityChangePasswordSerializer
+        if self.action == "send_new_email_captcha":
+            return SecuritySendNewEmailCaptchaSerializer
+        if self.action == "change_email":
+            return SecurityChangeEmailSerializer
+        if self.action == "check_account_password":
+            return SecurityCheckAccountPasswordSerializer
+        if self.action == "send_bind_email_captcha":
+            return SecuritySendBindEmailCaptchaSerializer
+        if self.action == "bind_email":
+            return SecurityBindEmailSerializer
         return UserSerializer
     def get_permissions(self):
         if self.action == "check_old_email":
             return [IsAuthenticated()]
         if self.action == "send_old_email_captcha":
             return [IsAuthenticated()]
-        return []
+        if self.action == "confirm_old_email_captcha":
+            return [IsAuthenticated()]
+        if self.action == "change_mobile":
+            return [IsAuthenticated()]
+        if self.action == "change_password":
+            return [IsAuthenticated()]
+        if self.action == "send_new_email_captcha":
+            return [IsAuthenticated()]
+        if self.action == "change_email":
+            return [IsAuthenticated()]
+        if self.action == "check_account_password":
+            return [IsAuthenticated()]
+        if self.action == "send_bind_email_captcha":
+            return [IsAuthenticated()]
+        if self.action == "bind_email":
+            return [IsAuthenticated()]
+        return [IsAuthenticated()]
 
     @action(methods=['POST'], detail=False)
     def check_old_email(self, request, *args, **kwargs):
@@ -658,18 +692,10 @@ class SecurityViewset(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        if request.user.email is None:
-            return Response({
-                "detail": "未绑定邮箱！"
-            }, status=status.HTTP_400_BAD_REQUEST)
-        elif request.user.email == serializer.validated_data['email']:
-            return Response({
-                "detail": "检验输入成功"
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({
-                "detail": "邮箱输入错误"
-            }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({
+            "detail": "校验成功：邮箱输入正确！"
+        }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=False)
     def send_old_email_captcha(self, request, *args, **kwargs):
@@ -690,22 +716,21 @@ class SecurityViewset(viewsets.GenericViewSet):
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        if request.user.email is None:
-            return Response({
-                "detail": "未绑定邮箱！"
-            }, status=status.HTTP_400_BAD_REQUEST)
-        elif request.user.email == serializer.validated_data['email']:
-            code = generate_code()
-            smtp.code_smtp(request.user.email, code)
-            captcha = CaptchaModel(email=request.user.email, code=code)
-            captcha.save()
-            return Response({
-                "detail": "发送成功！"
-            }, status=status.HTTP_201_CREATED)
-        else:
-            return Response({
-                "detail": "邮箱输入错误"
-            }, status=status.HTTP_400_BAD_REQUEST)
+
+        captcha_list = CaptchaModel.objects.filter(email=serializer.validated_data['old_email']).order_by("-create_time")
+        if captcha_list:
+            if captcha_list[0].create_time >= datetime.now() - timedelta(hours=0, minutes=1, seconds=0):
+                return Response({
+                    "detail": "发送失败：一分钟内只能发送一次验证码！"
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        code = generate_code()
+        smtp.code_smtp(serializer.validated_data['old_email'], code)
+        captcha = CaptchaModel(email=request.user.email, code=code)
+        captcha.save()
+        return Response({
+            "detail": "验证码发送成功，请查收！"
+        }, status=status.HTTP_201_CREATED)
 
     @action(methods=['POST'], detail=False)
     def confirm_old_email_captcha(self, request, *args, **kwargs):
@@ -714,16 +739,156 @@ class SecurityViewset(viewsets.GenericViewSet):
             url: '/member/security/send_old_email_captcha/'
             type: 'post'
         """
-        if request.user.email is None:
-            return Response({
-                "detail": "未绑定邮箱！"
-            }, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            return Response({
-                "detail": "验证码正确！"
-            }, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({
+            "detail": "校验成功：验证码正确！"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=False)
+    def change_mobile(self, request, *args, **kwargs):
+        """
+            修改手机
+            url: '/member/security/change_mobile/'
+            type: 'post'
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        request.user.info.mobile = serializer.validated_data['new_mobile']
+        request.user.info.save()
+        return Response({
+            "detail": "操作成功：手机修改成功！",
+            "mobile": serializer.validated_data['new_mobile']
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=False)
+    def change_password(self, request, *args, **kwargs):
+        """
+            修改密码
+            url: '/member/security/change_password/'
+            type: 'post'
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        request.user.set_password(serializer.validated_data['new_password'])
+        request.user.save()
+        return Response({
+            "detail": "操作成功：账户密码修改成功！"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=False)
+    def send_new_email_captcha(self, request, *args, **kwargs):
+        """
+            向新邮箱发送验证码
+            url: '/member/security/send_new_email_captcha/'
+            type: 'post'
+        """
+        def generate_code():
+            """
+            生成六位数字的验证码
+            """
+            seeds = "1234567890"
+            random_str = []
+            for i in range(6):
+                random_str.append(choice(seeds))
+            return "".join(random_str)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        captcha_list = CaptchaModel.objects.filter(email=serializer.validated_data['new_email']).order_by("-create_time")
+        if captcha_list:
+            if captcha_list[0].create_time >= datetime.now() - timedelta(hours=0, minutes=1, seconds=0):
+                return Response({
+                    "detail": "发送失败：一分钟内只能发送一次验证码！"
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        code = generate_code()
+        smtp.code_smtp(serializer.validated_data['new_email'], code)
+        captcha = CaptchaModel(email=serializer.validated_data['new_email'], code=code)
+        captcha.save()
+        return Response({
+            "detail": "发送成功！"
+        }, status=status.HTTP_201_CREATED)
+
+    @action(methods=['POST'], detail=False)
+    def change_email(self, request, *args, **kwargs):
+        """
+            修改邮箱
+            url: '/member/security/change_email/'
+            type: 'post'
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        request.user.email = serializer.validated_data['new_email']
+        request.user.save()
+        return Response({
+            "detail": "操作成功：邮箱修改成功！",
+            "email": serializer.validated_data['new_email']
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=False)
+    def check_account_password(self, request, *args, **kwargs):
+        """
+            验证账户密码
+            url: '/member/security/check_account_password/'
+            type: 'post'
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({
+            "detail": "账户密码验证成功！"
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['POST'], detail=False)
+    def send_bind_email_captcha(self, request, *args, **kwargs):
+        """
+            向绑定邮箱发送验证码
+            url: '/member/security/send_bind_email_captcha/'
+            type: 'post'
+        """
+        def generate_code():
+            """
+            生成六位数字的验证码
+            """
+            seeds = "1234567890"
+            random_str = []
+            for i in range(6):
+                random_str.append(choice(seeds))
+            return "".join(random_str)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        captcha_list = CaptchaModel.objects.filter(email=serializer.validated_data['bind_email']).order_by("-create_time")
+        if captcha_list:
+            if captcha_list[0].create_time >= datetime.now() - timedelta(hours=0, minutes=1, seconds=0):
+                return Response({
+                    "detail": "发送失败：一分钟内只能发送一次验证码！"
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        code = generate_code()
+        smtp.code_smtp(serializer.validated_data['bind_email'], code)
+        captcha = CaptchaModel(email=serializer.validated_data['bind_email'], code=code)
+        captcha.save()
+        return Response({
+            "detail": "发送成功！"
+        }, status=status.HTTP_201_CREATED)
+
+    @action(methods=['POST'], detail=False)
+    def bind_email(self, request, *args, **kwargs):
+        """
+            绑定邮箱
+            url: '/member/security/bind_email/'
+            type: 'post'
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        request.user.email = serializer.validated_data['bind_email']
+        request.user.save()
+        return Response({
+            "detail": "操作成功：邮箱绑定成功！",
+            "email": serializer.validated_data['bind_email']
+        }, status=status.HTTP_200_OK)
 
 
 """
