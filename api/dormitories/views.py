@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Dormitory, WaterFees, ElectricityFees
 from .serializers import DormitorySerializer, DormitoryCreateSerializer, DormitoryOnChangeTransferSerializer, DormitoryChangeAllowLiveNumberSerializer, DormitoryChangeNoteSerializer
-from .serializers import WaterFeesSerializer, WaterFeesRechargeSerializer, WaterFeesChangeNoteSerializer
+from .serializers import WaterFeesSerializer, WaterFeesRechargeAdminSerializer, WaterFeesChangeNoteSerializer
 from .serializers import ElectricityFeesSerializer, ElectricityFeesRechargeSerializer, ElectricityFeesChangeNoteSerializer
 from users.models import User
 from user_operation.models import WaterFeesLog, ElectricityFeesLog
@@ -153,6 +153,8 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             user_dict["title"] = user.username + "(" + user.first_name + " " + user.last_name + ")"
             if user.is_staff is True:
                 user_dict["title"] += " ★"
+            if user.is_active is False:
+                user_dict["title"] += " ▲"
             users_list.append(user_dict.copy())
 
         dormitory = self.get_object()
@@ -162,6 +164,8 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             user_dict["title"] = user.username + "(" + user.first_name + " " + user.last_name + ")"
             if user.is_staff is True:
                 user_dict["title"] += " ★"
+            if user.is_active is False:
+                user_dict["title"] += " ▲"
             users_list.append(user_dict.copy())
 
         return Response({
@@ -288,8 +292,8 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
             return WaterFeesSerializer
         if self.action == "retrieve":
             return WaterFeesSerializer
-        if self.action == "recharge":
-            return WaterFeesRechargeSerializer
+        if self.action == "recharge_admin":
+            return WaterFeesRechargeAdminSerializer
         if self.action == "change_note":
             return WaterFeesChangeNoteSerializer
         return WaterFeesSerializer
@@ -299,7 +303,7 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
             return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), WaterFeesIsSelf()]
-        if self.action == "recharge":
+        if self.action == "recharge_admin":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "change_note":
             return [IsAuthenticated(), UserIsSuperUser()]
@@ -369,9 +373,9 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
             })
 
     @action(methods=['POST'], detail=True)
-    def recharge(self, request, *args, **kwargs):
+    def recharge_admin(self, request, *args, **kwargs):
         """
-        宿舍水费 充值
+        宿舍水费 管理员充值
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)

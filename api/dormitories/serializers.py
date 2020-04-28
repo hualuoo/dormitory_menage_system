@@ -139,7 +139,7 @@ class WaterFeesSerializer(serializers.ModelSerializer):
         fields = ("id", "dormitory_number", "have_water_fees", "have_water", "note", )
 
 
-class WaterFeesRechargeSerializer(serializers.ModelSerializer):
+class WaterFeesRechargeAdminSerializer(serializers.ModelSerializer):
     """
     宿舍水费 充值 序列类
     """

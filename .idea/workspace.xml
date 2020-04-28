@@ -3,10 +3,26 @@
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/access_control/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user_operation/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user_operation/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/user_operation/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/utils/jwt_custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/jwt_custom.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/utils/save_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/save_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/utils/smtp.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/smtp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/system/banner/2020/04/19/710579b54d234b18cdf1ccd870058bd5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/17/c478bff4293b0be66a20c034ffe83df2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/17/cc568a55a51eb426794d1f47148dddc5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/30/852050754272c5e50da0702c99162941.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/04/20/18d151596fbcb3ec2fb7de26e24d7173.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/face_photo/2020/04/16/2ff8c209850d93f2477a3fba656d2ef8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/face_photo/2020/04/16/852050754272c5e50da0702c99162941.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/users/face_photo/2020/04/20/6f10e6596680aa7164dbffb1409f7530.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/rest_framework_jwt/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/rest_framework_jwt/serializers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,13 +62,6 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\project\attendance_system\media\system\banner" />
-      <recent name="C:\project\attendance_system\api\system_setting\migrations" />
-      <recent name="C:\project\attendance_system\media\users\access_control" />
-      <recent name="C:\project\attendance_system\api\user_operation" />
-      <recent name="C:\project\attendance_system\api\users\backup" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\project\attendance_system\api\system_setting" />
       <recent name="C:\project\attendance_system\api" />
@@ -60,8 +69,15 @@
       <recent name="C:\project\attendance_system\api\rooms" />
       <recent name="C:\project\attendance_system\api\utils" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\project\attendance_system\media\system\banner" />
+      <recent name="C:\project\attendance_system\api\system_setting\migrations" />
+      <recent name="C:\project\attendance_system\media\users\access_control" />
+      <recent name="C:\project\attendance_system\api\user_operation" />
+      <recent name="C:\project\attendance_system\api\users\backup" />
+    </key>
   </component>
-  <component name="RunManager" selected="Django server.attendance_system">
+  <component name="RunManager" selected="Python.views (1)">
     <configuration name="clean-migrations" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="attendance_system" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -106,6 +122,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="views (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="attendance_system" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/access_control" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/access_control/views.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="views" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="attendance_system" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -136,14 +174,14 @@
         <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="attendance_system.settings" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\project\attendance_system\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
+      <option name="port" value="11453" />
+      <option name="host" value="0.0.0.0" />
       <option name="additionalOptions" value="" />
       <option name="browserUrl" value="" />
       <option name="runTestServer" value="false" />
@@ -152,8 +190,16 @@
       <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Django server.attendance_system" />
+      <item itemvalue="Python.clean-migrations" />
+      <item itemvalue="Python.start_app" />
+      <item itemvalue="Python.views" />
+      <item itemvalue="Python.views (1)" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.views (1)" />
         <item itemvalue="Python.views" />
         <item itemvalue="Python.start_app" />
         <item itemvalue="Python.clean-migrations" />
@@ -190,7 +236,7 @@
       <workItem from="1581844924356" duration="192092000" />
       <workItem from="1583754811610" duration="12766000" />
       <workItem from="1583855762209" duration="255382000" />
-      <workItem from="1587362878582" duration="44436000" />
+      <workItem from="1587362878582" duration="102914000" />
     </task>
     <servers />
   </component>
@@ -215,6 +261,10 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1124" y="429" key="#Inspections/0.0.2560.1400@0.0.2560.1400" timestamp="1582892801919" />
+    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587975716318">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1587975716318" />
     <state x="1310" y="664" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582179444313">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -223,26 +273,26 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1586442549849" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1587478654067">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1588058486307">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1587478654067" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1587478654067">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1588058486307" />
+    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1588058486307">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1587478654067" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1587478654067">
+    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1588058486307" />
+    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1588058486307">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1587478654067" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1587478654067">
+    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1588058486307" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1588058486307">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1587478654067" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1588058486307" />
     <state x="576" y="261" key="SettingsEditor" timestamp="1582024039431">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -256,6 +306,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/attendance_system$views.coverage" NAME="views Coverage Results" MODIFIED="1587298539517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/system_setting" />
+    <SUITE FILE_PATH="coverage/attendance_system$views__1_.coverage" NAME="views (1) Coverage Results" MODIFIED="1588054382591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/access_control" />
     <SUITE FILE_PATH="coverage/attendance_system$clean_migrations.coverage" NAME="clean-migrations Coverage Results" MODIFIED="1583133316467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
     <SUITE FILE_PATH="coverage/attendance_system$start_app.coverage" NAME="start_app Coverage Results" MODIFIED="1586442482188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
   </component>

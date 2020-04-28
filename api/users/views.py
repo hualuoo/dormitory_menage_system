@@ -431,11 +431,11 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             url: '/users/<pk>/set_avatar/'
             type: 'post'
         """
-        from utils.save_file import save_img
+        from utils.save_file import save_img_and_crop_1_1
 
         avatar = request.FILES.get("file")
 
-        flag = save_img(avatar, "users/avatar")
+        flag = save_img_and_crop_1_1(avatar, "users/avatar")
         if flag == 0:
             return Response({
                 "detail": "操作失败：未选择上传的文件！"
@@ -552,13 +552,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             url: '/users/<pk>/set_face/'
             type: 'post'
         """
-        from utils.save_file import save_img
+        from utils.save_file import save_img_and_crop_1_1
         from utils import face_recognition
         from attendance_system import settings
         import json
 
         image = request.FILES.get("file")
-        flag = save_img(image, "users/face_photo")
+        flag = save_img_and_crop_1_1(image, "users/face_photo")
         if flag == 0:
             return Response({
                 "detail": "操作失败：未选择上传的文件！"
@@ -577,11 +577,11 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
 
         if face_128d_features == 0:
             return Response({
-                "detail": "操作失败：未检测到人脸！"
+                "detail": "操作失败：未检测到人脸，请尝试将人脸置于正中！"
             }, status=status.HTTP_400_BAD_REQUEST)
         if face_128d_features == 1:
             return Response({
-                "detail": "操作失败：检测到多张人脸！"
+                "detail": "操作失败：检测到多张人脸，请保证图片中只保留一人！"
             }, status=status.HTTP_400_BAD_REQUEST)
 
         face_128d_features_list = []
@@ -603,7 +603,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             "code": 0,
             "msg": "操作成功：人脸数据设置成功！",
             "data": {
-                "src": "http://" + request.META['HTTP_HOST'] + "/face_photo/" + flag
+                "src": "http://" + request.META['HTTP_HOST'] + "/media/" + flag
             }
         }, status=status.HTTP_200_OK)
 

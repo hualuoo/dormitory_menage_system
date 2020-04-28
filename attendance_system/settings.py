@@ -212,3 +212,15 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = 'i@hualuoo.com'
 EMAIL_HOST_PASSWORD = 'dlsdykhqebzpbdba'
 EMAIL_FROM = 'hualuo<i@hualuoo.com>'
+
+"""
+ALiCloud_AFS
+"""
+ALICLOUD_AFS_ACCESSKEY = 'LTAI4Fh3HhsFavmxAr623YRd'
+ALICLOUD_AFS_ACCESS_SECRET = 'b0QYWiDGMbKKLhdU5MF8Pw0H68n2ff'
+
+"""
+CodePay
+"""
+CODEPAY_ID = '207619'
+CODEPAY_TOKEN = 'uHKuNNqpvWo951q6Ux1Tq0JapyD3llWb'

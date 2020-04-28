@@ -49,6 +49,15 @@ class RepairSerializer(serializers.ModelSerializer):
         fields = ("id", "title", "applicant__username", "applicant__first_name", "applicant__last_name", "dormitory__number", "content", "status", "add_time", )
 
 
+class RepairCreateSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(help_text="标题", max_length=50)
+    content = serializers.CharField(help_text="报修内容")
+
+    class Meta:
+        model = Repair
+        fields = ("title", "content", )
+
+
 class RepairLogSerializer(serializers.ModelSerializer):
     main_repair__id = serializers.IntegerField(source='main_repair.id', required=False)
     reply = serializers.CharField(help_text="报修回复")

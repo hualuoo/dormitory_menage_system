@@ -5,12 +5,13 @@ from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-
+from datetime import datetime
+from rest_framework.decorators import action
 
 from .models import WaterFeesLog, ElectricityFeesLog
 from .serializers import WaterFeesLogSerializer, ElectricityFeesLogSerializer
 from .models import Repair, RepairLog
-from .serializers import RepairSerializer, RepairLogSerializer, RepairLogCreateSerializer
+from .serializers import RepairSerializer, RepairCreateSerializer, RepairLogSerializer, RepairLogCreateSerializer
 from utils.permission import UserIsSuperUser, FeesLogIsSelf, RepairIsSelf, RepairLogIsSelf
 
 
@@ -179,7 +180,7 @@ class ElectricityFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin
             })
 
 
-class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     宿舍报修单 视图类
     """
@@ -194,6 +195,8 @@ class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upd
             return RepairSerializer
         if self.action == "update":
             return RepairSerializer
+        if self.action == "create":
+            return RepairCreateSerializer
         return RepairSerializer
 
     def get_permissions(self):
@@ -203,6 +206,8 @@ class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upd
             return [IsAuthenticated(), RepairIsSelf()]
         if self.action == "update":
             return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "create":
+            return [IsAuthenticated()]
         return []
 
     def list(self, request, *args, **kwargs):
@@ -269,6 +274,25 @@ class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upd
                 'data': serializer.data
             })
 
+    def create(self, request, *args, **kwargs):
+        """
+            报修单 创建
+
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        repair = Repair.objects.create(title=serializer.validated_data["title"],
+                                       content=serializer.validated_data["content"],
+                                       status="untreated",
+                                       add_time=datetime.now(),
+                                       applicant_id=self.request.user.id,
+                                       dormitory_id=self.request.user.lived_dormitory.id)
+        repair.save()
+
+        return Response({
+            "detail": "创建报修单成功！"
+        }, status=status.HTTP_200_OK)
 
 class RepairLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
@@ -357,6 +381,16 @@ class RepairLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        if Repair.objects.filter(id=serializer.validated_data["main_repair__id"]):
+            if Repair.objects.filter(id=serializer.validated_data["main_repair__id"]).first().status == "complete":
+                return Response({
+                    "detail": "主报修单已完成，无法回复！"
+                }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({
+                "detail": "查询不到主报修单！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         repair_log = RepairLog.objects.create(main_repair_id=serializer.validated_data["main_repair__id"],
                                               reply=serializer.validated_data["reply"],
                                               reply_type=serializer.validated_data["reply_type"],
@@ -372,3 +406,12 @@ class RepairLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         return Response({
             "detail": "回复成功！"
         }, status=status.HTTP_200_OK)
+
+
+class FeesRechargeOrderViewset(viewsets.GenericViewSet):
+    """
+    充值 订单
+    """
+    @action(methods=['POST'], detail=False)
+    def create_order(self, request, *args, **kwargs):
+        create_order_result = requests
