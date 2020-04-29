@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/animate.css/3.5.2/animate.min.css" />
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+	</head>
+
+	<body class="pb12 fadeIn animated">
+		<div class="p3 f30 f30 w75">
+			<form>
+				<div class="pt5 pb5">
+					<span class="col-3">充值宿舍：</span>
+					<span class="col-9">
+						<input type="text" class="w59 form-control input_text" id="user_lived_dormitory" placeholder="暂未居住" style="width: 100px;" disabled="disabled" />
+					</span>
+				</div>
+				<div class="pt5 pb5">
+					<span class="col-3">充值对象：</span>
+					<div class="col-9" id="recharge_object_div">
+					</div>
+				</div>
+				<div class="pt5 pb5">
+					<span class="col-3">充值金额：</span>
+					<span class="col-9">
+						<input type="text" class="w59 form-control input_text" id="price_input" placeholder="" style="width: 60px;"/> 元
+					</span>
+				</div>
+				<div class="pt5 pb5">
+					<span class="col-3">充值数量：</span>
+					<span class="col-9" id="recharge_number">
+						
+					</span>
+				</div>
+				<div class="pt1 pb1">
+					<span class="col-3">充值方式：</span>
+					<span class="col-9">
+						<label>
+                        	<div class="type_select alipay_select">
+                            	<input type="radio" name="recharge_type" value="1" checked="checked">
+                        	</div>
+                    	</label>
+						<label>
+                        	<div class="type_select wechat_select">
+                        		   <input type="radio" name="recharge_type" value="3">
+                        	</div>
+                    	</label>
+						<label>
+                        	<div class="qqpay_select type_select">
+                         	   	<input type="radio" name="recharge_type" value="2">
+                        	</div>
+                    	</label>
+					</span>
+				</div>
+				<div class="pt5 pb5">
+					&emsp;
+				</div>
+				<div class="t-c mt5">
+					<input type="button" class="btn f30 btn-primary radius10 p2 w50" value="支付宝支付" id="submit_button" onclick="recharge_create()" />
+				</div>
+			</form>
+		</div>
+		<!-- check-token -->
+		<script src="js/check-token.js"></script>
+		<script>
+			// 初始化数据
+			var water_fees = '';
+			var electricity_fees = '';
+
+			// 充值方式修改监听
+			var recharge_type = document.getElementsByName('recharge_type');
+			for(var i = 0; i < recharge_type.length; i++) {
+				recharge_type[i].onclick = function() {
+					switch(parseInt(this.value)) {
+						case 1:
+							document.getElementById('submit_button').value = '支付宝支付';
+							break;
+						case 2:
+							document.getElementById('submit_button').value = 'QQ钱包支付';
+							break;
+						case 3:
+							document.getElementById('submit_button').value = '微信支付';
+							break;
+						default:
+							document.getElementById('submit_button').value = '支付宝支付';
+					}
+				}
+			}
+
+			// 数据加载
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/users/get_info_self/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					$('#user_lived_dormitory').val(data.lived_dormitory);
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 1
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/system_setting/get_fees/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				async: false,
+				success: function(data) {
+					var recharge_object_html = '';
+					data.map(function(value, index, arr) {
+						if(value.code == "water_fees") {
+							recharge_object_html += '<label class="mr3"><input type="radio" class="check" name="recharge_object" value="water" checked="checked"/> 水费(' + value.content + '元/吨)</label></br>';
+							water_fees = value.content;
+						}
+						if(value.code == "electricity_fees") {
+							recharge_object_html += '<label class="mr3"><input type="radio" class="check" name="recharge_object" value="electricity"/> 电费(' + value.content + '元/千瓦时)</label></br>';
+							electricity_fees = value.content;
+						}
+					});
+					$('#recharge_object_div').html(recharge_object_html);
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 1
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
+			
+			// 修改充值数量
+			function edit_recharge_number(inputContent, recharge_object){
+				if(inputContent == '') {
+					$('#recharge_number').html('');
+					return false;
+				}
+				if (!(/(^[1-9]\d*$)/.test(inputContent))) {
+					$('#recharge_number').html('充值金额只能为正整数');
+					return false;
+				}
+				if (Number(inputContent) > 1000){
+					$('#recharge_number').html('充值金额不能大于1000元');
+					return false;
+				}
+				if (recharge_object == "water"){
+					$('#recharge_number').html((Number(inputContent)/Number(water_fees)).toFixed(2) + '吨');
+					return false;
+				}
+				if (recharge_object == "electricity"){
+					$('#recharge_number').html((Number(inputContent)/Number(electricity_fees)).toFixed(2) + '度');
+					return false;
+				}
+			}
+
+			// 输入金额监听
+			$('#price_input').on('input', function() {
+				var inputContent = $.trim($('#price_input').val());
+				edit_recharge_number(inputContent, $("input[name='recharge_object']:checked").val());
+			});
+			
+			// 充值对象修改监听
+			var recharge_object = document.getElementsByName('recharge_object');
+			for(var i = 0; i < recharge_object.length; i++) {
+				recharge_object[i].onclick = function() {
+					edit_recharge_number($.trim($('#price_input').val()), this.value);
+				}
+			}
+
+			// "支付"按钮 点击
+			function recharge_create() {
+				$.ajax({
+					url: "http://s1.mc.fyi:11453/fees_recharge_order/create_order/",
+					type: "post",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					data: {
+						'price': $.trim($('#price_input').val()),
+						'type': $("input[name='recharge_type']:checked").val(),
+						'object': $("input[name='recharge_object']:checked").val()
+					},
+					success: function(data) {
+						layer.open({
+							content: '创建订单正常，正在跳转支付界面！',
+							skin: 'msg',
+							time: 1
+						});
+						console.log(data.url);
+						setTimeout('location.href = "' + data.url + '"', 1000);
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						if(json_responseText.price) {
+							layer.open({
+								content: '充值金额：' + json_responseText.price[0],
+								skin: 'msg',
+								time: 1
+							});
+							$('#price_input').focus();
+							return false;
+						}
+						if(json_responseText.type) {
+							layer.open({
+								content: '充值方式：' + json_responseText.type[0],
+								skin: 'msg',
+								time: 1
+							});
+							return false;
+						}
+						if(json_responseText.object) {
+							layer.open({
+								content: '充值对象：' + json_responseText.object[0],
+								skin: 'msg',
+								time: 1
+							});
+							return false;
+						}
+						if(json_responseText.detail) {
+							layer.open({
+								content: '操作失败：' + json_responseText.detail,
+								skin: 'msg',
+								time: 1
+							});
+							return false;
+						}
+						layer.open({
+							content: '操作失败：出现未知错误，请联系管理！',
+							skin: 'msg',
+							time: 1
+						});
+					}
+				});
+			}
+		</script>
+
+		<style type="text/css">
+			.userbox {
+				line-height: 2em;
+				background: url(img/s5.jpg) center 40% no-repeat;
+				background-size: cover
+			}
+			
+			.userbox-l img {
+				border: 2px solid #fff;
+			}
+			
+			li {
+				line-height: 2.5em;
+				border-top: 1px solid #F1F1F1;
+				border-bottom: 1px solid #F1F1F1;
+				margin-top: -1px;
+			}
+			
+			li a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.input_text {
+				padding: 10px 10px;
+				border: 1px solid #d5d9da;
+				border-radius: 5px;
+				box-shadow: 0 0 5px #e8e9eb inset;
+				width: 120px;
+				font-size: 1em;
+				outline: 0;
+			}
+			
+			.input_text:focus {
+				border: 1px solid #b9d4e9;
+				border-top-color: #b6d5ea;
+				border-bottom-color: #b8d4ea;
+				box-shadow: 0 0 5px #b9d4e9;
+			}
+			
+			.alipay_select {
+				width: 140px;
+				background: url(http://codepay.fateqq.com/img/alipay.jpg) no-repeat 14px 0;
+			}
+			
+			.qqpay_select {
+				width: 140px;
+				background: url(http://codepay.fateqq.com/img/qqpay.jpg) no-repeat 8px -2px;
+			}
+			
+			.wechat_select {
+				width: 140px;
+				background: url(http://codepay.fateqq.com/img/weixin.jpg) no-repeat 14px 0;
+			}
+			
+			.type_select {
+				float: left;
+				padding: 1px;
+				margin: 5px 5px 0px 0px;
+				border: 1px solid #80C5FF;
+				color: #0061F3;
+				font-size: 13px;
+				padding: 5px;
+				margin-left: 0px;
+				float: left;
+				padding-left: 2px;
+				padding-right: 20px;
+				padding-top: 14px;
+				height: 40px;
+			}
+			
+			input,
+			label {
+				vertical-align: middle;
+			}
+		</style>
+
+	</body>
+
+</html>

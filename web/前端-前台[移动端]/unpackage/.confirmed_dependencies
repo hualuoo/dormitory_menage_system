@@ -1,0 +1,10 @@
+{
+	"my.html": {
+		"resources": [
+			"user_info.html"
+		],
+		"refer": [
+			"user_info.html"
+		]
+	}
+}

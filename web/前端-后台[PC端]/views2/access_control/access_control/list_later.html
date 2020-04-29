@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>门禁记录 - 晚归</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/template.css" media="all">
+	</head>
+
+	<style type="text/css">
+		.layui-table-cell {
+			height: auto;
+			line-height: 38px;
+		}
+	</style>
+
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" id="usersearch">
+					<div class="layui-form-item layui-row">
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">真实姓名</label>
+							<div class="layui-input-block">
+								<input type="text" name="id" placeholder="姓" autocomplete="off" class="layui-input" id="users_search_firstname">
+							</div>
+							<div class="layui-input-block">
+								<input type="text" name="id" placeholder="名" autocomplete="off" class="layui-input" id="users_search_lastname">
+							</div>
+						</div>
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">用户名</label>
+							<div class="layui-input-block">
+								<input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input" id="users_search_username">
+							</div>
+							<label class="layui-form-label">手机号码</label>
+							<div class="layui-input-block">
+								<input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input" id="users_search_mobile">
+							</div>
+						</div>
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">绑定邮箱</label>
+							<div class="layui-input-block">
+								<input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input" id="users_search_email">
+							</div>
+						</div>
+						<div class="layui-col-sm2 layui-col-md-offset1">
+							<button class="layui-btn" id="users_search_button">
+                        		<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i> 搜索
+                    		</button>
+							<button class="layui-btn layui-btn-warm" id="users_search_clean_button">
+                        		<i class="layui-icon layui-icon-senior layuiadmin-button-btn"></i> 清空
+                    		</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-card-body layui-form">
+					<div id="access_control_flow_div">
+						<ul class="flow-default" id="access_control_flow"></ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.all.js"></script>
+
+		<script src="../../../layuiadmin/js/check-token.js"></script>
+
+		<script>
+			function flow_load(url) {
+				layui.flow.load({
+					elem: '#access_control_flow', //流加载容器
+					done: function(page, next) { //执行下一页的回调
+						var lis = [];
+						//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+
+						var flow_data = "";
+						$.ajax({
+							method: "get",
+							url: url + '&page=' + page,
+							async: false,
+							headers: {
+								"Authorization": "JWT " + localStorage.getItem("cache_token")
+							},
+							success: function(data) {
+								flow_data = data;
+							},
+							error: function(jqXHR) {
+								var json_responseText = JSON.parse(jqXHR.responseText);
+								layer.msg(json_responseText.error, {
+									icon: 2,
+									anim: 6
+								});
+							}
+						});
+
+						layui.each(flow_data.data, function(index, item) {
+							var str = '<div class="layui-col-md2 layui-col-sm4" >' +
+								'<div class="cmdlist-container">' +
+								'<a href="javascript:;" onclick="access_control_detailed(' + item.id + ')">' +
+								'<img src="' + item.photo + '">' +
+								'<div style="position: absolute;margin-right:0px;margin-top:-82px;width:80px;border:1px solid #0000FF;"><img src="' + item.person__face__photo + '"></div>' +
+								'</a>' +
+								'<a href="javascript:;">' +
+								'<div class="cmdlist-text">' +
+								'<p class="info">' + item.person__username + '(' + item.person__first_name + item.person__last_name + ')</br>';
+							if(item.status == "normal") {
+								str += '<span class="layui-badge layui-bg-green">正常</span>';
+							}
+							if(item.status == "later") {
+								str += '<span class="layui-badge layui-bg-orange">晚归</span>';
+							}
+							if(item.status == "abnormal") {
+								str += '<span class="layui-badge">异常</span>';
+							}
+							str += ' 准确率' + item.accuracy + '%</p>' +
+								'<div class="price">' +
+								'<b>' + item.add_time + '</b>' +
+								'</div>' +
+								'</div>' +
+								'</a>' +
+								'</div>' +
+								'</div>'
+							lis.push(str);
+						});
+						var i = flow_data.data.length;
+						while(i % 6 != 0) {
+							for(var j = 0; j < 16; j++)
+								lis.push('<div class="layui-col-md2 layui-col-sm4">&nbsp;</div>');
+							i++;
+						}
+						//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+						next(lis.join(''), page < flow_data.pages);
+					}
+				});
+			}
+
+			layui.use('flow', function() {
+				var flow = layui.flow;
+
+				flow_load('http://127.0.0.1:11453/access_control/?limit=12&search_status=later');
+
+				// 模糊查询"搜索"按钮
+				$('#users_search_button').click(function() {
+					var url_value = '&search_firstname=' + $('#users_search_firstname').val().trim() +
+						'&search_lastname=' + $('#users_search_lastname').val().trim() +
+						'&search_username=' + $('#users_search_username').val().trim() +
+						'&search_mobile=' + $('#users_search_mobile').val().trim() +
+						'&search_email=' + $('#users_search_email').val().trim();
+
+					//执行重载
+					$("#access_control_flow").remove();
+					$("#access_control_flow_div").append("<ul id=\"access_control_flow\"></ul>");
+
+					flow_load('http://127.0.0.1:11453/access_control/?limit=12&search_status=later' + url_value);
+				});
+
+				// 模糊查询"清空"按钮
+				$('#users_search_clean_button').click(function() {
+					$('#users_search_firstname').val("");
+					$('#users_search_lastname').val("");
+					$('#users_search_username').val("");
+					$('#users_search_mobile').val("");
+					$('#users_search_email').val("");
+
+					//执行重载
+					$("#access_control_flow").remove();
+					$("#access_control_flow_div").append("<ul id=\"access_control_flow\"></ul>");
+
+					flow_load('http://127.0.0.1:11453/access_control/?limit=12&search_status=later');
+				});
+
+				//搜索区域DIV回车监听
+				$("#usersearch").bind("keydown", function(e) {
+					// 兼容FF和IE和Opera
+					var theEvent = e || window.event;
+					var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+					if(code == 13) {
+						//回车执行查询
+						$("#users_search_button").click();
+					}
+				});
+			});
+
+			// 点击方格触发
+			function access_control_detailed(id) {
+				layer.open({
+					type: 2,
+					title: '门禁信息详情',
+					content: 'access_control_detailed.html?access_control_id=' + id,
+					shadeClose: true,
+					maxmin: true,
+					area: ['801px', '704px'],
+					btn: ['修改', '取消'],
+					yes: function(index, layero) {
+						var iframeWindow = window['layui-layer-iframe' + index],
+							submitID = 'LAY-access_control-front-submit',
+							submit = layero.find('iframe').contents().find('#' + submitID);
+
+						//监听提交
+						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
+							var field = data.field; //获取提交的字段
+							$.ajax({
+								url: "http://127.0.0.1:11453/access_control/" + id + "/",
+								type: "put",
+								headers: {
+									"Authorization": "JWT " + localStorage.getItem("cache_token")
+								},
+								dataType: "json",
+								data: {
+									"status": field.access_control_status,
+									"note": field.access_control_note
+								},
+								success: function(data) {
+									layer.msg(data.msg, {
+										icon: 1,
+										time: 2000
+									})
+									layer.close(index); //关闭弹层
+								},
+								error: function(jqXHR) {
+									var json_responseText = JSON.parse(jqXHR.responseText);
+									if(json_responseText.status) {
+										layer.msg(json_responseText.status[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#access_control_status').focus();
+										return false;
+									}
+									if(json_responseText.note) {
+										layer.msg(json_responseText.note[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#access_control_note').focus();
+										return false;
+									}
+									if(json_responseText.msg) {
+										layer.msg(json_responseText.msg, {
+											icon: 2,
+											anim: 6
+										});
+										return false;
+									}
+								}
+							});
+						});
+						submit.trigger('click');
+					},
+					btn2: function(index, layero) {
+						layer.close(index);
+					},
+					end: function(index, layero) {
+						$("#users_search_button").click();
+					}
+				})
+			}
+		</script>
+	</body>
+
+</html>

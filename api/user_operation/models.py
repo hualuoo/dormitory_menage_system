@@ -30,13 +30,14 @@ class FeesRechargeOrder(models.Model):
     """
     operator = models.ForeignKey(User, verbose_name="操作人", on_delete=models.CASCADE, null=False,
                                  related_name='fees_recharge_order_s_operator')
-    price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="充值金额(元)")
+    price = models.IntegerField(verbose_name="充值金额(元)")
     recharge_dormitory = models.ForeignKey(Dormitory, verbose_name="宿舍", on_delete=models.CASCADE, null=False, related_name='fees_recharge_order_s_dormitory')
     recharge_object = models.CharField(verbose_name="充值对象", max_length=11, choices=(("water", "水费"), ("electricity", "电费")), default="water")
-    recharge_type = models.CharField(verbose_name="充值方式", max_length=6, choices=(("alipay", "支付宝"), ("qpay", "QQ钱包"), ("wechar", "微信")), default="alipay")
+    recharge_number = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="充值数量")
+    recharge_type = models.CharField(verbose_name="充值方式", max_length=6, choices=(("alipay", "支付宝"), ("qqpay", "QQ钱包"), ("wechar", "微信")), default="alipay")
     recharge_status = models.CharField(verbose_name="充值状态", max_length=7, choices=(("success", "充值成功"), ("closed", "超时关闭"), ("paying", "待支付")), default="paying")
     pay_id = models.CharField(verbose_name="充值订单号", max_length=100)
-    pay_no = models.CharField(verbose_name="充值流水号(支付平台订单号)", max_length=100)
+    pay_no = models.CharField(verbose_name="充值流水号(支付平台订单号)", max_length=100, null=True)
 
     class Meta:
         verbose_name = "充值订单记录"

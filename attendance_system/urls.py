@@ -24,7 +24,7 @@ from attendance_system.settings import MEDIA_ROOT
 from users.views import UserViewset, SecurityViewset
 
 from dormitories.views import DormitoryViewset, WaterFeesViewset, ElectricityFeesViewset
-from user_operation.views import WaterFeesLogViewset, ElectricityFeesLogViewset, RepairViewset, RepairLogViewset
+from user_operation.views import WaterFeesLogViewset, ElectricityFeesLogViewset, RepairViewset, RepairLogViewset, FeesRechargeOrderViewset
 from access_control.views import AccessControlViewset
 from system_setting.views import SystemSettingViewset
 
@@ -43,6 +43,7 @@ router.register(r'repair', RepairViewset, basename="repair")
 router.register(r'repair_log', RepairLogViewset, basename="repair_log")
 router.register(r'access_control', AccessControlViewset, basename="access_control")
 router.register(r'system_setting', SystemSettingViewset, basename="system_setting")
+router.register(r'fees_recharge_order', FeesRechargeOrderViewset, basename="fees_recharge_order")
 
 router.register(r'member/security', SecurityViewset, basename="security")
 

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>异常申请列表 - 未处理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	</head>
+
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" id="abnormal_application_search">
+					<div class="layui-form-item layui-row">
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">真实姓名</label>
+							<div class="layui-input-block">
+								<input type="text" name="id" placeholder="姓" autocomplete="off" class="layui-input" id="abnormal_application_search_firstname">
+							</div>
+							<div class="layui-input-block">
+								<input type="text" name="id" placeholder="名" autocomplete="off" class="layui-input" id="abnormal_application_search_lastname">
+							</div>
+						</div>
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">用户名</label>
+							<div class="layui-input-block">
+								<input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input" id="abnormal_application_search_username">
+							</div>
+							<label class="layui-form-label">手机号码</label>
+							<div class="layui-input-block">
+								<input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input" id="abnormal_application_search_mobile">
+							</div>
+						</div>
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">绑定邮箱</label>
+							<div class="layui-input-block">
+								<input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input" id="abnormal_application_search_email">
+							</div>
+						</div>
+						<div class="layui-col-sm2 layui-col-md-offset1">
+							<button class="layui-btn" id="abnormal_application_search_button">
+                        		<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i> 搜索
+                    		</button>
+							<button class="layui-btn layui-btn-warm" id="abnormal_application_search_clean_button">
+                        		<i class="layui-icon layui-icon-senior layuiadmin-button-btn"></i> 清空
+                    		</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-card-body layui-form">
+						<table id="LAY-access_control_abnormal_application-manage" lay-filter="LAY-access_control_abnormal_application-manage"></table>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.all.js"></script>
+		<script src="../../../layuiadmin/js/check-token.js"></script>
+
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-inline" lay-event="refresh" onclick="layui.table.reload('LAY-access_control_abnormal_application-manage')">
+				<i class="layui-icon layui-icon-refresh"></i>
+			</div>
+		</script>
+
+		<script>
+			layui.use(['table'], function() {
+				var table = layui.table;
+				var laydate = layui.laydate;
+				table.render({
+					elem: '#LAY-access_control_abnormal_application-manage',
+					autoSort: false, //禁用前端自动排序
+					toolbar: '#toolbarDemo',
+					url: 'http://127.0.0.1:11453/access_control/get_abnormal_application_list/',
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					where: {
+						"is_pending": "true"
+					},
+					limit: 10,
+					limits: [10, 20, 50, 100],
+					height: 'full-158',
+					initSort: {
+						field: 'add_time', //排序字段，对应 cols 设定的各字段名
+						type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+					},
+					cols: [
+						[{
+								field: 'id',
+								title: '申请ID',
+								width: '8%',
+								align: 'center',
+								sort: true,
+								rowspan: 2
+							},
+							{
+								field: 'add_time',
+								width: '13%',
+								title: '申请时间',
+								align: 'center',
+								sort: true,
+								rowspan: 2
+							},
+							{
+								field: '',
+								width: '13%',
+								title: '门禁记录',
+								align: 'center',
+								templet: function(d) {
+									return d.main_record.person__username;
+								},
+								colspan: 6
+							},
+							{
+								field: 'used_info',
+								width: '11%',
+								title: '结果',
+								align: 'center',
+								templet: function(d) {
+									if(d.result == "pending") {
+										return '<span class="layui-badge layui-bg-orange">待处理</span>';
+									}
+									if(d.result == "pass") {
+										return '<span class="layui-badge layui-bg-green">通过</span>';
+									}
+									if(d.result == "fail") {
+										return '<span class="layui-badge">未通过</span>';
+									}
+								},
+								rowspan: 2
+							},
+							{
+								field: 'operation',
+								title: '操作',
+								width: '9%',
+								align: 'center',
+								fixed: 'right',
+								templet: function(d) {
+									var str = '<a class="layui-btn layui-btn-primary layui-btn-xs" onclick="repair_detailed(' + d.main_record.id + ');"><i class="layui-icon layui-icon-cols"></i>查看</a>';
+									return str;
+								},
+								rowspan: 2
+							}
+						],
+						[{
+								field: 'main_record__id',
+								width: '7%',
+								title: '编号',
+								align: 'center',
+								sort: true,
+								templet: function(d) {
+									return d.main_record.id;
+								},
+								rowspan: 2
+							},
+							{
+								field: 'main_record__person__username',
+								width: '12%',
+								title: '用户名',
+								align: 'center',
+								sort: true,
+								templet: function(d) {
+									return d.main_record.person__username;
+								},
+							},
+							{
+								field: 'main_record__person__first_name',
+								width: '9%',
+								title: '姓名',
+								align: 'center',
+								sort: true,
+								templet: function(d) {
+									return d.main_record.person__first_name + d.main_record.person__last_name;
+								}
+							},
+							{
+								field: 'main_record__add_time',
+								width: '13%',
+								title: '发生时间',
+								align: 'center',
+								sort: true,
+								templet: function(d) {
+									return d.main_record.add_time;
+								}
+							},
+							{
+								field: 'main_record__accuracy',
+								width: '9%',
+								title: '准确度',
+								align: 'center',
+								sort: true,
+								templet: function(d) {
+									return d.main_record.accuracy;
+								}
+							},
+							{
+								field: 'main_record__status',
+								width: '9%',
+								title: '当前状态',
+								align: 'center',
+								sort: true,
+								templet: function(d) {
+									if(d.main_record.status == "normal") {
+										return '<span class="layui-badge layui-bg-green">正常</span>';
+									}
+									if(d.main_record.status == "later") {
+										return '<span class="layui-badge layui-bg-orange">晚归</span>';
+									}
+									if(d.main_record.status == "abnormal") {
+										return '<span class="layui-badge">异常</span>';
+									}
+								}
+							}
+						]
+					],
+					page: true,
+					done: function(res, curr, count) {
+						//数据的回调用，可不写
+					}
+				});
+
+				// 监听单元格事件<排序>
+				table.on('sort(LAY-access_control_abnormal_application-manage)', function(obj) { //注：tool是工具条事件名，LAY-access_control_abnormal_application-manage是table原始容器的属性 lay-filter="对应的值"
+					//尽管我们的 table 自带排序功能，但并没有请求服务端。
+					//有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+					table.reload('LAY-access_control_abnormal_application-manage', { //LAY-access_control_abnormal_application-manage是表格容器id
+						initSort: obj, //记录初始排序，如果不设的话，将无法标记表头的排序状态。 layui 2.1.1 新增参数
+						where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+							field: obj.field, //排序字段
+							order: obj.type //排序方式
+						}
+					});
+				});
+
+				// 模糊查询"搜索"按钮
+				$('#abnormal_application_search_button').click(function() {
+					//执行重载
+					table.reload('LAY-access_control_abnormal_application-manage', {
+						page: {
+							curr: 1 //重新从第 1 页开始
+						},
+						where: {
+							search_firstname: $('#abnormal_application_search_firstname').val().trim(),
+							search_lastname: $('#abnormal_application_search_lastname').val().trim(),
+							search_username: $('#abnormal_application_search_username').val().trim(),
+							search_mobile: $('#abnormal_application_search_mobile').val().trim(),
+							search_email: $('#abnormal_application_search_email').val().trim()
+						}
+					}, 'data');
+				});
+
+				// 模糊查询"清空"按钮
+				$('#abnormal_application_search_clean_button').click(function() {
+					$('#abnormal_application_search_firstname').val("");
+					$('#abnormal_application_search_lastname').val("");
+					$('#abnormal_application_search_username').val("");
+					$('#abnormal_application_search_mobile').val("");
+					$('#abnormal_application_search_email').val("");
+					table.reload('LAY-access_control_abnormal_application-manage', {
+						where: {
+							search_firstname: '',
+							search_lastname: '',
+							search_username: '',
+							search_mobile: '',
+							search_email: ''
+						}
+					}, 'data');
+				});
+
+				//搜索区域DIV回车监听
+				$("#abnormal_application_search").bind("keydown", function(e) {
+					// 兼容FF和IE和Opera
+					var theEvent = e || window.event;
+					var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+					if(code == 13) {
+						//回车执行查询
+						$("#abnormal_application_search_button").click();
+					}
+				});
+
+			})
+
+			// 表单修饰 "只显示已完成报修单"
+			layui.use('form', function() {
+				var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+				form.render();
+				form.on('checkbox(abnormal_application_is_pending)', function(data) {
+					if(data.elem.checked) {
+						layui.table.reload('LAY-access_control_abnormal_application-manage', {
+							where: {
+								'is_pending': 'false'
+							}
+						}, 'data');
+					} else {
+						layui.table.reload('LAY-access_control_abnormal_application-manage', {
+							where: {
+								'is_pending': 'all'
+							}
+						}, 'data');
+					}
+				});
+			});
+
+			//"查看"按钮
+			function repair_detailed(id) {
+				layer.open({
+					type: 2,
+					title: '详单',
+					content: 'abnormal_application_detailed.html?access_control_id=' + id,
+					shadeClose: true,
+					maxmin: true,
+					area: ['800px', '723px'],
+					btn: ['关闭'],
+					btn1: function(index, layero) {
+						layer.close(index); //关闭弹层
+					},
+					end: function() {
+						layui.table.reload('LAY-access_control_abnormal_application-manage');
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

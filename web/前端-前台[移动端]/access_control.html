@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- ui css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- 瀑布流 -->
+		<script src="plugins/myflow.js" type="text/javascript"></script>
+		<!-- 字体图标 -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+	</head>
+
+	<body class="t-c fadeIn animated" style="padding-bottom: 55px;">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-success t-c o-h header">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				门禁记录
+			</div>
+			<!--<div class="ui-header-r fl w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>-->
+		</header>
+		<div class="main">
+			<div class="myflowBox color4 f30"></div>
+			<div class="mt2 mb4 f28">
+				<span class="btn btn-primary radius10 w68 p2 jiazai" id="load_button">点击加载</span>
+			</div>
+		</div>
+		<!-- 底部导航 -->
+		<div class="footer"></div>
+
+		<style type="text/css">
+			.myflowBox {
+				line-height: 2em;
+				border-bottom: 1px solid #ccc;
+			}
+			
+			.ui-myflow-item {
+				padding-top: 0.2rem;
+			}
+			
+			.ui-myflow-item:first-child {
+				border-right: 1px solid #ccc;
+			}
+			
+			.ui-myflow-item:last-child {
+				border-left: 1px solid #ccc;
+				margin-left: -1px;
+			}
+		</style>
+		<script type="text/javascript">
+			// 获取公共底部
+			$(document).ready(function() {
+				$(".footer").load("footer.html");
+			});
+
+			//瀑布流
+			var page = 0;
+			$(".jiazai").click(function() {
+				page++;
+				$(".myflowBox").myflow({
+					url: 'http://s1.mc.fyi:11453/access_control/?limit=12&search_status=all&page=' + page,
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					colspan: 2,
+					//clearlist:true,
+					template: function(data) {
+						var html = '<a href="access_control_detailed.html?access_control_id=' + data.id + '"><dl class="pb1">' +
+							'<dt>' +
+							'<img src="' + data.photo + '" class="w33"/>' +
+							'</dt>' +
+							'<dd>';
+						if(data.status == "normal") {
+							html += '<span class="tag tag-success f28">正常</span>';
+						}
+						if(data.status == "later") {
+							html += '<span class="tag tag-warning f28">晚归</span>';
+						}
+						if(data.status == "abnormal") {
+							html += '<span class="tag tag-danger f28">异常</span>';
+						}
+						html += '<span class="f28"> ' + data.add_time + '</span></dd>' +
+							'</dl></a>';
+						return html;
+					},
+					dataArr: function(data) {
+						if(data.pages == page) {
+							$('#load_button').html("已到结尾");
+							$('#load_button').attr("class", "btn disable radius10 w68 p2");
+							document.getElementById("load_button").disabled = true;
+						}
+						return data.data;
+					}
+				});
+			}).click();
+		</script>
+		<!-- 返回顶部 -->
+		<div class="ui-scrollTop radius-o bg-color-warning w10 h10 t-c pt1 f50 color8" onclick="goTop();">
+			<i class="icon iconfont icon-fanhuidingbu "></i>
+		</div>
+		<style>
+			.ui-scrollTop {
+				position: fixed;
+				right: 0.2rem;
+				bottom: 1.36rem;
+				cursor: pointer;
+			}
+			
+			.header {
+				padding-bottom: 10%;
+				width: 100%;
+				position: fixed;
+				top: 0px;
+				left: 0px;
+				z-index: 9998;
+			}
+			
+			.main {
+				position: absolute;
+				width: 100%;
+				height: auto;
+				top: 40px;
+				padding-bottom: 60px;
+			}
+		</style>
+	</body>
+
+</html>

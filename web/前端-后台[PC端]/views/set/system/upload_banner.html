@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>上传Banner</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/js/cropper/cropper.css">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+		<style>
+			#choice-btn {
+				display: inline-block;
+				height: 38px;
+				line-height: 38px;
+				padding: 0 18px;
+				background-color: #009688;
+				color: #fff;
+				white-space: nowrap;
+				text-align: center;
+				font-size: 14px;
+				border: none;
+				border-radius: 2px;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div style="margin: 20px;">
+			<div style="margin-bottom:15px;">
+				<label for="cropper_imgUpload">
+            		<span id="choice-btn">
+            			<i class="layui-icon layui-icon-upload"></i>选择图片
+            		</span>
+        		</label>
+				<input type="file" id="cropper_imgUpload" name="file" style="display:none" accept="image/*">
+			</div>
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-xs9">
+					<div id="readyimg" style="height: 374px;width: 100%;border: 1px dashed black;background-color: rgb(247, 247, 247);">
+						<img id="img" src="" alt="">
+					</div>
+				</div>
+				<div class="layui-col-xs3">
+					<div>预览：</div>
+					<div id="img-preview" style="width: 180px;height: 180px;overflow: hidden;border: 1px dashed black;">
+					</div>
+				</div>
+			</div>
+			<div class="layui-row layui-hide oper-btn" style="margin-top: 15px;">
+				<div class="layui-col-xs9">
+					<button type="button" class="layui-btn layui-icon layui-icon-left" cropper-event="rotate" data-option="-15" title="Rotate -90 degrees"> 向左旋转
+            </button>
+					<button type="button" class="layui-btn layui-icon layui-icon-right" cropper-event="rotate" data-option="15" title="Rotate 90 degrees"> 向右旋转
+            </button>
+					<button type="button" class="layui-btn layui-icon layui-icon-refresh" cropper-event="reset" title="reset-image">重置图片
+            </button>
+				</div>
+				<div class="layui-col-xs2 layui-col-xs-offset1">
+					<button type="button" class="layui-btn layui-btn-fluid" id="keep-save" cropper-event="confirmSave">保存修改
+            </button>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../../layuiadmin/js/check-token.js"></script>
+		
+		<script>
+			// 获取url的参数并赋值
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return decodeURI(r[2]);
+				return null;
+			}
+			var code = GetQueryString("code");
+			if(code == null) {
+				layer.msg('数据加载错误，请检查链接', {
+					icon: 2,
+					anim: 6
+				});
+			}
+
+			layui.config({
+				base: '../../../layuiadmin/js/cropper/'
+			}).extend({
+				cropper: 'cropper'
+			}).use(['element', 'layer', 'cropper', 'jquery', 'jqcropper'], function() {
+				var element = layui.element;
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var cropper = layui.cropper;
+
+				var imageEle = $("#img"),
+					preview = '#img-preview',
+					file = $("input[name='file']"),
+					uploadImageMaxSize = 2048 //文件上传大小限制
+					,
+					options = {
+						aspectRatio: 75 / 40,
+						viewMode: 1,
+						preview: preview,
+						dragMode: 'none',
+						responsive: false,
+						restore: false
+						// cropBoxMovable:false,
+						// cropBoxResizable:false,
+					};
+				// 找到上传图片的input标签绑定change事件
+				$("#cropper_imgUpload").change(function() {
+					$(".oper-btn").removeClass("layui-hide");
+					// 1. 创建一个读取文件的对象
+					var fileReader = new FileReader();
+					fileReader.readAsDataURL(this.files[0]);
+					fileReader.onload = function() {
+						// 2. 等上一步读完文件之后才 把图片加载到img标签中
+						imageEle.attr("src", fileReader.result); //图片链接（base64）
+						imageEle.cropper(options);
+					};
+				});
+
+				$(".layui-btn").on('click', function() {
+					var event = $(this).attr("cropper-event");
+					//监听确认保存图像
+					if(event === 'confirmSave') {
+						imageEle.cropper("getCroppedCanvas").toBlob(function(blob) {
+							var filesize = (blob["size"] / 1024).toFixed(2);
+							if(filesize < uploadImageMaxSize) {
+								var formData = new FormData();
+								formData.append('file', blob);
+
+								$.ajax({
+									method: "post",
+									url: 'http://127.0.0.1:11453/system_setting/upload_banner/?code=' + code, //用于文件上传的服务器端请求地址
+									headers: {
+										"Authorization": "JWT " + localStorage.getItem("cache_token")
+									},
+									data: formData,
+									processData: false,
+									contentType: false,
+									success: function(data) {
+										if(data.code === 0) {
+											// 代开裁剪页面的回调函数
+											layer.msg("上传成功", {
+												icon: 1,
+												time: 1000 // 默认三秒
+											}, function() {
+												// 回调关闭弹出层
+												var index = parent.layer.getFrameIndex(window.name);
+												parent.layer.close(index);
+											});
+										} else {
+											layer.alert(data.detail, {
+												icon: 2
+											});
+										}
+									},
+									error: function(jqXHR) {
+										var json_responseText = JSON.parse(jqXHR.responseText);
+										layer.msg(json_responseText.error, {
+											icon: 2,
+											anim: 6
+										});
+									}
+								});
+							} else {
+								layer.alert("上传图片大小不超过" + uploadImageMaxSize + "KB", {
+									icon: 2
+								})
+							}
+						});
+					} else if(event === 'rotate') {
+						//监听旋转
+						var option = $(this).attr('data-option');
+						imageEle.cropper('rotate', option);
+					} else if(event === 'reset') {
+						//重设图片
+						imageEle.cropper('reset');
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

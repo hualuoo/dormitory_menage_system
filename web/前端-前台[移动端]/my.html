@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/animate.css/3.5.2/animate.min.css" />
+	</head>
+
+	<body class="fadeIn animated bg-color7" style="padding-bottom: 65px;">
+		<article class="w75 o-h f36">
+			<section class="userbox p5 bg-color-success pl5 clearfix">
+				<input type="hidden" id="user_id"></input>
+				<div class="userbox-l fl w20" id="user_avatar">
+					user_avatar
+				</div>
+				<div class="userbox-r fl w41 pl4 pt3 color8">
+					<p class="f60" id="user_realname">user_realname</p>
+					<p class="f34"><b id="user_username">user_username</b></p>
+				</div>
+			</section>
+			<ul class="mt5 mb5 f36 color3">
+				<li class="bg-color8 clearfix">
+					<a href="user_info.html">
+						<p class="w15 t-c fl">
+							<i class="icon iconfont icon-sortlight f42 color-primary"></i>
+						</p>
+						<p class="w60 fl">
+							<font class="fr pr5"><i class="icon iconfont icon-arrow-right"></i></font>
+							个人信息
+						</p>
+					</a>
+				</li>
+				<li class="bg-color8 clearfix">
+					<a href="change_mobile.html">
+						<p class="w15 t-c fl">
+							<i class="icon iconfont icon-phone f42 color-primary"></i>
+						</p>
+						<p id="user_mobile" class="w60 fl">
+							<font class="fr pr5"><i class="icon iconfont icon-arrow-right"></i></font>
+							user_mobile
+						</p>
+					</a>
+				</li>
+				<li class="bg-color8 clearfix">
+					<a href="change_email.html">
+						<p class="w15 t-c fl">
+							<i class="icon iconfont icon-dialog f42 color-primary"></i>
+						</p>
+						<p id="user_email" class="w60 fl">
+							<font class="fr pr5"><i class="icon iconfont icon-arrow-right"></i></font>
+							user_email
+						</p>
+					</a>
+				</li>
+				<li class="bg-color8 clearfix">
+					<a href="change_password.html">
+						<p class="w15 t-c fl">
+							<i class="icon iconfont icon-ddonghuabai f42 color-primary"></i>
+						</p>
+						<p class="w60 fl">
+							<font class="fr pr5"><i class="icon iconfont icon-arrow-right"></i></font>
+							修改密码
+						</p>
+					</a>
+				</li>
+			</ul>
+			<ul class="mt5 mb5 f36 color3">
+				<li class="bg-color8 clearfix">
+					<a href="change_face.html">
+						<p class="w15 t-c fl">
+							<i class="icon iconfont icon-zhediemianban f42 color-success"></i>
+						</p>
+						<p class="w60 fl">
+							<font class="fr pr5"><i class="icon iconfont icon-arrow-right"></i></font>
+							设置人脸
+						</p>
+					</a>
+				</li>
+			</ul>
+			<ul class="mt5 mb5 f36 color3">
+				<li class="bg-color8 clearfix">
+					<a onclick="logout();">
+						<p class="w15 t-c fl">
+							<i class="icon iconfont icon-close f42"></i>
+						</p>
+						<p class="w60 fl">
+							<font class="fr pr5"><i class="icon iconfont icon-arrow-right"></i></font>
+							退出账户
+						</p>
+					</a>
+				</li>
+			</ul>
+		</article>
+		<!-- 底部导航 -->
+		<div class="footer"></div>
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+		<!-- check-token -->
+		<script src="js/check-token.js"></script>
+		<script>
+			// 获取公共底部
+			$(document).ready(function() {
+				$(".footer").load("footer.html");
+			});
+
+			// 数据加载
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/users/get_info_self/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					$('#user_id').val(data.id);
+					if(data.first_name) {
+						$('#user_realname').html(data.first_name + ' ' + data.last_name);
+					} else {
+						$('#user_realname').html('<a href="user_info.html"><font color="#ED5565" size="4" >姓名未填写(点击完善)</font></a>');
+					}
+					$('#user_username').html(data.username);
+					if(data.info__avatar) {
+						$('#user_avatar').html('<img src="' + data.info__avatar + '" id="user_avatar" onclick="showActionSheet(this);" class="radius-o col-12" />');
+					} else {
+						$('#user_avatar').html('<img src="http://s1.mc.fyi:11453/media/users/avatar/default.jpg" id="user_avatar" onclick="showActionSheet(this);" class="radius-o col-12" />');
+					}
+					if(data.info__mobile) {
+						$('#user_mobile').html('<h5>手机已绑定&emsp;(' + data.info__mobile + ')</h5><p style="line-height: 10%;"><font size="2" color="red">您可以享受手机相关的安全及提醒服务</font></p><font class="fr pr5" size="3">修改手机&emsp;<i class="icon iconfont icon-arrow-right"></i></font>');
+					} else {
+						$('#user_mobile').html('<h5>手机未绑定</h5><p style="line-height: 10%;"><font size="2" color="red">完善手机信息，享受手机相关的安全及提醒服务</font></p><font class="fr pr5" size="3">绑定手机&emsp;<i class="icon iconfont icon-arrow-right"></i></font>');
+					}
+					if(data.email) {
+						$('#user_email').html('<h5>邮箱已绑定&emsp;(' + data.email + ')</h5><p style="line-height: 10%;"><font size="2" color="red">您可以使用邮箱来保障您的帐号安全</font></p><font class="fr pr5" size="3">修改邮箱&emsp;<i class="icon iconfont icon-arrow-right"></i></font>');
+					} else {
+						$('#user_email').html('<h5>邮箱未绑定</h5><p style="line-height: 10%;"><font size="2" color="red">完善邮箱信息，使用邮箱来保障您的帐号安全</font></p><font class="fr pr5" size="3">绑定邮箱&emsp;<i class="icon iconfont icon-arrow-right"></i></font>');
+					}
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 1
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
+
+			// 退出
+			function logout() {
+				layer.open({
+					content: '您是否确认要退出该账户？',
+					btn: ['退出', '取消'],
+					skin: 'footer',
+					yes: function(index) {
+						localStorage.removeItem("cache_token");
+						layer.open({
+							content: '您的账户已成功退出',
+							skin: 'msg',
+							time: 2 //2秒后自动关闭
+						});
+						setTimeout(function() {
+							location.href = "index.html";
+						}, 2000);
+					}
+				});
+			}
+
+			// 选取图片的来源，拍照和相册
+			/*
+			 * @param {Object} conf 触发控件
+			 */
+			function showActionSheet(conf) {
+				var divid = conf.id;
+				var actionbuttons = [{
+						title: "拍照"
+					},
+					{
+						title: "相册选取"
+					}
+				];
+				var actionstyle = {
+					title: "选择头像照片",
+					cancel: "取消",
+					buttons: actionbuttons
+				};
+				plus.nativeUI.actionSheet(actionstyle, function(e) {
+					if(e.index == 1) {
+						getImage(divid);
+					} else if(e.index == 2) {
+						galleryImg(divid);
+					}
+				});
+			}
+
+			// 相册选取
+			/*
+			 * @param {Object} divid 触发控件的ID，根据触发控件ID进行保存
+			 */
+			function galleryImg(divid) {
+				plus.gallery.pick(function(p) {
+					//alert(p);//file:///storage/emulated/0/DCIM/Camera/IMG_20160704_112620.jpg
+					plus.io.resolveLocalFileSystemURL(p, function(entry) {
+						//alert(entry.toLocalURL());//file:///storage/emulated/0/DCIM/Camera/IMG_20160704_112620.jpg
+						//alert(entry.name);//IMG_20160704_112620.jpg
+						compressImage(entry.toLocalURL(), entry.name, divid);
+					}, function(e) {
+						plus.nativeUI.toast("读取拍照文件错误：" + e.message);
+					});
+				}, function(e) {}, {
+					filename: "_doc/camera/",
+					filter: "image"
+				});
+			}
+
+			// 拍照
+			/*
+			 * @param {Object} divid 触发控件的ID，根据触发控件ID进行保存
+			 */
+			function getImage(divid) {
+				var cmr = plus.camera.getCamera();
+				cmr.captureImage(function(p) {
+					//alert(p);//_doc/camera/1467602809090.jpg
+					plus.io.resolveLocalFileSystemURL(p, function(entry) {
+						//alert(entry.toLocalURL());//file:///storage/emulated/0/Android/data/io.dcloud...../doc/camera/1467602809090.jpg
+						//alert(entry.name);//1467602809090.jpg
+						compressImage(entry.toLocalURL(), entry.name, divid);
+					}, function(e) {
+						plus.nativeUI.toast("读取拍照文件错误：" + e.message);
+					});
+				}, function(e) {}, {
+					filename: "_doc/camera/",
+					index: 1
+				});
+			}
+
+			//压缩图片
+			/*
+			 * @param {Object} url 文件路径
+			 * @param {Object} filename 文件名
+			 * @param {Object} divid 触发控件的ID，根据触发控件ID进行保存
+			 */
+			function compressImage(url, filename, divid) {
+				var name = "_doc/upload/" + divid + "-" + filename; //_doc/upload/F_ZDDZZ-1467602809090.jpg
+				plus.zip.compressImage({
+						src: url, //src: (String 类型 )压缩转换原始图片的路径
+						dst: name, //压缩转换目标图片的路径
+						quality: 20, //quality: (Number 类型 )压缩图片的质量.取值范围为1-100
+						overwrite: true //overwrite: (Boolean 类型 )覆盖生成新文件
+					},
+					function(res) {
+						// 文件系统中的读取文件对象，用于获取文件的内容
+						let reader = new plus.io.FileReader();
+						// 文件读取操作完成时的回调函数
+						reader.onloadend = (fileData) => {
+							let speech = fileData.target.result; //base64图片
+							uploadImage(speech);
+						};
+						reader.readAsDataURL(res.target);
+					},
+					function(error) {
+						plus.nativeUI.toast("压缩图片失败，请稍候再试");
+					}
+				);
+			}
+
+			// Base64转Blob
+			/*
+			 * @param {Object} base64 图片的Base64编码
+			 */
+			function dataURLtoBlob(base64) {
+				var base64Arr = base64.split(',');
+				var imgtype = '';
+				var base64String = '';
+				if(base64Arr.length > 1) {
+					//如果是图片base64，去掉头信息
+					base64String = base64Arr[1];
+					imgtype = base64Arr[0].substring(base64Arr[0].indexOf(':') + 1, base64Arr[0].indexOf(';'));
+				}
+				// 将base64解码
+				var bytes = atob(base64String);
+				//var bytes = base64;
+				var bytesCode = new ArrayBuffer(bytes.length);
+				// 转换为类型化数组
+				var byteArray = new Uint8Array(bytesCode);
+
+				// 将base64转换为ascii码
+				for(var i = 0; i < bytes.length; i++) {
+					byteArray[i] = bytes.charCodeAt(i);
+				}
+
+				// 生成Blob对象（文件对象）
+				return new Blob([bytesCode], {
+					type: imgtype
+				});
+			};
+
+			// 上传图片
+			/*
+			 * @param {Object} imgData 图片的Base64编码数据
+			 */
+			function uploadImage(imgData) {
+				var formData = new FormData();
+				formData.append('file', dataURLtoBlob(imgData));
+
+				$.ajax({
+					url: 'http://s1.mc.fyi:11453/users/' + $('#user_id').val() + '/set_avatar/', //用于文件上传的服务器端请求地址
+					type: "post",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: function(data) {
+						if(data.code === 0) {
+							layer.open({
+								content: data.msg,
+								skin: 'msg',
+								time: 2
+							});
+							setTimeout('window.location.reload()', 2000);
+						} else {
+							layer.open({
+								content: json_responseText.detail,
+								skin: 'msg',
+								time: 2
+							});
+						}
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						if(json_responseText.error != null) {
+							layer.open({
+								content: json_responseText.error,
+								skin: 'msg',
+								time: 2
+							});
+							return false;
+						}
+						if(json_responseText.detail != null) {
+							layer.open({
+								content: json_responseText.detail,
+								skin: 'msg',
+								time: 2
+							});
+							return false;
+						}
+						layer.open({
+							content: '发生未知错误，请联系管理员',
+							skin: 'msg',
+							time: 2
+						});
+					}
+				});
+			}
+		</script>
+
+		<style type="text/css">
+			.userbox {
+				line-height: 2em;
+				background: url(img/s5.jpg) center 40% no-repeat;
+				background-size: cover
+			}
+			
+			.userbox-l img {
+				border: 2px solid #fff;
+			}
+			
+			li {
+				line-height: 2.5em;
+				border-top: 1px solid #F1F1F1;
+				border-bottom: 1px solid #F1F1F1;
+				margin-top: -1px;
+			}
+			
+			li a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+
+	</body>
+
+</html>

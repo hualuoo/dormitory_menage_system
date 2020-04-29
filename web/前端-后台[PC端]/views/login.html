@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>登入 - 宿舍门禁管理系统</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<script type="text/javascript" charset="utf8" src="../layuiadmin/js/jquery-1.10.2.min.js"></script>
+		<link rel="stylesheet" href="../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../layuiadmin/style/admin.css" media="all">
+		<link rel="stylesheet" href="../layuiadmin/style/login.css" media="all">
+		<script type="text/javascript" charset="utf-8" src="//g.alicdn.com/sd/ncpc/nc.js?t=2015052012"></script>
+
+	</head>
+
+	<body>
+
+		<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+
+			<div class="layadmin-user-login-main">
+				<div class="layadmin-user-login-box layadmin-user-login-header">
+					<h2>Test</h2>
+					<p>宿舍门禁管理系统</p>
+				</div>
+				<div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+					<div class="layui-form-item">
+						<label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
+						<input type="text" name="username" id="username" lay-verify="required" placeholder="用户名/邮箱" class="layui-input">
+					</div>
+					<div class="layui-form-item">
+						<label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
+						<input type="password" name="password" id="password" lay-verify="required" placeholder="密码" class="layui-input">
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-row">
+							<center>
+								<div id="your-dom-id" class="nc-container"></div>
+							</center>
+							<!--No-Captcha渲染的位置，其中 class 中必须包含 nc-container-->
+						</div>
+					</div>
+					<div class="layui-form-item" style="margin-bottom: 20px;">
+						<input type="checkbox" name="remember" lay-skin="primary" id="save_password" title="记住密码">
+						<!--<a href="forget.html" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">忘记密码？</a>-->
+					</div>
+					<div class="layui-form-item">
+						<button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit" id="LAY-user-login-submit">登 入</button>
+					</div>
+					<div class="layui-trans layui-form-item layadmin-user-login-other">
+						<!--<a href="reg.html" class="layadmin-user-jump-change layadmin-link">注册帐号</a>-->
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-trans layadmin-user-login-footer">
+
+				<p>© 2020
+					<a href="https://www.hualuoo.com/" target="_blank">HuaLuoo.com</a>
+				</p>
+			</div>
+
+		</div>
+
+		<script src="../layuiadmin/layui/layui.js"></script>
+
+		<script>
+			// 阿里云验证
+			var nc_token = ["FFFF0N00000000008F12", (new Date()).getTime(), Math.random()].join(':');
+			var nc_SessionId = '',
+				nc_Sig = '';
+			var NC_Opt = {
+				renderTo: "#your-dom-id",
+				appkey: "FFFF0N00000000008F12",
+				scene: "nc_login",
+				token: nc_token,
+				customWidth: 334,
+				trans: {
+					"key1": "code0"
+				},
+				elementID: ["usernameID"],
+				is_Opt: 0,
+				language: "cn",
+				isEnabled: true,
+				timeout: 3000,
+				times: 5,
+				apimap: {
+					// 'analyze': '//a.com/nocaptcha/analyze.jsonp',
+					// 'get_captcha': '//b.com/get_captcha/ver3',
+					// 'get_captcha': '//pin3.aliyun.com/get_captcha/ver3'
+					// 'get_img': '//c.com/get_img',
+					// 'checkcode': '//d.com/captcha/checkcode.jsonp',
+					// 'umid_Url': '//e.com/security/umscript/3.2.1/um.js',
+					// 'uab_Url': '//aeu.alicdn.com/js/uac/909.js',
+					// 'umid_serUrl': 'https://g.com/service/um.json'
+				},
+				callback: function(data) {
+					nc_SessionId = data.csessionid;
+					nc_Sig = data.sig;
+				}
+			}
+			var nc = new noCaptcha(NC_Opt)
+			nc.upLang('cn', {
+				_startTEXT: "请按住滑块，拖动到最右边",
+				_yesTEXT: "验证通过",
+				_error300: "哎呀，出错了，点击<a href=\"javascript:__nc.reset()\">刷新</a>再来一次",
+				_errorNetwork: "网络不给力，请<a href=\"javascript:__nc.reset()\">点击刷新</a>",
+			})
+
+			var cache_token = "";
+			var cache_username = "";
+			var cache_password = "";
+			if(localStorage.getItem("cache_token") != null) {
+				cache_token = localStorage.getItem("cache_token");
+			}
+			if(localStorage.getItem("cache_username") != null) {
+				cache_username = localStorage.getItem("cache_username");
+			}
+			if(localStorage.getItem("cache_password") != null) {
+				cache_password = localStorage.getItem("cache_password");
+			}
+
+			layui.use(['form', 'layer'], function() {
+				var form = layui.form;
+				var layer = layui.layer;
+
+				// jwt判断
+				if(cache_token != "") {
+					$.ajax({
+						url: "http://127.0.0.1:11453/token-verify/",
+						type: "post",
+						dataType: "json",
+						data: {
+							"token": cache_token
+						},
+						success: function(data) {
+							layer.msg('检测到' + data.username + '已登录，正在跳转到登录后的页面');
+							setTimeout(function() {
+								location.href = "index.html";
+							}, 1000);
+						},
+						error: function(jqXHR) {
+							localStorage.removeItem("cache_token");
+						}
+					});
+				}
+
+				// 记住密码判断
+				if(cache_username != "") {
+					$('#username').val(cache_username);
+					if(cache_password != "") {
+						$('#password').val(cache_password);
+						$('#save_password').attr('checked', true);
+						form.render();
+					}
+				}
+
+				//提交
+				form.on('submit(LAY-user-login-submit)', function(data) {
+					if(nc_SessionId == '') {
+						layer.msg('请先通过滑动验证', {
+							icon: 2,
+							anim: 6
+						});
+						return false;
+					};
+					var field = data.field;
+					$.ajax({
+						url: "http://127.0.0.1:11453/login/",
+						type: "post",
+						dataType: "json",
+						data: {
+							"username": field.username,
+							"password": field.password,
+							"session_id": nc_SessionId,
+							"sig": nc_Sig,
+							"token": nc_token,
+							"scene": "nc_login"
+
+						}, //数据为登录名和登录密码
+						beforeSend: function() {
+							document.getElementById("LAY-user-login-submit").value = "登录中";
+						},
+						success: function(data) {
+							if(data.is_superuser == false) {
+								layer.msg('抱歉，仅管理员可以登陆');
+								return false;
+							}
+							// 默认将 token  用户名存入 localStorage
+							localStorage.setItem("cache_token", data.token);
+							localStorage.setItem("cache_username", field.username);
+							// 如果选择 "记住密码" 即将 密码 存入localStorage
+							if(document.getElementById("save_password").checked) {
+								localStorage.setItem("cache_password", field.password);
+							} else {
+								localStorage.removeItem("cache_password");
+							}
+							layer.msg(data.username + '，欢迎登录');
+							setTimeout(function() {
+								if(parent == window) {
+									location.href = "index.html";
+								} else {
+									parent.layer.closeAll('iframe');
+									parent.location.reload();
+								}
+							}, 500);
+						},
+						error: function(jqXHR) {
+							var json_responseText = JSON.parse(jqXHR.responseText);
+							localStorage.removeItem("cache_token");
+							localStorage.setItem("cache_username", field.username);
+							localStorage.removeItem("cache_password");
+							if(json_responseText.detail != null) {
+								layer.msg(json_responseText.detail[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							if(json_responseText.non_field_errors != null) {
+								layer.msg(json_responseText.non_field_errors[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							document.getElementById("login_button").value = "登录";
+						}
+					});
+				});
+
+			});
+		</script>
+	</body>
+
+</html>

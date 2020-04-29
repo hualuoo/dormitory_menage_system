@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/animate.css/3.5.2/animate.min.css" />
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+	</head>
+
+	<body class="pb12 fadeIn animated" style="padding-bottom: 65px;">
+		<header class="ui-header clearfix w75 pl3 pr3 h8 f46  color8 bg-color-primary t-c header">
+			<div class="ui-header-l fl w5 mirrorRotateLevel">
+				<a href="my.html" class="icon color8 iconfont icon-arrow-right"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				用户信息
+			</div>
+			<!--<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>-->
+		</header>
+		<style>
+			.formheader {
+				line-height: 0.7rem;
+			}
+			
+			.formheader span {
+				display: inline-block;
+			}
+			
+			.formheader input {
+				border: none;
+			}
+			
+			.mirrorRotateLevel {
+				/* 水平镜像翻转 */
+				-moz-transform: scaleX(-1);
+				-webkit-transform: scaleX(-1);
+				-o-transform: scaleX(-1);
+				transform: scaleX(-1);
+				/*兼容IE*/
+				filter: FlipH;
+			}
+		</style>
+		<div class="p3 f30 f30 w75 main">
+			<form>
+				<div class="pt1 pb1">
+					ＵＩＤ：
+					<input type="text" class="w59  form-control" id="user_uid" placeholder="UID" style="width: 90px;" disabled="disabled" />
+				</div>
+				<div class="pt1 pb1">
+					用户名：
+					<input type="text" class="w59  form-control" id="user_username" placeholder="用户名" style="width: 180px;" disabled="disabled" />
+				</div>
+				<div class="pt1 pb1">
+					邮&emsp;箱：
+					<input type="email" class="w59  form-control" id="user_email" placeholder="未绑定" style="width: 210px;" disabled="disabled" />
+					<input type="button" class="btn btn-success radius10 f28 h6 w10" style="padding: 0 0 4px 0;" value="修改" onclick='location.href="index.html";' />
+				</div>
+				<div class="pt1 pb1">
+					手&emsp;机：
+					<input type="text" class="w59  form-control" id="user_mobile" placeholder="未绑定" style="width: 210px;" disabled="disabled" />
+					<input type="button" class="btn btn-success radius10 f28 h6 w10" style="padding: 0 0 4px 0;" value="修改" onclick='location.href="index.html";' />
+				</div>
+				<div class="pt1 pb1">
+					姓&emsp;名：
+					<input type="text" class="w59  form-control" id="user_first_name" placeholder="姓" style="width: 60px;" />
+					<input type="text" class="w59  form-control" id="user_last_name" placeholder="名" style="width: 90px;" />
+				</div>
+				<div class="pt1 pb1">
+					性&emsp;别：
+					<label class="mr3"><input type="radio" class="check" name="gender" value="male" /> 男</label>
+					<label class="mr3"><input type="radio" class="check" name="gender" value="female" /> 女</label>
+					<label class="mr3"><input type="radio" class="check" name="gender" value="unknown" /> 保密</label>
+				</div>
+				<div class="pt1 pb1">
+					生&emsp;日：
+					<input type="date" class="w59  form-control" id="user_birthday" min="16" max="100" style="width: 210px;" />
+				</div>
+				<div class="pt1 pb1">
+					所居住的宿舍：
+					<input type="text" class="w59  form-control" id="user_lived_dormitory" placeholder="暂未居住" style="width: 100px;" disabled="disabled" />
+				</div>
+				<div class="pt1 pb1">
+					账户创建时间：
+					<input type="text" class="w59  form-control" id="user_date_joined" placeholder="0000-00-00 00:00:00" style="width: 180px;" disabled="disabled" />
+				</div>
+				<div class="pt1 pb1">
+					最后登录时间：
+					<input type="text" class="w59  form-control" id="user_last_login" placeholder="0000-00-00 00:00:00" style="width: 180px;" disabled="disabled" />
+				</div>
+				<div class="t-c mt5">
+					<input type="button" class="btn f30 btn-primary radius10 p2 w50" value="提交修改" id="login_button" onclick="update_info()" />
+				</div>
+			</form>
+		</div>
+		<!-- 底部导航 -->
+		<div class="footer"></div>
+
+		<!-- check-token -->
+		<script src="js/check-token.js"></script>
+		<script>
+			// 获取公共底部
+			$(document).ready(function() {
+				$(".footer").load("footer.html");
+			});
+			
+			// 数据加载
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/users/get_info_self/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					$('#user_uid').val(data.id);
+					$('#user_username').val(data.username);
+					$('#user_email').val(data.email);
+					$('#user_mobile').val(data.info__mobile);
+					$('#user_first_name').val(data.first_name);
+					$('#user_last_name').val(data.last_name);
+					$("input[type=radio][name=gender][value=" + data.info__gender + "]").attr("checked", 'checked');
+					$('#user_birthday').val(data.info__birthday);
+					$('#user_lived_dormitory').val(data.lived_dormitory);
+					$('#user_date_joined').val(data.date_joined);
+					$('#user_last_login').val(data.last_login);
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 1
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
+
+			// "提交修改"按钮 点击
+			function update_info() {
+				$.ajax({
+					url: "http://s1.mc.fyi:11453/users/" + $('#user_uid').val() + "/",
+					type: "put",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					data: {
+						"first_name": $('#user_first_name').val(),
+						"last_name": $('#user_last_name').val(),
+						"info__gender": $("input[name='gender']:checked").val(),
+						"info__birthday": $('#user_birthday').val()
+					},
+					success: function(data) {
+						layer.open({
+							content: '操作成功：用户' + $('#user_username').val() + '的信息已修改成功！',
+							skin: 'msg',
+							time: 1
+						});
+						setTimeout('window.location.reload()', 1000);
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						if(json_responseText.first_name) {
+							layer.open({
+								content: json_responseText.first_name[0],
+								skin: 'msg',
+								time: 1
+							});
+							$('#user_first_name').focus();
+							return false;
+						}
+						if(json_responseText.last_name) {
+							layer.open({
+								content: json_responseText.last_name[0],
+								skin: 'msg',
+								time: 1
+							});
+							$('#user_last_name').focus();
+							return false;
+						}
+						if(json_responseText.info__gender) {
+							layer.open({
+								content: json_responseText.info__gender[0],
+								skin: 'msg',
+								time: 1
+							});
+							return false;
+						}
+						if(json_responseText.info__birthday) {
+							layer.open({
+								content: json_responseText.info__birthday[0],
+								skin: 'msg',
+								time: 1
+							});
+							$('#user_birthday').focus();
+							return false;
+						}
+						if(json_responseText.detail) {
+							layer.open({
+								content: '操作失败：' + json_responseText.detail,
+								skin: 'msg',
+								time: 1
+							});
+							return false;
+						}
+						layer.open({
+							content: '操作失败：出现未知错误，请联系管理！',
+							skin: 'msg',
+							time: 1
+						});
+					}
+				});
+			}
+		</script>
+
+		<style type="text/css">
+			.userbox {
+				line-height: 2em;
+				background: url(img/s5.jpg) center 40% no-repeat;
+				background-size: cover
+			}
+			
+			.userbox-l img {
+				border: 2px solid #fff;
+			}
+			
+			li {
+				line-height: 2.5em;
+				border-top: 1px solid #F1F1F1;
+				border-bottom: 1px solid #F1F1F1;
+				margin-top: -1px;
+			}
+			
+			li a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.header {
+				padding-bottom: 10%;
+				width: 100%;
+				position: fixed;
+				top: 0px;
+				left: 0px;
+				z-index: 9998;
+			}
+			
+			.main {
+				position: absolute;
+				width: 100%;
+				height: auto;
+				top: 40px;
+				padding-bottom: 60px;
+			}
+		</style>
+
+	</body>
+
+</html>

@@ -255,3 +255,17 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
             }
         }, status=status.HTTP_200_OK)
 
+    @action(methods=['GET'], detail=False)
+    def get_fees(self, request, *args, **kwargs):
+        """
+            系统 获取水电费价格
+            url: '/system_setting/get_fees/'
+            type: 'get'
+        """
+        all_result = self.filter_queryset(self.get_queryset())
+        all_result = all_result.filter(code__icontains="_fees")
+        queryset = self.filter_queryset(all_result)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+

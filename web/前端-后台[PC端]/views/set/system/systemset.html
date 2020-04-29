@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>系统设置</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+	</head>
+
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md12">
+					<div class="layui-form" wid100 lay-filter="layuiadmin-form-useradmin">
+						<div class="layui-card">
+							<div class="layui-card-header">前台设置</div>
+							<div class="layui-card-body layui-row" pad15>
+								<div class="layui-col-md4">
+									<div class="layui-form-item">
+										<label class="layui-form-label">首页Banner图1</label>
+										<div class="layui-input-block">
+											<input type="text" name="banner1_input" class="layui-input layui-input-inline" style="width: 240px;">
+											<button class="layui-btn layui-btn-primary layui-inline" onclick="upload_img('banner1')">上传</button>
+										</div>
+										<div class="layui-input-block">
+											<div class="layui-input-inline" id="banner1" style="height: 170px;padding: 0 0 0 0;"></div>
+										</div>
+									</div>
+								</div>
+								<div class="layui-col-md4">
+									<div class="layui-form-item">
+										<label class="layui-form-label">首页Banner图2</label>
+										<div class="layui-input-block">
+											<input type="text" name="banner2_input" class="layui-input layui-input-inline" style="width: 240px;">
+											<button class="layui-btn layui-btn-primary layui-inline" onclick="upload_img('banner2')">上传</button>
+										</div>
+										<div class="layui-input-block">
+											<div class="layui-input-inline" id="banner2" style="height: 170px;padding: 0 0 0 0;"></div>
+										</div>
+									</div>
+								</div>
+								<div class="layui-col-md4">
+									<div class="layui-form-item">
+										<label class="layui-form-label">首页Banner图3</label>
+										<div class="layui-input-block">
+											<input type="text" name="banner3_input" class="layui-input layui-input-inline" style="width: 240px;">
+											<button class="layui-btn layui-btn-primary layui-inline" onclick="upload_img('banner3')">上传</button>
+										</div>
+										<div class="layui-input-block">
+											<div class="layui-input-inline" id="banner3" style="height: 170px;padding: 0 0 0 0;"></div>
+										</div>
+									</div>
+								</div>
+								<div class="layui-col-md12">
+									<div class="layui-form-item">
+										<label class="layui-form-label">首页公告标题</label>
+										<div class="layui-input-block">
+											<input type="text" name="notice_title" class="layui-input layui-input-inline" style="width: 340px;">
+										</div>
+									</div>
+								</div>
+								<div class="layui-col-md12">
+									<div class="layui-form-item">
+										<label class="layui-form-label">首页公告内容</label>
+										<div class="layui-input-block">
+											<input type="text" name="notice_content" class="layui-input layui-input-inline" style="width: 540px;">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="layui-card">
+							<div class="layui-card-header">后台设置</div>
+							<div class="layui-card-body" pad15>
+								<div class="layui-form-item">
+									<div class="layui-form-item">
+										<label class="layui-form-label" style="width: 150px;">控制台代办事项列表</label>
+										<div class="layui-input-block">
+											<input type="checkbox" name="todo_list" value="todo[water_fees]" title="待缴水费宿舍">
+											<input type="checkbox" name="todo_list" value="todo[electricity_fees]" title="待缴电费宿舍">
+											<input type="checkbox" name="todo_list" value="todo[repair]" title="待处理报修单">
+											<input type="checkbox" name="todo_list" value="todo[access_control_later]" title="待处理门禁晚归记录">
+											<input type="checkbox" name="todo_list" value="todo[access_control_application]" title="待处理门禁异常申请">
+										</div>
+									</div>
+									<div class="layui-form-item">
+										<label class="layui-form-label" style="width: 150px;">控制台概略信息显示</label>
+										<div class="layui-input-block">
+											<input type="checkbox" name="overview_info" value="info[student]" title="学生人量">
+											<input type="checkbox" name="overview_info" value="info[staff]" title="教职工人量">
+											<input type="checkbox" name="overview_info" value="info[dormitory]" title="宿舍数量">
+											<input type="checkbox" name="overview_info" value="info[access_control_day]" title="门禁通过人数[本日]">
+											<input type="checkbox" name="overview_info" value="info[access_control_week]" title="门禁通过人数[本周]">
+											<input type="checkbox" name="overview_info" value="info[access_control_month]" title="门禁通过人数[本月]">
+										</div>
+										<div class="layui-form-mid layui-word-aux">只可以选择四个</div>
+									</div>
+									<div class="layui-form-item">
+										<label class="layui-form-label" style="width: 150px;">控制台流量图起始时间</label>
+										<div class="layui-input-inline">
+											<input type="text" name="data_overview_start_date" id="data_overview_start_date" lay-verify="data" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="layui-card">
+							<div class="layui-card-header">资费设置</div>
+							<div class="layui-card-body" pad15>
+
+								<div class="layui-form-item">
+									<label class="layui-form-label">水费(元/吨)</label>
+									<div class="layui-input-inline">
+										<input type="text" name="water_fees" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">电费(元/千瓦时)</label>
+									<div class="layui-input-inline">
+										<input type="text" name="electricity_fees" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-input-block">
+										<button class="layui-btn" lay-submit lay-filter="set_website"><i class="layui-icon layui-icon-layer" ></i>确认保存</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.all.js"></script>
+		<script src="../../../layuiadmin/js/check-token.js"></script>
+
+		<script>
+			layui.use(['form', 'laydate'], function() {
+				var form = layui.form,
+					laydate = layui.laydate;
+
+				//日期
+				laydate.render({
+					elem: '#data_overview_start_date'
+				});
+
+				// 数据加载
+				$.ajax({
+					url: "http://127.0.0.1:11453/system_setting/",
+					type: "get",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					success: function(data) {
+						data.map(function(value, index, arr) {
+							if(value.code == "water_fees") {
+								form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+									"water_fees": value.content
+								});
+							}
+							if(value.code == "electricity_fees") {
+								form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+									"electricity_fees": value.content
+								});
+							}
+							if(value.code == "todo_list") {
+								strs = value.content.split(",")
+								strs.map(function(str, index, arr) {
+									$("[value='" + str + "']:checkbox").each(function() {
+										$(this).attr("checked", true);
+									});
+								});
+							}
+							if(value.code == "overview_info") {
+								strs = value.content.split(",")
+								strs.map(function(str, index, arr) {
+									$("[value='" + str + "']:checkbox").each(function() {
+										$(this).attr("checked", true);
+									});
+								});
+							}
+							if(value.code == "data_overview_start_date") {
+								form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+									"data_overview_start_date": value.content
+								});
+							}
+							if(value.code == "banner1") {
+								form.val("layuiadmin-form-useradmin", {
+									"banner1_input": value.url.replace("http://127.0.0.1:11453", "")
+								});
+								$('#banner1').html('<img style="height: 170px;" src="' + value.url + '">')
+							}
+							if(value.code == "banner2") {
+								form.val("layuiadmin-form-useradmin", {
+									"banner2_input": value.url.replace("http://127.0.0.1:11453", "")
+								});
+								$('#banner2').html('<img style="height: 170px;" src="' + value.url + '">')
+							}
+							if(value.code == "banner3") {
+								form.val("layuiadmin-form-useradmin", {
+									"banner3_input": value.url.replace("http://127.0.0.1:11453", "")
+								});
+								$('#banner3').html('<img style="height: 170px;" src="' + value.url + '">')
+							}
+							if(value.code == "notice_title") {
+								form.val("layuiadmin-form-useradmin", {
+									"notice_title": value.content
+								});
+							}
+							if(value.code == "notice_content") {
+								form.val("layuiadmin-form-useradmin", {
+									"notice_content": value.content
+								});
+							}
+						});
+						form.render();
+					},
+					error: function(jqXHR) {
+						layer.msg('数据加载错误，请尝试重新登录', {
+							icon: 2,
+							anim: 6
+						});
+					}
+				});
+				
+				// 保存设置
+				form.on('submit(set_website)', function(data) {
+					var field = data.field;
+
+					var todo_list = [];
+					$("[name='todo_list']:checkbox").each(function() {
+						if($(this).is(":checked")) {
+							todo_list.push($(this).attr("value"));
+						}
+					});
+					var overview_info = [];
+					$("[name='overview_info']:checkbox").each(function() {
+						if($(this).is(":checked")) {
+							overview_info.push($(this).attr("value"));
+						}
+					});
+
+					$.ajax({
+						url: "http://127.0.0.1:11453/system_setting/system_setting_update/",
+						type: "post",
+						headers: {
+							"Authorization": "JWT " + localStorage.getItem("cache_token")
+						},
+						dataType: "json",
+						data: {
+							"water_fees": field.water_fees,
+							"electricity_fees": field.electricity_fees,
+							"todo_list": todo_list.join(","),
+							"overview_info": overview_info.join(","),
+							"data_overview_start_date": field.data_overview_start_date,
+							"notice_title": field.notice_title,
+							"notice_content": field.notice_content
+						},
+						success: function(data) {
+							layer.msg(data.detail, {
+								icon: 1,
+								time: 2000
+							});
+							setTimeout('window.location.reload()', 1000);
+						},
+						error: function(jqXHR) {
+							var json_responseText = JSON.parse(jqXHR.responseText);
+							if(json_responseText.water_fees) {
+								layer.msg('水费：' + json_responseText.water_fees[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.electricity_fees) {
+								layer.msg('电费：' + json_responseText.electricity_fees[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.todo_list) {
+								layer.msg('代办事项列表：' + json_responseText.todo_list[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.overview_info) {
+								layer.msg('概略信息显示：' + json_responseText.overview_info[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.data_overview_start_date) {
+								layer.msg('门禁流量图起始时间：' + json_responseText.data_overview_start_date[0], {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+							if(json_responseText.detail) {
+								layer.msg(json_responseText.detail, {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+						}
+					})
+				});
+			});
+			
+			// 上传图片
+			function upload_img(code){
+				layer.open({
+					type: 2,
+					title: '上传Banner',
+					content: 'upload_banner.html?code=' + code,
+					shadeClose: true,
+					maxmin: true,
+					area: ['851px', '623px'],
+					btn: ['取消'],
+					btn1: function(index, layero) {
+						layer.close(index);
+					},
+					end: function(index, layero) {
+						setTimeout('window.location.reload()', 0);
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

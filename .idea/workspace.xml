@@ -2,27 +2,536 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/api/user_operation/migrations/0009_feesrechargeorder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/user_operation/migrations/0010_auto_20200428_1826.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/user_operation/migrations/0011_auto_20200429_1430.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/user_operation/migrations/0012_feesrechargeorder_recharge_number.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/user_operation/migrations/0013_auto_20200429_1556.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/access_control/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/system_setting/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/user_operation/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/user_operation/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/user_operation/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/utils/jwt_custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/jwt_custom.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/utils/save_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/save_file.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/utils/smtp.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/smtp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/system/banner/2020/04/19/710579b54d234b18cdf1ccd870058bd5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/17/c478bff4293b0be66a20c034ffe83df2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/17/cc568a55a51eb426794d1f47148dddc5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/03/30/852050754272c5e50da0702c99162941.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/avatar/2020/04/20/18d151596fbcb3ec2fb7de26e24d7173.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/face_photo/2020/04/16/2ff8c209850d93f2477a3fba656d2ef8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/face_photo/2020/04/16/852050754272c5e50da0702c99162941.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/users/face_photo/2020/04/20/6f10e6596680aa7164dbffb1409f7530.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/rest_framework_jwt/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/rest_framework_jwt/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/attendance_system_web/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/css/miniMobile.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/css/miniMobile.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/banner1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/banner2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/banner3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/meng.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/s1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/s2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/s3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/s4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/s5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/select.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/timg.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/user.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/img/user2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/js/check-token.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/js/flexible.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/js/jquery-1.10.2.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/js/miniMobile.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/js/zepto.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/my.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/Progress.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/aside.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/blockquote.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/button.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/comment.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/css/miniMobile.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/css/miniMobile.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/flow.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/foldingPanel.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/font.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/fullWinodwPage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/grid.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/header.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/icon.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/banner1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/banner2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/banner3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/meng.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/s1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/s2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/s3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/s4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/s5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/select.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/timg.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/user.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/img/user2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/iscroll.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/js/check-token.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/js/flexible.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/js/jquery-1.10.2.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/js/miniMobile.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/js/zepto.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/keyboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/layer.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/list-button.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/listPic.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/my.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/fonticon/demo.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/fonticon/demo_fontclass.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/fonticon/iconfont.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/fonticon/iconfont.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/fonticon/iconfont.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/fonticon/iconfont.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/fonticon/iconfont.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/icheck/icheck.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/iscroll-probe.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/json.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/layer_mobile/layer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/layer_mobile/need/layer.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/mobileSelect/mobileSelect.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/mobileSelect/mobileSelect.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/myflow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/noUiSlider.10.0.0/nouislider.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/noUiSlider.10.0.0/nouislider.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/noUiSlider.10.0.0/nouislider.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/noUiSlider.10.0.0/nouislider.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/photoswipe/default-skin/default-skin.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/photoswipe/default-skin/default-skin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/photoswipe/default-skin/default-skin.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/photoswipe/default-skin/preloader.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/photoswipe/photoswipe-ui-default.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/photoswipe/photoswipe-ui-default.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/photoswipe/photoswipe.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/photoswipe/photoswipe.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/photoswipe/photoswipe.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/switchery/switchery.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/switchery/switchery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/switchery/switchery.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/switchery/switchery.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/plugins/webKeyBoard.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/radius.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/select.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/swiper.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/old/tab.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/fonticon/demo.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/fonticon/demo_fontclass.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/fonticon/iconfont.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/fonticon/iconfont.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/fonticon/iconfont.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/fonticon/iconfont.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/fonticon/iconfont.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/icheck/icheck.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/iscroll-probe.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/json.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/layer_mobile/layer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/layer_mobile/need/layer.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/mobileSelect/mobileSelect.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/mobileSelect/mobileSelect.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/myflow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/noUiSlider.10.0.0/nouislider.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/noUiSlider.10.0.0/nouislider.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/noUiSlider.10.0.0/nouislider.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/noUiSlider.10.0.0/nouislider.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/photoswipe/default-skin/default-skin.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/photoswipe/default-skin/default-skin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/photoswipe/default-skin/default-skin.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/photoswipe/default-skin/preloader.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/photoswipe/photoswipe-ui-default.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/photoswipe/photoswipe-ui-default.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/photoswipe/photoswipe.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/photoswipe/photoswipe.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/photoswipe/photoswipe.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/switchery/switchery.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/switchery/switchery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/switchery/switchery.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/switchery/switchery.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-前台/plugins/webKeyBoard.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/.idea/dist.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/check-token.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/cropper/cropper.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/cropper/cropper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/cropper/jqcropper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/jquery-1.10.2.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/wangEditor/fonts/w-e-icon.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/wangEditor/wangEditor.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/wangEditor/wangEditor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/wangEditor/wangEditor.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/wangEditor/wangEditor.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/js/wangEditor/wangEditor.min.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/console/prograss.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/console/top-card.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/console/top-search.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/content/comment.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/content/list.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/content/tags.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/forum/list.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/forum/replys.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/layer/photos.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/layim/getList.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/layim/getMembers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/mall/order.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/menu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/menu1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/message/all.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/message/detail.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/message/direct.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/message/new.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/message/notice.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/table/demo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/table/demo2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/table/user.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/table/user30.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/upload/demo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/user/forget.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/user/login.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/user/logout.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/user/reg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/user/resetpass.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/user/session.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/user/sms.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/useradmin/mangadmin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/useradmin/role.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/useradmin/webuser.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/workorder/demo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/json/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/layui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/layui.mobile.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/modules/code.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/modules/laydate/default/laydate.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/modules/layer/default/icon-ext.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/modules/layer/default/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/modules/layer/default/layer.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/modules/layer/default/loading-0.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/modules/layer/default/loading-1.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/css/modules/layer/default/loading-2.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/font/iconfont.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/font/iconfont.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/font/iconfont.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/font/iconfont.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/font/iconfont.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/0.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/1.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/10.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/11.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/12.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/13.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/14.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/15.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/16.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/17.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/18.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/19.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/2.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/20.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/21.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/22.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/23.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/24.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/25.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/26.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/27.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/28.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/29.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/3.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/30.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/31.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/32.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/33.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/34.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/35.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/36.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/37.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/38.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/39.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/4.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/40.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/41.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/42.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/43.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/44.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/45.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/46.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/47.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/48.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/49.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/5.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/50.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/51.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/52.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/53.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/54.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/55.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/56.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/57.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/58.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/59.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/6.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/60.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/61.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/62.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/63.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/64.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/65.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/66.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/67.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/68.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/69.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/7.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/70.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/71.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/8.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/images/face/9.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/carousel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/code.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/colorpicker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/element.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/form.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/jquery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/laydate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/layedit.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/layer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/laypage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/laytpl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/mobile.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/rate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/slider.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/table.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/transfer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/tree.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/upload.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/lay/modules/util.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/layui.all.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/layui/layui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/lib/admin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/lib/extend/echarts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/lib/extend/echartsTheme.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/lib/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/lib/view.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/common.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/console.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/contlist.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/forum.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/im.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/message.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/sample.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/senior.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/set.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/user.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/useradmin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/modules/workorder.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/admin.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/login.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/res/bg-none.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/res/layui-logo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/res/logo-black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/res/logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/res/template/character.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/res/template/huge.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/res/template/portrait.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/style/template.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/tpl/layim/demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/tpl/system/about.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/tpl/system/get.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/tpl/system/more.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/tpl/system/theme.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/tpl/system/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/layuiadmin/tpl/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/access_control/abnormal_application/abnormal_application_detailed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/access_control/abnormal_application/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/access_control/abnormal_application/list_pending.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/access_control/access_control/access_control_detailed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/access_control/access_control/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/access_control/access_control/list_abnormal.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/access_control/access_control/list_later.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/access_control/access_control/list_normal.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/dormitories/dormitory_create.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/dormitories/dormitory_edit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/dormitories/dormitory_note.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/dormitories/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/dormitories/list_empty.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/electricity_fees/electricity_fees_detailed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/electricity_fees/electricity_fees_note.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/electricity_fees/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/repair/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/repair/list_processing.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/repair/list_untreated.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/repair/repair_detailed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/water_fees/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/water_fees/water_fees_detailed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/dormitories/water_fees/water_fees_note.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/home/console.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/set/system/systemset.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/set/system/upload_banner.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/set/user/info.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/set/user/password.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/face/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/face/list_not_set.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/face/list_set.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/face/user_set_face.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/forget.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/reg.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/staff/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/staff/list_inactive.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/users/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/users/list_inactive.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/users/user_create.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/users/user_create_multiple.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/users/user_edit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views/users/users/user_set_avatar.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/access_control/access_control/access_control_detailed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/access_control/access_control/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/access_control/access_control/list_abnormal.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/access_control/access_control/list_later.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/access_control/access_control/list_normal.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/content/comment.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/content/contform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/content/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/content/listform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/content/tags.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/content/tagsform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/forum/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/forum/listform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/forum/replys.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/forum/replysform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/mall/category.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/mall/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/mall/specs.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/message/detail.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/message/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/workorder/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/workorder/listform.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/app/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/anim/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/auxiliar/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/badge/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/button/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/carousel/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/code/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/flow/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/form/element.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/form/group.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/grid/all.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/grid/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/grid/mobile-pc.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/grid/mobile.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/grid/speed-dial.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/grid/stack.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/laydate/demo1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/laydate/demo2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/laydate/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/laydate/special-demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/laydate/theme.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/layer/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/layer/special-demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/layer/theme.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/laypage/demo1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/laypage/demo2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/laypage/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/laytpl/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/nav/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/panel/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/progress/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/rate/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/auto.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/cellEdit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/cellEvent.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/checkbox.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/data.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/fixed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/height.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/initSort.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/operate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/page.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/reload.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/resetPage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/simple.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/static.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/style.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/thead.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/table/tostatic.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/tabs/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/temp.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/timeline/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/upload/demo1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/upload/demo2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/upload/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/util/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/component/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/dormitories/dormitory_create.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/dormitories/dormitory_edit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/dormitories/dormitory_note.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/dormitories/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/dormitories/list_empty.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/electricity_fees/electricity_fees_detailed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/electricity_fees/electricity_fees_note.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/electricity_fees/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/repair/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/repair/list_processing.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/repair/list_untreated.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/repair/repair_detailed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/water_fees/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/water_fees/water_fees_detailed.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/dormitories/water_fees/water_fees_note.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/home/console.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/home/homepage1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/home/homepage2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/iframe/layer/iframe.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/index2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/senior/echarts/bar.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/senior/echarts/line.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/senior/echarts/map.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/senior/im/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/senior/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/set/system/email.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/set/system/website.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/set/user/info.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/set/user/password.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/set/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/system/about.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/system/get.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/system/more.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/system/theme.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/system/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/template/addresslist.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/template/goodslist.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/template/msgboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/template/personalpage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/template/search.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/template/temp.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/template/tips/404.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/template/tips/error.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/template/说明.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/face/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/face/list_not_set.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/face/list_set.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/face/user_set_face.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/forget.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/reg.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/staff/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/staff/list_inactive.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/users/list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/users/list_inactive.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/users/user_create.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/users/user_create_multiple.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/users/user_edit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/前端-后台/views2/users/users/user_set_avatar.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +586,7 @@
       <recent name="C:\project\attendance_system\api\users\backup" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.views (1)">
+  <component name="RunManager" selected="Python.views (2)">
     <configuration name="clean-migrations" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="attendance_system" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -144,6 +653,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="views (2)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="attendance_system" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/user_operation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/user_operation/views.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="views" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="attendance_system" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -196,9 +727,11 @@
       <item itemvalue="Python.start_app" />
       <item itemvalue="Python.views" />
       <item itemvalue="Python.views (1)" />
+      <item itemvalue="Python.views (2)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.views (2)" />
         <item itemvalue="Python.views (1)" />
         <item itemvalue="Python.views" />
         <item itemvalue="Python.start_app" />
@@ -236,7 +769,7 @@
       <workItem from="1581844924356" duration="192092000" />
       <workItem from="1583754811610" duration="12766000" />
       <workItem from="1583855762209" duration="255382000" />
-      <workItem from="1587362878582" duration="102914000" />
+      <workItem from="1587362878582" duration="124726000" />
     </task>
     <servers />
   </component>
@@ -273,40 +806,41 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1586442549849" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1588058486307">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1588155801975">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1588058486307" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1588058486307">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1588155801975" />
+    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1588155801975">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1588058486307" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1588058486307">
+    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1588155801975" />
+    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1588155801975">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1588058486307" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1588058486307">
+    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1588155801975" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1588155801975">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1588058486307" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1588155801975" />
     <state x="576" y="261" key="SettingsEditor" timestamp="1582024039431">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="576" y="261" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1582024039431" />
     <state x="768" y="351" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1581839323807" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1587481002574">
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1588156269769">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587389021186" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1587481002574" />
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1588156269769" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/attendance_system$views.coverage" NAME="views Coverage Results" MODIFIED="1587298539517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/system_setting" />
     <SUITE FILE_PATH="coverage/attendance_system$views__1_.coverage" NAME="views (1) Coverage Results" MODIFIED="1588054382591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/access_control" />
+    <SUITE FILE_PATH="coverage/attendance_system$views__2_.coverage" NAME="views (2) Coverage Results" MODIFIED="1588068212600" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/user_operation" />
     <SUITE FILE_PATH="coverage/attendance_system$clean_migrations.coverage" NAME="clean-migrations Coverage Results" MODIFIED="1583133316467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
     <SUITE FILE_PATH="coverage/attendance_system$start_app.coverage" NAME="start_app Coverage Results" MODIFIED="1586442482188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api" />
   </component>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>宿舍列表 - 未满</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	</head>
+
+	<style type="text/css">
+		.layui-table-cell {
+			height: auto;
+			line-height: 38px;
+		}
+	</style>
+
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" id="usersearch">
+					<div class="layui-form-item layui-row">
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">宿舍编号</label>
+							<div class="layui-input-block">
+								<input type="text" name="id" placeholder="请输入宿舍编号" autocomplete="off" class="layui-input" id="dormitories_search_number">
+							</div>
+						</div>
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">所在区域</label>
+							<div class="layui-input-block">
+								<input type="text" name="username" placeholder="请输入所在区域" autocomplete="off" class="layui-input" id="dormitories_search_area">
+							</div>
+							<label class="layui-form-label">所在楼层</label>
+							<div class="layui-input-block">
+								<input type="text" name="email" placeholder="请输入所在楼层" autocomplete="off" class="layui-input" id="dormitories_search_floor">
+							</div>
+						</div>
+						<div class="layui-col-sm3">
+							<label class="layui-form-label">宿舍楼</label>
+							<div class="layui-input-block">
+								<input type="text" name="email" placeholder="请输入宿舍楼" autocomplete="off" class="layui-input" id="dormitories_search_build">
+							</div>
+							<label class="layui-form-label">房间号</label>
+							<div class="layui-input-block">
+								<input type="text" name="email" placeholder="请输入房间号" autocomplete="off" class="layui-input" id="dormitories_search_room">
+							</div>
+						</div>
+						<div class="layui-col-sm2 layui-col-md-offset1">
+							<button class="layui-btn" id="dormitories_search_button">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i> 搜索
+                    </button>
+							<button class="layui-btn layui-btn-warm" id="dormitories_search_clean_button">
+                        <i class="layui-icon layui-icon-senior layuiadmin-button-btn"></i> 清空
+                    </button>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-card-body layui-form">
+					<div style="float:right">
+						<button class="layui-btn layui-btn-sm layui-btn-normal" data-type="add" id="dormitory_create_button">
+                    		<i class="layui-icon layui-icon-add-circle"></i> 创建单个宿舍
+                		</button>
+					</div>
+					<div style="padding: 40px 0 0 0;">
+						<table id="LAY-dormitories-manage" lay-filter="LAY-dormitories-manage"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.all.js"></script>
+		<script src="../../../layuiadmin/js/check-token.js"></script>
+
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-inline" lay-event="refresh" onclick="layui.table.reload('LAY-dormitories-manage')">
+				<i class="layui-icon layui-icon-refresh"></i>
+			</div>
+		</script>
+
+		<script>
+			layui.use('table', function() {
+				var table = layui.table;
+				table.render({
+					elem: '#LAY-dormitories-manage',
+					autoSort: false, //禁用前端自动排序
+					toolbar: '#toolbarDemo',
+					url: 'http://127.0.0.1:11453/dormitories/',
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					where: {
+						'is_empty': 'true'
+					},
+					limit: 10,
+					limits: [10, 20, 50, 100],
+					height: 'full-198',
+					cols: [
+						[{
+								field: 'id',
+								title: 'ID',
+								width: '5%',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'number',
+								width: '7%',
+								title: '编号',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'area',
+								width: '9%',
+								title: '所在区域',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'build',
+								width: '7%',
+								title: '宿舍楼',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'floor',
+								width: '9%',
+								title: '所在楼层',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'room',
+								width: '7%',
+								title: '房间号',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'allow_live_number',
+								width: '8%',
+								title: '允许人数',
+								align: 'center'
+							},
+							{
+								field: 'now_live_number',
+								width: '8%',
+								title: '目前人数',
+								align: 'center'
+							},
+							{
+								field: 'live_info',
+								width: '5%',
+								title: '情况',
+								align: 'center',
+								templet: function(d) {
+									if(d.allow_live_number == d.now_live_number) {
+										return '<span class="layui-badge layui-bg-gray">已满</span>';
+									} else {
+										return '<span class="layui-badge layui-bg-blue">未满</span>';
+									}
+								}
+							},
+							{
+								field: 'add_time',
+								width: '14%',
+								title: '创建时间',
+								align: 'center'
+							},
+							{
+								field: 'operation',
+								title: '操作',
+								width: '21%',
+								align: 'center',
+								fixed: 'right',
+								templet: function(d) {
+									var str = '<a class="layui-btn layui-btn-primary layui-btn-xs" onclick="dormitory_edit(' + d.id + ');"><i class="layui-icon layui-icon-edit"></i>调整居住学生</a>';
+									str += '<a class="layui-btn layui-btn-primary layui-btn-xs" onclick="dormitory_note(' + d.id + ');"><i class="layui-icon layui-icon-note"></i>备注</a>';
+									str += '<a class="layui-btn layui-btn-xs layui-btn-danger" onclick="dormitory_delete(' + d.id + ');"><i class="layui-icon layui-icon-delete"></i>删除</a>';
+									return str;
+								}
+							}
+						]
+					],
+					page: true,
+					done: function(res, curr, count) {
+						//数据的回调用，可不写
+					}
+				});
+
+				// 监听单元格事件<排序>
+				table.on('sort(LAY-dormitories-manage)', function(obj) { //注：tool是工具条事件名，LAY-dormitories-manage是table原始容器的属性 lay-filter="对应的值"
+					//尽管我们的 table 自带排序功能，但并没有请求服务端。
+					//有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+					table.reload('LAY-dormitories-manage', { //LAY-dormitories-manage是表格容器id
+						initSort: obj, //记录初始排序，如果不设的话，将无法标记表头的排序状态。 layui 2.1.1 新增参数
+						where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+							field: obj.field, //排序字段
+							order: obj.type //排序方式
+						}
+					});
+				});
+
+				// 模糊查询"搜索"按钮
+				$('#dormitories_search_button').click(function() {
+					//执行重载
+					table.reload('LAY-dormitories-manage', {
+						page: {
+							curr: 1 //重新从第 1 页开始
+						},
+						where: {
+							search_number: $('#dormitories_search_number').val().trim(),
+							search_area: $('#dormitories_search_area').val().trim(),
+							search_build: $('#dormitories_search_build').val().trim(),
+							search_floor: $('#dormitories_search_floor').val().trim(),
+							search_room: $('#dormitories_search_room').val().trim()
+						}
+					}, 'data');
+				});
+
+				// 模糊查询"清空"按钮
+				$('#dormitories_search_clean_button').click(function() {
+					$('#dormitories_search_number').val("");
+					$('#dormitories_search_area').val("");
+					$('#dormitories_search_build').val("");
+					$('#dormitories_search_floor').val("");
+					$('#dormitories_search_room').val("");
+					table.reload('LAY-dormitories-manage', {
+						where: {
+							search_number: '',
+							search_area: '',
+							search_build: '',
+							search_floor: '',
+							search_room: ''
+						}
+					}, 'data');
+				});
+
+				//搜索区域DIV回车监听
+				$("#usersearch").bind("keydown", function(e) {
+					// 兼容FF和IE和Opera
+					var theEvent = e || window.event;
+					var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+					if(code == 13) {
+						//回车执行查询
+						$("#dormitories_search_button").click();
+					}
+				});
+
+				// "创建单个宿舍"按钮
+				$('#dormitory_create_button').click(function() {
+					layer.open({
+						type: 2,
+						title: '创建',
+						content: 'dormitory_create.html',
+						shadeClose: true,
+						maxmin: true,
+						area: ['280px', '438px'],
+						btn: ['确定', '取消'],
+						yes: function(index, layero) {
+							var iframeWindow = window['layui-layer-iframe' + index],
+								submitID = 'LAY-dormitory-front-submit',
+								submit = layero.find('iframe').contents().find('#' + submitID);
+
+							//监听提交
+							iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
+								var field = data.field; //获取提交的字段
+								$.ajax({
+									url: "http://127.0.0.1:11453/dormitories/",
+									type: "post",
+									headers: {
+										"Authorization": "JWT " + localStorage.getItem("cache_token")
+									},
+									dataType: "json",
+									data: {
+										"number": field.dormitory_number,
+										"area": field.dormitory_area,
+										"build": field.dormitory_build,
+										"floor": field.dormitory_floor,
+										"room": field.dormitory_room,
+										"allow_live_number": field.dormitory_allow_live_number
+									},
+									success: function(data) {
+										layer.msg('操作成功：新宿舍' + data.number + '创建成功', {
+											icon: 1,
+											time: 2000
+										})
+										layer.close(index); //关闭弹层
+									},
+									error: function(jqXHR) {
+										var json_responseText = JSON.parse(jqXHR.responseText);
+										if(json_responseText.number) {
+											layer.msg(json_responseText.number[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_number').focus();
+											return false;
+										}
+										if(json_responseText.area) {
+											layer.msg(json_responseText.area[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_area').focus();
+											return false;
+										}
+										if(json_responseText.build) {
+											layer.msg(json_responseText.build[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_build').focus();
+											return false;
+										}
+										if(json_responseText.floor) {
+											layer.msg(json_responseText.floor[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_floor').focus();
+											return false;
+										}
+										if(json_responseText.room) {
+											layer.msg(json_responseText.room[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_room').focus();
+											return false;
+										}
+										if(json_responseText.allow_live_number) {
+											layer.msg(json_responseText.allow_live_number[0], {
+												icon: 2,
+												anim: 6
+											});
+											layero.find('iframe').contents().find('#dormitory_allow_live_number').focus();
+											return false;
+										}
+										if(json_responseText.detail) {
+											layer.msg(json_responseText.detail, {
+												icon: 2,
+												anim: 6
+											});
+											return false;
+										}
+									}
+								});
+							});
+							submit.trigger('click');
+						},
+						btn2: function(index, layero) {
+							layer.close(index); //关闭弹层
+						},
+						end: function() {
+							layui.table.reload('LAY-dormitories-manage');
+						}
+					});
+				});
+
+			})
+
+			// 表单修饰 "只显示未满宿舍"
+			layui.use('form', function() {
+				var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+				form.render();
+				form.on('checkbox(only_show_empty_dormitories)', function(data) {
+					if(data.elem.checked) {
+						layui.table.reload('LAY-dormitories-manage', {
+							where: {
+								'is_empty': 'true'
+							}
+						}, 'data');
+					} else {
+						layui.table.reload('LAY-dormitories-manage', {
+							where: {
+								'is_empty': 'all'
+							}
+						}, 'data');
+					}
+				});
+			});
+
+			//"调整居住学生"按钮
+			function dormitory_edit(id) {
+				layer.open({
+					type: 2,
+					title: '编辑',
+					content: 'dormitory_edit.html?dormitories_id=' + id,
+					shadeClose: true,
+					maxmin: true,
+					area: ['640px', '584px'],
+					btn: ['关闭'],
+					btn1: function(index, layero) {
+						layer.close(index); //关闭弹层
+					},
+					end: function() {
+						layui.table.reload('LAY-dormitories-manage');
+					}
+				});
+			}
+
+			//"备注"按钮
+			function dormitory_note(id) {
+				layer.open({
+					type: 2,
+					title: '编辑',
+					content: 'dormitory_note.html?dormitories_id=' + id,
+					shadeClose: true,
+					maxmin: true,
+					area: ['640px', '273px'],
+					btn: ['提交', '关闭'],
+					yes: function(index, layero) {
+						var iframeWindow = window['layui-layer-iframe' + index],
+							submitID = 'LAY-dormitory-front-submit',
+							submit = layero.find('iframe').contents().find('#' + submitID);
+
+						//监听提交
+						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
+							var field = data.field; //获取提交的字段
+							$.ajax({
+								url: "http://127.0.0.1:11453/dormitories/" + id + "/change_note/",
+								type: "post",
+								headers: {
+									"Authorization": "JWT " + localStorage.getItem("cache_token")
+								},
+								dataType: "json",
+								data: {
+									"note": field.dormitory_note
+								},
+								success: function(data) {
+									layer.msg(data.detail, {
+										icon: 1,
+										time: 2000
+									})
+									layer.close(index); //关闭弹层
+									layui.table.reload('LAY-dormitories-manage');
+								},
+								error: function(jqXHR) {
+									var json_responseText = JSON.parse(jqXHR.responseText);
+									if(json_responseText.note) {
+										layer.msg(json_responseText.note[0], {
+											icon: 2,
+											anim: 6
+										});
+										layero.find('iframe').contents().find('#dormitory_note').focus();
+										return false;
+									}
+									if(json_responseText.detail) {
+										layer.msg(json_responseText.detail, {
+											icon: 2,
+											anim: 6
+										});
+										return false;
+									}
+								}
+							});
+						});
+						submit.trigger('click');
+					},
+					btn1: function(index, layero) {
+						layer.close(index); //关闭弹层
+					},
+					end: function() {
+						layui.table.reload('LAY-dormitories-manage');
+					}
+				});
+			}
+
+			// "删除"按钮
+			function dormitory_delete(id) {
+				layer.prompt({
+					formType: 1,
+					title: '请输入宿舍ID以确认删除宿舍'
+				}, function(value, index) {
+					if(id != value) {
+						layer.msg('请检查宿舍ID是否输入正确', {
+							icon: 2,
+							anim: 6
+						});
+						return false;
+					}
+					layer.confirm('确定删除ID为' + id + '的宿舍吗？如宿舍内还有居住的人将会自动清空。',
+						function(index2) {
+							$.ajax({
+								url: "http://127.0.0.1:11453/dormitories/" + id + "/",
+								type: "delete",
+								headers: {
+									"Authorization": "JWT " + localStorage.getItem("cache_token")
+								},
+								success: function(data) {
+									layer.close(index);
+									layer.msg('操作成功：ID为' + id + '的宿舍已被删除！', {
+										icon: 1,
+										time: 2000
+									})
+									layui.table.reload('LAY-dormitories-manage');
+								},
+								error: function(jqXHR) {
+									layer.msg('操作失败：请联系管理员！', {
+										icon: 2,
+										anim: 6
+									});
+									layui.table.reload('LAY-dormitories-manage');
+								}
+							});
+						}
+					)
+				});
+			}
+		</script>
+	</body>
+
+</html>

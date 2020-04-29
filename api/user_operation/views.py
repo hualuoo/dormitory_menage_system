@@ -7,13 +7,19 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
 from rest_framework.decorators import action
+import requests
+from django.conf import settings
+import json
 
 from .models import WaterFeesLog, ElectricityFeesLog
 from .serializers import WaterFeesLogSerializer, ElectricityFeesLogSerializer
 from .models import Repair, RepairLog
 from .serializers import RepairSerializer, RepairCreateSerializer, RepairLogSerializer, RepairLogCreateSerializer
+from .models import FeesRechargeOrder
+from .serializers import FeesRechargeOrderCreateSerializer
 from utils.permission import UserIsSuperUser, FeesLogIsSelf, RepairIsSelf, RepairLogIsSelf
-
+from users.models import User
+from system_setting.models import SystemSetting
 
 # Create your views here.
 class WaterFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -412,6 +418,244 @@ class FeesRechargeOrderViewset(viewsets.GenericViewSet):
     """
     充值 订单
     """
+    serializer_class = FeesRechargeOrderCreateSerializer
+    queryset = FeesRechargeOrder.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == "create_order":
+            return FeesRechargeOrderCreateSerializer
+
     @action(methods=['POST'], detail=False)
     def create_order(self, request, *args, **kwargs):
-        create_order_result = requests
+        """
+            创建订单
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if serializer.validated_data['object'] == "water":
+            return Response({
+                'url': 'https://api.xiuxiu888.com/creat_order/?id=' + settings.CODEPAY_ID + '&token=' + settings.CODEPAY_TOKEN + '&price=' + str(
+                    serializer.validated_data['price']) + '&pay_id=' + self.request.user.username + '&type=' +
+                       serializer.validated_data[
+                           'type'] + '&page=1&return_url=http://s1.mc.fyi:11453/fees_recharge_order/check_order_water/'
+            }, status=status.HTTP_200_OK)
+        if serializer.validated_data['object'] == "electricity":
+            return Response({
+                'url': 'https://api.xiuxiu888.com/creat_order/?id=' + settings.CODEPAY_ID + '&token=' + settings.CODEPAY_TOKEN + '&price=' + str(
+                    serializer.validated_data['price']) + '&pay_id=' + self.request.user.username + '&type=' +
+                       serializer.validated_data[
+                           'type'] + '&page=1&return_url=http://s1.mc.fyi:11453/fees_recharge_order/check_order_electricity/'
+            }, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def check_order_water(self, request, *args, **kwargs):
+        """
+            302重定向 水费订单检测
+        """
+        from django.shortcuts import redirect
+
+        order_id = request.GET.get('id', '')
+        if order_id == '':
+            return Response({
+                "detail": "错误代码01：订单号为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.GET.get('userID', '') != settings.CODEPAY_ID:
+            return Response({
+                "detail": "错误代码02：平台ID为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        pay_no = request.GET.get('pay_no', '')
+        if pay_no == '':
+            return Response({
+                "detail": "错误代码03：流水号为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        price = request.GET.get('price', '')
+        if price == '':
+            return Response({
+                "detail": "错误代码04：金额为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        type = request.GET.get('type', '')
+        if type == '':
+            return Response({
+                "detail": "错误代码05：支付方式为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if type == '1':
+            recharge_type = "alipay"
+        if type == '2':
+            recharge_type = "qqpay"
+        if type == '3':
+            recharge_type = "wechar"
+
+        pay_id = request.GET.get('pay_id', '')
+        if pay_id == '':
+            return Response({
+                "detail": "错误代码06-0：充值人为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.filter(username=pay_id).first()
+        if user is None:
+            return Response({
+                "detail": "错误代码06-1：充值人不存在，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if user.lived_dormitory is None:
+            return Response({
+                "detail": "错误代码06-2：充值宿舍不存在，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # 判断是否已提交
+        if FeesRechargeOrder.objects.filter(pay_id=order_id):
+            return Response({
+                "detail": "错误代码07：重复提交，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # 计算充值数量
+        recharge_number = round(float(price) / float(SystemSetting.objects.filter(code='water_fees').first().content), 2)
+
+        # 充值订单创建
+        fees_recharge_order = FeesRechargeOrder.objects.create(operator=user,
+                                                               price=int(float(price)),
+                                                               recharge_dormitory=user.lived_dormitory,
+                                                               recharge_object="water",
+                                                               recharge_number=recharge_number,
+                                                               recharge_type=recharge_type,
+                                                               recharge_status="paying",
+                                                               pay_id=order_id)
+        fees_recharge_order.save()
+
+        # POST检查
+        is_pay_result = requests.post(url='https://api.xiuxiu888.com/ispay?id=' + settings.CODEPAY_ID + '&token=' + settings.CODEPAY_TOKEN + '&order_id=' + order_id)
+        is_pay_result_json = json.loads(is_pay_result.text)
+        print(is_pay_result_json)
+
+        # 充值结果
+        if is_pay_result_json['status'] == 0:
+            fees_recharge_order.recharge_status = "close"
+            fees_recharge_order.save()
+        elif is_pay_result_json['status'] == 1 or is_pay_result_json['status'] == 2:
+            fees_recharge_order.recharge_status = "success"
+            fees_recharge_order.pay_no = pay_no
+            fees_recharge_order.save()
+
+        # 修改费用
+        user.lived_dormitory.water_fees.have_water_fees += int(float(price))
+        user.lived_dormitory.water_fees.save()
+        note = "用户" + user.username + "充值(" + str(fees_recharge_order.recharge_number) + "吨," + str(fees_recharge_order.price) + "元,订单号" + fees_recharge_order.pay_id + ",流水号" + fees_recharge_order.pay_no + ")"
+        water_fees_log = WaterFeesLog.objects.create(dormitory=user.lived_dormitory,
+                                                     mode="add",
+                                                     change_money=float(price),
+                                                     operator=user,
+                                                     note=note)
+        water_fees_log.save()
+
+
+        return redirect(request.get_full_path().replace('/fees_recharge_order/check_order_water/', 'https://api.xiuxiu888.com/demo_show.html'))
+
+    @action(methods=['GET'], detail=False)
+    def check_order_electricity(self, request, *args, **kwargs):
+        """
+            302重定向 电费订单检测
+        """
+        from django.shortcuts import redirect
+
+        order_id = request.GET.get('id', '')
+        if order_id == '':
+            return Response({
+                "detail": "错误代码01：订单号为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.GET.get('userID', '') != settings.CODEPAY_ID:
+            return Response({
+                "detail": "错误代码02：平台ID为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        pay_no = request.GET.get('pay_no', '')
+        if pay_no == '':
+            return Response({
+                "detail": "错误代码03：流水号为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        price = request.GET.get('price', '')
+        if price == '':
+            return Response({
+                "detail": "错误代码04：金额为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        type = request.GET.get('type', '')
+        if type == '':
+            return Response({
+                "detail": "错误代码05：支付方式为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if type == '1':
+            recharge_type = "alipay"
+        if type == '2':
+            recharge_type = "qqpay"
+        if type == '3':
+            recharge_type = "wechar"
+
+        pay_id = request.GET.get('pay_id', '')
+        if pay_id == '':
+            return Response({
+                "detail": "错误代码06-0：充值人为空，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.filter(username=pay_id).first()
+        if user is None:
+            return Response({
+                "detail": "错误代码06-1：充值人不存在，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if user.lived_dormitory is None:
+            return Response({
+                "detail": "错误代码06-2：充值宿舍不存在，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # 判断是否已提交
+        if FeesRechargeOrder.objects.filter(pay_id=order_id):
+            return Response({
+                "detail": "错误代码07：重复提交，请提交给管理员！"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # 计算充值数量
+        recharge_number = round(float(price) / float(SystemSetting.objects.filter(code='electricity_fees').first().content), 2)
+
+        # 充值订单创建
+        fees_recharge_order = FeesRechargeOrder.objects.create(operator=user,
+                                                               price=int(float(price)),
+                                                               recharge_dormitory=user.lived_dormitory,
+                                                               recharge_object="electricity",
+                                                               recharge_number=recharge_number,
+                                                               recharge_type=recharge_type,
+                                                               recharge_status="paying",
+                                                               pay_id=order_id)
+        fees_recharge_order.save()
+
+        # POST检查
+        is_pay_result = requests.post(
+            url='https://api.xiuxiu888.com/ispay?id=' + settings.CODEPAY_ID + '&token=' + settings.CODEPAY_TOKEN + '&order_id=' + order_id)
+        is_pay_result_json = json.loads(is_pay_result.text)
+        print(is_pay_result_json)
+
+        # 充值结果
+        if is_pay_result_json['status'] == 0:
+            fees_recharge_order.recharge_status = "close"
+            fees_recharge_order.save()
+        elif is_pay_result_json['status'] == 1 or is_pay_result_json['status'] == 2:
+            fees_recharge_order.recharge_status = "success"
+            fees_recharge_order.pay_no = pay_no
+            fees_recharge_order.save()
+
+        # 修改费用
+        user.lived_dormitory.electricity_fees.have_electricity_fees += int(float(price))
+        user.lived_dormitory.electricity_fees.save()
+        note = "用户" + user.username + "充值(" + str(fees_recharge_order.recharge_number) + "度," + str(fees_recharge_order.price) + "元,订单号" + fees_recharge_order.pay_id + ",流水号" + fees_recharge_order.pay_no + ")"
+        electricity_fees_log = ElectricityFeesLog.objects.create(dormitory=user.lived_dormitory,
+                                                                 mode="add",
+                                                                 change_money=float(price),
+                                                                 operator=user,
+                                                                 note=note)
+        electricity_fees_log.save()
+
+        return redirect(request.get_full_path().replace('/fees_recharge_order/check_order_electricity/', 'https://api.xiuxiu888.com/demo_show.html'))

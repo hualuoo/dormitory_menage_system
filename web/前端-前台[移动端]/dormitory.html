@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/animate.css/3.5.2/animate.min.css" />
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+	</head>
+
+	<body class="pb12 fadeIn animated">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-success t-c o-h header">
+			<div class="ui-header-l fl w5">
+				<a href="index.html" class="color8 iconfont icon-home_light"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				宿舍
+			</div>
+			<!--<div class="ui-header-r fl w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>-->
+		</header>
+		<style>
+			.formheader {
+				line-height: 0.7rem;
+			}
+			
+			.formheader span {
+				display: inline-block;
+			}
+			
+			.formheader input {
+				border: none;
+			}
+			
+			.mirrorRotateLevel {
+				/* 水平镜像翻转 */
+				-moz-transform: scaleX(-1);
+				-webkit-transform: scaleX(-1);
+				-o-transform: scaleX(-1);
+				transform: scaleX(-1);
+				/*兼容IE*/
+				filter: FlipH;
+			}
+		</style>
+		<div class="p3 f30 f30 w75 main">
+			<div class="f30 m2 color3">
+				<dl>
+					<dt class="t-c bg-color6 f36">宿舍信息</dt>
+				</dl>
+				<dl class="p2 pl3 pr3 bg-color7 clearfix">
+					<div class="clearfix col-7">
+						<p class="fl col-6">宿舍ＩＤ：</p>
+						<p class="fl col-6 color2" id="dormitory_id"></p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-7">宿舍编号：</p>
+						<p class="fl col-5 color2" id="dormitory_number"></p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-7">宿舍区域：</p>
+						<p class="fl col-5 color2" id="dormitory_area"></p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-7">宿舍楼号：</p>
+						<p class="fl col-5 color2" id="dormitory_build"></p>
+					</div>
+					<div class="clearfix col-6">
+						<p class="fl col-7">宿舍门牌：</p>
+						<p class="fl col-5 color2" id="dormitory_room"></p>
+					</div>
+					<div class="clearfix col-8">
+						<p class="fl col-7">允许居住人数：</p>
+						<p class="fl col-5 color2" id="dormitory_allow_live_number"></p>
+					</div>
+					<div class="clearfix col-8">
+						<p class="fl col-7">当前居住人数：</p>
+						<p class="fl col-5 color2" id="dormitory_now_live_number"></p>
+					</div>
+				</dl>
+				<dl class="o-h">
+					<dt class="pl3 pr3 f34"><i class="pr1 icon iconfont icon-fold"></i>当前居住的学生学号</dt>
+					<dd class="p2 pl3 pr3 bg-color7 clearfix t-c">
+						<div class="clearfix col-12" id="lived_users">
+						</div>
+					</dd>
+				</dl>
+			</div>
+			<div class="f30 m2 color3">
+				<ul class="mt5 mb5 f36 color3">
+					<li class="bg-color8 clearfix">
+						<a onclick="show_water_fees()">
+							<p class="w12 t-c fl">
+								<i class="icon iconfont icon-sortlight f42 color-primary"></i>
+							</p>
+							<p class="w53 fl">
+								<font class="fr pr5"><i class="icon iconfont icon-arrow-right"></i></font>
+								水费查询
+							</p>
+						</a>
+					</li>
+					<li class="bg-color8 clearfix">
+						<a onclick="show_electricity_fees()">
+							<p class="w12 t-c fl">
+								<i class="icon iconfont icon-sortlight f42 color-primary"></i>
+							</p>
+							<p class="w53 fl">
+								<font class="fr pr5"><i class="icon iconfont icon-arrow-right"></i></font>
+								电费查询
+							</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="f30 m2 color3">
+				<ul class="mt5 mb5 f36 color3">
+					<li class="bg-color8 clearfix">
+						<a href="recharge.html">
+							<p class="w12 t-c fl">
+								<i class="icon iconfont icon-sortlight f42 color-primary"></i>
+							</p>
+							<p class="w53 fl">
+								<font class="fr pr5"><i class="icon iconfont icon-arrow-right"></i></font>
+								水电充值
+							</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- 底部导航 -->
+		<div class="footer"></div>
+
+		<!-- check-token -->
+		<script src="js/check-token.js"></script>
+		<script>
+			// 获取公共底部
+			$(document).ready(function() {
+				$(".footer").load("footer.html");
+			});
+
+			$('dl dt').live('tap', function() {
+				$(this).siblings('dd').toggle();
+				$(this).children('i').toggleClass('icon-fold icon-unfold');
+			});
+
+			// 数据加载
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/dormitories/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.data.length != 1) {
+						layer.open({
+							content: '管理员请通过管理员后端进行管理',
+							skin: 'msg',
+							time: 2
+						});
+						setTimeout('location.href = "my.html"', 2000);
+					} else {
+						$('#dormitory_id').html(data.data[0].id);
+						$('#dormitory_number').html(data.data[0].number);
+						$('#dormitory_area').html(data.data[0].area);
+						$('#dormitory_build').html(data.data[0].build + '栋');
+						$('#dormitory_room').html(data.data[0].room + '室');
+						$('#dormitory_allow_live_number').html(data.data[0].allow_live_number + '人');
+						$('#dormitory_now_live_number').html(data.data[0].now_live_number + '人');
+						var lived_users_html = ""
+						data.data[0].lived_users.map(function(value, index, arr) {
+							lived_users_html += value + '</br>';
+						});
+						$('#lived_users').html(lived_users_html);
+					}
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 2
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
+			
+			function show_water_fees(){
+				layer.open({
+					type: 1,
+					content: '<iframe width="100%" height="550" src="dormitory_water_fees.html"></iframe>',
+					anim: 'up',
+					style: 'position:fixed; bottom:0; left:0; width: 100%; height: 550px; padding:0px 0; border:none;'
+				});
+			}
+			
+			function show_electricity_fees(){
+				layer.open({
+					type: 1,
+					content: '<iframe width="100%" height="550" src="dormitory_electricity_fees.html"></iframe>',
+					anim: 'up',
+					style: 'position:fixed; bottom:0; left:0; width: 100%; height: 550px; padding:0px 0; border:none;'
+				});
+			}
+		</script>
+
+		<style type="text/css">
+			dl {
+				border: 1px solid #efeeee;
+				margin-top: -1px
+			}
+			
+			dt {
+				line-height: 2em;
+				cursor: pointer;
+			}
+			
+			dd {
+				border-top: 1px solid #efeeee;
+				display: none;
+				line-height: 1.8em
+			}
+			
+			.userbox {
+				line-height: 2em;
+				background: url(img/s5.jpg) center 40% no-repeat;
+				background-size: cover
+			}
+			
+			.userbox-l img {
+				border: 2px solid #fff;
+			}
+			
+			li {
+				line-height: 2.5em;
+				border-top: 1px solid #F1F1F1;
+				border-bottom: 1px solid #F1F1F1;
+				margin-top: -1px;
+			}
+			
+			li a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.header {
+				padding-bottom: 10%;
+				width: 100%;
+				position: fixed;
+				top: 0px;
+				left: 0px;
+				z-index: 9999;
+			}
+			
+			.main {
+				position: absolute;
+				width: 100%;
+				height: auto;
+				top: 40px;
+				padding-bottom: 60px;
+			}
+		</style>
+
+	</body>
+
+</html>

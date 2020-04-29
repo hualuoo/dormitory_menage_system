@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- swiper -->
+		<link rel="stylesheet" href="https://cdn.staticfile.org/Swiper/4.0.5/css/swiper.min.css">
+		<script src="https://cdn.staticfile.org/Swiper/4.0.5/js/swiper.min.js"></script>
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/animate.css/3.5.2/animate.min.css" />
+		<link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/animate.css/3.5.2/animate.min.css" />
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+	</head>
+
+	<body class="fadeIn animated" style="padding-bottom: 65px;">
+		<header class="ui-header clearfix w75 h8 f46 pl3 pr3 color8 bg-color-success t-c o-h">
+			<div class="ui-header-l fl w5">
+				<b class="icon iconfont icon-sortlight"></b>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				首页
+			</div>
+			<!--<div class="ui-header-r fl w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>-->
+		</header>
+		<!-- aside -->
+		<aside class="ui-aside w40 bg-color-success f30">
+			<div class="user p3 color8 clearfix">
+				<div class="fl w10" id="user_avatar">
+				</div>
+				<div class="fr w22">
+					<span id="user_username"></span><br />
+					<!--<font class="tag f28"></font>-->
+				</div>
+			</div>
+			<ul class="f30 mt2" id="aside_li">
+			</ul>
+		</aside>
+		<style>
+			/*只针对侧栏内容部分做简单的样式*/
+			
+			.ui-aside {
+				line-height: 1.5em;
+			}
+			
+			.ui-aside ul {
+				border-top: 0.02rem solid #017da7;
+			}
+			
+			.ui-aside li {
+				line-height: 0.8rem;
+				border-bottom: 0.02rem solid #017da7;
+			}
+			
+			.ui-aside a {
+				display: block;
+			}
+		</style>
+		<script type="text/javascript">
+			var aside = $(".ui-aside").asideUi({
+				hasmask: true,
+				size: "4rem",
+				position: "left",
+				sidertime: 300
+			});
+			$(".ui-header-l").on('touchend', function() {
+				aside.toggle();
+			})
+		</script>
+		<!-- swiper -->
+		<section class="swiper-container h40">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide" id="banner1"></div>
+				<div class="swiper-slide" id="banner2"></div>
+				<div class="swiper-slide" id="banner3"></div>
+			</div>
+			<!-- Add Arrows -->
+			<div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div>
+			<!-- Add Pagination -->
+			<div class="swiper-pagination"></div>
+		</section>
+		<script>
+			var swiper = new Swiper('.swiper-container', {
+				navigation: {
+					nextEl: '.swiper-button-next',
+					prevEl: '.swiper-button-prev',
+				},
+				pagination: {
+					el: '.swiper-pagination',
+				}
+			});
+		</script>
+		<style>
+			.swiper-button-next,
+			.swiper-button-prev {
+				/*swiper 默认图标适应性较差，使用rem单位规定左右按钮大小，图标大小*/
+				width: 0.3rem !important;
+				height: 0.5rem !important;
+				background-size: cover !important;
+				margin-top: -0.23rem !important;
+			}
+		</style>
+		<!--  -->
+		<div class="t-c f28 p6 color4 bg-color6">
+			<h2 class="color-danger f46" id="notice_title">
+				notice_title
+			</h2>
+			<p id="notice_content">notice_content</p>
+		</div>
+		<!-- 导航 -->
+		<section class="demo-nav t-c f28 clearfix">
+			<div class="col-3 h19">
+				<a href="dormitory.html" class="pt4 pb4"><i class="f42 color-primary icon iconfont icon-pubuliu"></i>
+					<p>宿舍信息</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="repair.html" class="pt4 pb4"><i class="f46 color-success icon iconfont icon-tab"></i>
+					<p>报修管理</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="access_control.html" class="pt4 pb4"><i class="f44 color-info icon iconfont icon-ic_view_carousel_px"></i>
+					<p>门禁记录</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="dormitory_water_fees.html" class="pt4 pb4"><i class="f44 color-warning icon iconfont icon-rankfill"></i>
+					<p>水费查看</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="dormitory_electricity_fees.html" class="pt4 pb4"><i class="f46 color-danger icon iconfont icon-rank"></i>
+					<p>电费查看</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="my.html" class="pt4 pb4"><i class="f46 color-warning icon iconfont icon-servicefill"></i>
+					<p>我的面板</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="change_mobile.html" class="pt4 pb4"><i class="f50 color-info icon iconfont icon-phone"></i>
+					<p>绑定手机</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="change_email.html" class="pt4 pb4"><i class="f50 color-primary icon iconfont icon-dialog"></i>
+					<p>绑定邮箱</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="change_password.html" class="pt4 pb4"><i class="f50 color-success icon iconfont icon-ddonghuabai"></i>
+					<p>密码修改</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="change_face.html" class="pt4 pb4"><i class="f42 color-warning icon iconfont icon-list"></i>
+					<p>人脸信息</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="user_info.html" class="pt4 pb4"><i class="f46 color-danger icon iconfont icon-jianpan"></i>
+					<p>个人信息</p>
+				</a>
+			</div>
+			<div class="col-3 h19">
+				<a href="recharge.html" class="pt4 pb4"><i class="f46 color-success icon iconfont icon-iconfontliebiao1copy"></i>
+					<p>水电充值</p>
+				</a>
+			</div>
+		</section>
+		<style>
+			.demo-nav {
+				line-height: 1.8em;
+			}
+			
+			.demo-nav div {
+				border-left: 1px solid #f1f1f1;
+				border-bottom: 1px solid #f1f1f1;
+			}
+			
+			.demo-nav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.demo-nav div:nth-child(4n+1) {
+				border-left: none;
+			}
+		</style>
+		<!-- 底部导航 -->
+		<div class="footer"></div>
+
+		<script>
+			// 获取公共底部
+			$(document).ready(function() {
+				$(".footer").load("footer.html");
+			});
+
+			// 获取Banner
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/system_setting/get_banner/",
+				type: "get",
+				//				headers: {
+				//					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				//				},
+				dataType: "json",
+				success: function(data) {
+					data.map(function(value, index, arr) {
+						if(value.code == "banner1") {
+							$('#banner1').html('<img src="' + value.url + '" class="w75 h40" />')
+						}
+						if(value.code == "banner2") {
+							$('#banner2').html('<img src="' + value.url + '" class="w75 h40" />')
+						}
+						if(value.code == "banner3") {
+							$('#banner3').html('<img src="' + value.url + '" class="w75 h40" />')
+						}
+						if(value.code == "notice_title") {
+							$('#notice_title').html(value.content)
+						}
+						if(value.code == "notice_content") {
+							$('#notice_content').html(value.content)
+						}
+					});
+				},
+				error: function(jqXHR) {
+					setTimeout(function() { // 如为未登录，等待1秒给未登录
+						layer.open({
+							content: '数据加载错误，请尝试重新登录',
+							skin: 'msg',
+							time: 1
+						});
+					}, 1000);
+				}
+			});
+
+			// 获取aside
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/users/get_info_self/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					$('#user_username').html(data.username);
+					if(data.info__avatar) {
+						$('#user_avatar').html('<img src="' + data.info__avatar + '" class="w10 h10 radius-o" />');
+					} else {
+						$('#user_avatar').html('<img src="http://s1.mc.fyi:11453/media/users/avatar/default.jpg" class="w10 h10 radius-o" />');
+					}
+					$('#aside_li').html('<li>' +
+						'<a href="index.html" class="pl3 color8">首页</a>' +
+						'</li>' +
+						'<li>' +
+						'<a href="dormitory.html" class="pl3 color8">宿舍管理</a>' +
+						'</li>' +
+						'<li>' +
+						'<a href="repair.html" class="pl3 color8">报修管理</a>' +
+						'</li>' +
+						'<li>' +
+						'<a href="access_control.html" class="pl3 color8">门禁管理</a>' +
+						'</li>' +
+						'<li>' +
+						'<a href="my.html" class="pl3 color8">我的面板</a>' +
+						'</li>');
+				},
+				error: function(jqXHR) {
+					$('#user_username').html('未登录');
+					$('#user_avatar').html('<img src="http://s1.mc.fyi:11453/media/users/avatar/default.jpg" class="w10 h10 radius-o" />');
+					$('#aside_li').html('<li>' +
+						'<a href="login.html" class="pl3 color8">登录</a>' +
+						'</li>');
+				}
+			});
+		</script>
+
+		<style type="text/css">
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</body>
+
+</html>

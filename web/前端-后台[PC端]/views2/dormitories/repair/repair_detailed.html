@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>报修单 详情</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" charset="utf8" src="../../../layuiadmin/js/wangEditor/wangEditor.js"></script>
+	</head>
+
+	<body>
+
+		<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 20px 0 20px;">
+			<div class="layui-form-item">
+				<label class="layui-form-label">报修单编号</label>
+				<div class="layui-input-inline" style="width: 100px;">
+					<input type="text" name="repair_id" placeholder="" autocomplete="off" class="layui-input" disabled="disabled" style="background: #F5F5F5;">
+				</div>
+				<label class="layui-form-label">申请人</label>
+				<div class="layui-input-inline" style="width: 180px;">
+					<input type="text" name="repair_applicant" placeholder="" autocomplete="off" class="layui-input" disabled="disabled" style="background: #F5F5F5;">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">维修的宿舍</label>
+				<div class="layui-input-inline">
+					<input type="text" name="repair_dormitory_number" placeholder="" autocomplete="off" class="layui-input" disabled="disabled" style="background: #F5F5F5;">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">报修单标题</label>
+				<div class="layui-input-inline" style="width: 570px;">
+					<input type="text" name="repair_title" placeholder="" autocomplete="off" class="layui-input" lay-verify="title">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">报修单状态</label>
+				<div class="layui-input-inline" style="width: 400px;">
+					<input type="radio" name="repair_status" value="untreated" title="未处理">
+					<input type="radio" name="repair_status" value="processing" title="处理中">
+					<input type="radio" name="repair_status" value="complete" title="已完成">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">报修单内容</label>
+				<div class="layui-input-inline" style="width: 570px;">
+					<div id="repair_content_toolbar" style="border: 1px solid #ccc;"></div>
+					<div id="repair_content_text" style="border: 1px solid #ccc;height: 100px;"></div>
+				</div>
+			</div>
+			<div style="text-align:right; padding: 0px 12px 0 0px;">
+				<input class="layui-btn layui-btn-sm" type="button" lay-submit lay-filter="repair_update_button" value="修改">
+			</div>
+		</div>
+
+		<div class="layui-form" lay-filter="layuiadmin-form-useradmin2" id="layuiadmin-form-useradmin2" style="padding: 20px 20px 0 20px;">
+			<div id="repair_reply" class="layui-hide">
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+					<legend>回复详细</legend>
+				</fieldset>
+				<div class="layui-form-item">
+					<div class="layui-hide">
+						<input type="text" name="repair_log_id" placeholder="" autocomplete="off" class="layui-input">
+					</div>
+					<label class="layui-form-label">回复内容</label>
+					<div class="layui-input-inline" style="width: 570px;">
+						<div id="repair_log_reply_toolbar" style="border: 1px solid #ccc;"></div>
+						<div id="repair_log_reply_text" style="border: 1px solid #ccc;height: 100px;"></div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">回复类型</label>
+					<div class="layui-input-inline" style="width: 400px;">
+						<input type="radio" name="repair_log_reply_type" value="processing" title="处理中">
+						<input type="radio" name="repair_log_reply_type" value="complete" title="已完成">
+					</div>
+				</div>
+				<div style="text-align:right; padding: 0px 12px 0 0px;">
+					<input class="layui-btn layui-btn-sm" type="button" lay-submit lay-filter="repair_log_update_button" value="修改">
+				</div>
+
+			</div>
+			<div>
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+					<legend>回复详细列表</legend>
+				</fieldset>
+				<table id="LAY-repair_log-manage" lay-filter="LAY-repair_log-manage"></table>
+			</div>
+		</div>
+
+		<div class="layui-form" lay-filter="layuiadmin-form-useradmin3" id="layuiadmin-form-useradmin3" style="padding: 20px 20px 0 20px;">
+			<div id="repair_log_create" class="layui-hide">
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+					<legend>创建新回复</legend>
+				</fieldset>
+				<div class="layui-form-item">
+					<label class="layui-form-label">回复内容</label>
+					<div class="layui-input-inline" style="width: 570px;">
+						<div id="repair_log_create_reply_toolbar" style="border: 1px solid #ccc;"></div>
+						<div id="repair_log_create_reply_text" style="border: 1px solid #ccc;height: 100px;"></div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">回复类型</label>
+					<div class="layui-input-inline" style="width: 400px;">
+						<input type="radio" name="repair_log_create_reply_type" value="processing" title="处理中">
+						<input type="radio" name="repair_log_create_reply_type" value="complete" title="已完成">
+					</div>
+				</div>
+				<div style="text-align:right; padding: 0px 12px 20px 0px;">
+					<input class="layui-btn layui-btn-sm" type="button" lay-submit lay-filter="repair_log_create_button" value="提交">
+				</div>
+			</div>
+		</div>
+
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-inline" lay-event="refresh" onclick="document.getElementById('repair_log_create').className = '';window.scrollTo(0, document.documentElement.clientHeight);">
+				<i class="layui-icon layui-icon-addition"></i>
+			</div>
+		</script>
+
+		<script src="../../../layuiadmin/layui/layui.all.js"></script>
+		<script src="../../../layuiadmin/js/check-token.js"></script>
+		
+		<script>
+			var repair_content = new window.wangEditor('#repair_content_toolbar', '#repair_content_text');
+			repair_content.customConfig.uploadImgShowBase64 = true;
+			repair_content.customConfig.menus = [
+				'head', // 标题
+				'bold', // 粗体
+				'fontSize', // 字号
+				'fontName', // 字体
+				'italic', // 斜体
+				'underline', // 下划线
+				'strikeThrough', // 删除线
+				'foreColor', // 文字颜色
+				'backColor', // 背景颜色
+				'list', // 列表
+				'justify', // 对齐方式
+				'quote', // 引用
+				'emoticon', // 表情
+				'image', // 插入图片
+				'undo', // 撤销
+				'redo' // 重复
+			];
+			repair_content.create();
+
+			var repair_log_reply = new window.wangEditor('#repair_log_reply_toolbar', '#repair_log_reply_text');
+			repair_log_reply.customConfig.uploadImgShowBase64 = true;
+			repair_log_reply.customConfig.menus = [
+				'head', // 标题
+				'bold', // 粗体
+				'fontSize', // 字号
+				'fontName', // 字体
+				'italic', // 斜体
+				'underline', // 下划线
+				'strikeThrough', // 删除线
+				'foreColor', // 文字颜色
+				'backColor', // 背景颜色
+				'list', // 列表
+				'justify', // 对齐方式
+				'quote', // 引用
+				'emoticon', // 表情
+				'image', // 插入图片
+				'undo', // 撤销
+				'redo' // 重复
+			];
+			repair_log_reply.create();
+
+			var repair_log_create_reply = new window.wangEditor('#repair_log_create_reply_toolbar', '#repair_log_create_reply_text');
+			repair_log_create_reply.customConfig.uploadImgShowBase64 = true;
+			repair_log_create_reply.customConfig.menus = [
+				'head', // 标题
+				'bold', // 粗体
+				'fontSize', // 字号
+				'fontName', // 字体
+				'italic', // 斜体
+				'underline', // 下划线
+				'strikeThrough', // 删除线
+				'foreColor', // 文字颜色
+				'backColor', // 背景颜色
+				'list', // 列表
+				'justify', // 对齐方式
+				'quote', // 引用
+				'emoticon', // 表情
+				'image', // 插入图片
+				'undo', // 撤销
+				'redo' // 重复
+			];
+			repair_log_create_reply.create();
+
+			layui.use(['form', 'table', 'layedit'], function() {
+				var form = layui.form;
+				var table = layui.table;
+				var layedit = layui.layedit;
+
+				//自定义验证规则
+				form.verify({
+					title: [/^.{1,50}$/, '标题不能为空，且须小于50个字符']
+				});
+
+				// 获取url的参数并赋值
+				function GetQueryString(name) {
+					var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+					var r = window.location.search.substr(1).match(reg);
+					if(r != null) return decodeURI(r[2]);
+					return null;
+				}
+				var repair_id = GetQueryString("repair_id");
+				if(repair_id == null) {
+					layer.msg('数据加载错误，请检查链接', {
+						icon: 2,
+						anim: 6
+					});
+					return false;
+				}
+
+				// 数据加载
+				$.ajax({
+					url: "http://127.0.0.1:11453/repair/" + repair_id + "/",
+					type: "get",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					success: function(data) {
+						form.val("layuiadmin-form-useradmin", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+							"repair_id": data.id,
+							"repair_applicant": data.applicant__username + '(' + data.applicant__first_name + data.applicant__last_name + ')',
+							"repair_dormitory_number": data.dormitory__number,
+							"repair_title": data.title,
+							"repair_status": data.status
+						});
+						repair_content.txt.html(data.content);
+					},
+					error: function(jqXHR) {
+						layer.msg('数据加载错误，请尝试重新登录', {
+							icon: 2,
+							anim: 6
+						});
+					}
+				});
+
+				table.render({
+					elem: '#LAY-repair_log-manage',
+					autoSort: false, //禁用前端自动排序
+					toolbar: '#toolbarDemo',
+					url: 'http://127.0.0.1:11453/repair_log/',
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					where: {
+						'search_repair_id': repair_id
+					},
+					limit: 10,
+					limits: [10, 20, 50, 100],
+					height: 'full-532',
+					initSort: {
+						field: 'add_time', //排序字段，对应 cols 设定的各字段名
+						type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+					},
+					cols: [
+						[{
+								field: 'id',
+								title: 'ID',
+								width: '12%',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'reply_type',
+								width: '18%',
+								title: '回复类型',
+								align: 'center',
+								sort: true,
+								templet: function(d) {
+									if(d.reply_type == "processing") {
+										return '<span class="layui-badge">处理中</span>';
+									}
+									if(d.reply_type == "complete") {
+										return '<span class="layui-badge layui-bg-green">已完成</span>';
+									}
+								}
+							},
+							{
+								field: 'reply_person__username',
+								width: '32%',
+								title: '回复人',
+								align: 'center',
+								sort: true,
+								templet: function(d) {
+									return d.reply_person__username + '(' + d.reply_person__first_name + d.reply_person__last_name + ')';
+								}
+							},
+							{
+								field: 'add_time',
+								width: '25%',
+								title: '操作时间',
+								align: 'center',
+								sort: true
+							},
+							{
+								field: 'operation',
+								title: '操作',
+								width: '13%',
+								align: 'center',
+								fixed: 'right',
+								templet: function(d) {
+									var str = '<a class="layui-btn layui-btn-primary layui-btn-xs" onclick="repair_log_details(' + d.id + ');"><i class="layui-icon layui-icon-cols"></i>查看</a>';
+									return str;
+								}
+							}
+						]
+					],
+					page: true,
+					done: function(res, curr, count) {
+						//数据的回调用，可不写
+					}
+				});
+
+				// 监听单元格事件<排序>
+				table.on('sort(LAY-repair_log-manage)', function(obj) { //注：tool是工具条事件名，LAY-repair_log-manage是table原始容器的属性 lay-filter="对应的值"
+					//尽管我们的 table 自带排序功能，但并没有请求服务端。
+					//有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+					table.reload('LAY-repair_log-manage', { //LAY-repair_log-manage是表格容器id
+						initSort: obj, //记录初始排序，如果不设的话，将无法标记表头的排序状态。 layui 2.1.1 新增参数
+						where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+							field: obj.field, //排序字段
+							order: obj.type //排序方式
+						}
+					});
+				});
+
+				// 报修单"修改"按钮
+				form.on('submit(repair_update_button)', function(data) {
+					var field = data.field;
+					$.ajax({
+						url: 'http://127.0.0.1:11453/repair/' + repair_id + '/',
+						type: "put",
+						headers: {
+							"Authorization": "JWT " + localStorage.getItem("cache_token")
+						},
+						dataType: "json",
+						data: {
+							"title": field.repair_title,
+							"status": field.repair_status,
+							"content": repair_content.txt.html()
+						},
+						success: function(data) {
+							layer.msg('操作成功：ID为' + repair_id + '的报修单已修改成功', {
+								icon: 1,
+								time: 2000
+							});
+						},
+						error: function(jqXHR) {
+							var json_responseText = JSON.parse(jqXHR.responseText);
+							if(json_responseText.title) {
+								layer.msg('报修单标题：' + json_responseText.title[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							if(json_responseText.status) {
+								layer.msg('报修单状态：' + json_responseText.status[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							if(json_responseText.content) {
+								layer.msg('报修单内容：' + json_responseText.content[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							if(json_responseText.detail) {
+								layer.msg(json_responseText.detail, {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+						}
+					});
+				});
+
+				//报修单 回复"修改"按钮
+				form.on('submit(repair_log_update_button)', function(data) {
+					var field = data.field;
+					$.ajax({
+						url: 'http://127.0.0.1:11453/repair_log/' + field.repair_log_id + '/',
+						type: "put",
+						headers: {
+							"Authorization": "JWT " + localStorage.getItem("cache_token")
+						},
+						dataType: "json",
+						data: {
+							"reply": repair_log_reply.txt.html(),
+							"reply_type": field.repair_log_reply_type
+						},
+						success: function(data) {
+							layer.msg('操作成功：ID为' + field.repair_log_id + '的回复单已修改成功', {
+								icon: 1,
+								time: 2000
+							});
+							layui.table.reload('LAY-repair_log-manage');
+						},
+						error: function(jqXHR) {
+							var json_responseText = JSON.parse(jqXHR.responseText);
+							if(json_responseText.reply) {
+								layer.msg('回复内容：' + json_responseText.reply[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							if(json_responseText.reply_type) {
+								layer.msg('回复类型：' + json_responseText.reply_type[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							if(json_responseText.detail) {
+								layer.msg(json_responseText.detail, {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+						}
+					});
+				});
+
+				//报修单 回复"新建"按钮				
+				form.on('submit(repair_log_create_button)', function(data) {
+					var field = data.field;
+					$.ajax({
+						url: 'http://127.0.0.1:11453/repair_log/',
+						type: "post",
+						headers: {
+							"Authorization": "JWT " + localStorage.getItem("cache_token")
+						},
+						dataType: "json",
+						data: {
+							"main_repair__id": repair_id,
+							"reply": repair_log_create_reply.txt.html(),
+							"reply_type": field.repair_log_create_reply_type
+						},
+						success: function(data) {
+							layer.msg('操作成功：ID为' + repair_id + '的报修单已回复成功', {
+								icon: 1,
+								time: 2000
+							});
+							layui.table.reload('LAY-repair_log-manage');
+							document.getElementById('repair_log_create').className = 'layui-hide';
+						},
+						error: function(jqXHR) {
+							var json_responseText = JSON.parse(jqXHR.responseText);
+							if(json_responseText.main_repair__id) {
+								layer.msg('报修单ID：' + json_responseText.main_repair__id[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							if(json_responseText.reply) {
+								layer.msg('回复内容：' + json_responseText.reply[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							if(json_responseText.reply_type) {
+								layer.msg('回复类型：' + json_responseText.reply_type[0], {
+									icon: 2,
+									anim: 6
+								});
+							}
+							if(json_responseText.detail) {
+								layer.msg(json_responseText.detail, {
+									icon: 2,
+									anim: 6
+								});
+								return false;
+							}
+						}
+					});
+				});
+			});
+
+			function repair_log_details(id) {
+				var div = document.getElementById('repair_reply');
+				div.className = '';
+
+				$.ajax({
+					url: "http://127.0.0.1:11453/repair_log/" + id + "/",
+					type: "get",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					success: function(data) {
+						layui.form.val("layuiadmin-form-useradmin2", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+							"repair_log_id": data.id,
+							"repair_log_reply_type": data.reply_type
+						});
+						repair_log_reply.txt.html(data.reply);
+					},
+					error: function(jqXHR) {
+						layer.msg('数据加载错误，请尝试重新登录', {
+							icon: 2,
+							anim: 6
+						});
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

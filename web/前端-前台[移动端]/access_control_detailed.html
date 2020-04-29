@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/animate.css/3.5.2/animate.min.css" />
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+	</head>
+
+	<body class="pb12 fadeIn animated" style="padding-bottom: 65px;">
+		<header class="ui-header clearfix w75 pl3 pr3 h8 f46  color8 bg-color-primary t-c header">
+			<div class="ui-header-l fl w5 mirrorRotateLevel">
+				<a href="access_control.html" class="icon color8 iconfont icon-arrow-right"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				门禁 - 记录详情
+			</div>
+			<!--<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>-->
+		</header>
+		<style>
+			.formheader {
+				line-height: 0.7rem;
+			}
+			
+			.formheader span {
+				display: inline-block;
+			}
+			
+			.formheader input {
+				border: none;
+			}
+			
+			.mirrorRotateLevel {
+				/* 水平镜像翻转 */
+				-moz-transform: scaleX(-1);
+				-webkit-transform: scaleX(-1);
+				-o-transform: scaleX(-1);
+				transform: scaleX(-1);
+				/*兼容IE*/
+				filter: FlipH;
+			}
+		</style>
+		<div class="p3 f30 f30 w75 main">
+			<div class="f30 m2 color3">
+				<dl>
+					<dt class="t-c bg-color6 f36">门禁记录信息</dt>
+				</dl>
+				<dl class="p2 pl3 pr3 bg-color7 clearfix">
+					<div class="clearfix col-12">
+						<span class="col-2">&emsp;</span>
+						<img class="col-8" id="access_control_detailed_photo">
+					</div>
+					<div class="clearfix col-12" style="padding: 4px 0 0 0;">
+						<span class="">记录ＩＤ：</span>
+						<span class="color2" id="access_control_detailed_id"></span>
+					</div>
+					<div class="clearfix col-12">
+						<span class="">记录时间：</span>
+						<span class="color2" id="access_control_detailed_add_time"></span>
+					</div>
+					<div class="clearfix col-12">
+						<span class="">记录状态：</span>
+						<span class="color2" id="access_control_detailed_status"></span>
+					</div>
+					<div class="clearfix col-12">
+						<span class="">&emsp;准确率：</span>
+						<span class="color2" id="access_control_detailed_accuracy"></span>
+					</div>
+					<div class="clearfix col-12">
+						<span class="col-2">备注：</span>
+						<span class="col-10 color2" id="access_control_detailed_note"></span>
+					</div>
+				</dl>
+			</div>
+			<div class="f30 m2 color3">
+				<dl>
+					<dt class="t-c bg-color6 f36">异常申请</dt>
+				</dl>
+				<dl class="p2 pl3 pr3 bg-color8 clearfix">
+					<div class="clearfix col-12">
+						<span class="col-2">内容：</span>
+						<div id="access_control_abnormal_application_content">
+						
+						</div>
+					</div>
+					<div class="clearfix col-12" style="padding: 4px 0 0 0;">
+						<font class="t-c f30 color1" id="error_label"></font>
+						<div id="access_control_abnormal_application_button">
+						</div>
+					</div>
+				</dl>
+			</div>
+			<div class="f30 m2 color3" id="access_control_abnormal_application_reply">
+			</div>
+		</div>
+		<!-- 底部导航 -->
+		<div class="footer"></div>
+
+		<!-- check-token -->
+		<script src="js/check-token.js"></script>
+		<script>
+			// 获取公共底部
+			$(document).ready(function() {
+				$(".footer").load("footer.html");
+			});
+
+			$('dl dt').live('tap', function() {
+				$(this).siblings('dd').toggle();
+				$(this).children('i').toggleClass('icon-fold icon-unfold');
+			});
+
+			// 获取url的参数并赋值
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return decodeURI(r[2]);
+				return null;
+			}
+			var access_control_id = GetQueryString("access_control_id");
+			if(access_control_id == null) {
+				layer.msg('数据加载错误，请检查链接', {
+					icon: 2,
+					anim: 6
+				});
+			}
+
+			// 数据加载
+			$.ajax({
+				url: 'http://s1.mc.fyi:11453/access_control/' + access_control_id + '/',
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					$('#access_control_detailed_photo').attr("src", data.photo);
+					$('#access_control_detailed_id').html(data.id);
+					$('#access_control_detailed_add_time').html(data.add_time);
+					$('#access_control_detailed_accuracy').html(data.accuracy);
+					$('#access_control_detailed_note').html(data.note);
+					if(data.status == "normal") {
+						$('#access_control_detailed_status').html('<span class="tag tag-success f28">正常</span>');
+					}
+					if(data.status == "later") {
+						$('#access_control_detailed_status').html('<span class="tag tag-warning f28">晚归</span>');
+					}
+					if(data.status == "abnormal") {
+						$('#access_control_detailed_status').html('<span class="tag tag-danger f28">异常</span>');
+					}
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 2
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
+			$.ajax({
+				url: 'http://s1.mc.fyi:11453/access_control/' + access_control_id + '/abnormal_application/',
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.id == "0") {
+						$('#access_control_abnormal_application_content').html('<textarea class="col-10 w59 h20 form-control" placeholder="异常申请内容" id="abnormal_application_content"></textarea>');
+						$('#access_control_abnormal_application_button').html('<span class="fr f28 w9 h4 btn radius5 btn-primary" onclick="abnormal_application_create()">提交</span>')
+						console.log("123")
+					} else {
+						if(data.result == "pending") {
+							$('#access_control_abnormal_application_content').html('<textarea class="col-10 w59 h20 form-control" placeholder="异常申请内容" id="abnormal_application_content">' + data.content + '</textarea>');
+							$('#access_control_abnormal_application_button').html('<span class="fr f28 w9 h4 btn radius5 btn-primary" onclick="abnormal_application_update()">修改</span>')
+							var abnormal_application_reply_html = '<dl><dt class="t-c bg-color6 f36">申请回复</dt><dl class="p2 pl3 pr3 bg-color7 clearfix">该申请还未处理，请耐心等待处理。</dl></dl>';
+						}
+						if(data.result == "pass") {
+							$('#access_control_abnormal_application_content').html('<span class="col-10 w59">' + data.content + '</span>');
+							var abnormal_application_reply_html = '<dl>' +
+								'<dt class="t-c bg-color6 f36">申请回复</dt>' +
+								'<dl class="p2 pl3 pr3 bg-color8 clearfix">' +
+								'<div class="clearfix col-12">' +
+								'<span class="col-2">状态：</span>' +
+								'<span class="tag tag-success f28">通过</span>' +
+								'</div>' +
+								'<div class="clearfix col-12">' +
+								'<span class="col-2">内容：</span>' +
+								'<span class="col-10 color2">' + data.reply + '</span>' +
+								'</div>' +
+								'</dl>' +
+								'</dl>';
+						}
+						if(data.result == "fail") {
+							$('#access_control_abnormal_application_content').html('<span class="col-10 w59">' + data.content + '</span>');
+							var abnormal_application_reply_html = '<dl>' +
+								'<dt class="t-c bg-color6 f36">申请回复</dt>' +
+								'<dl class="p2 pl3 pr3 bg-color8 clearfix">' +
+								'<div class="clearfix col-12">' +
+								'<span class="col-2">状态：</span>' +
+								'<span class="tag tag-danger f28">未通过</span>' +
+								'</div>' +
+								'<div class="clearfix col-12">' +
+								'<span class="col-2">内容：</span>' +
+								'<span class="col-10 color2">' + data.reply + '</span>' +
+								'</div>' +
+								'</dl>' +
+								'</dl>';
+						}
+						$('#access_control_abnormal_application_reply').html(abnormal_application_reply_html);
+					}
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 2
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
+
+			// 提交申请
+			function abnormal_application_create() {
+				if($('#abnormal_application_content').val() == "") {
+					$('#error_label').html('<i class="icon iconfont icon-close">异常申请内容：不能为空。');
+					return false;
+				}
+				$.ajax({
+					url: 'http://s1.mc.fyi:11453/access_control/' + access_control_id + '/abnormal_application_create/',
+					type: "post",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					data: {
+						"content": $('#abnormal_application_content').val()
+					},
+					success: function(data) {
+						layer.open({
+							content: '操作成功：' + data.detail,
+							skin: 'msg',
+							time: 1
+						});
+						setTimeout('window.location.reload()', 1000);
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						if(json_responseText.content) {
+							$('#error_label').html('<i class="icon iconfont icon-close">异常申请内容：' + json_responseText.content[0]);
+							return false;
+						}
+						if(json_responseText.detail) {
+							$('#error_label').html('<i class="icon iconfont icon-close">' + json_responseText.detail);
+							return false;
+						}
+						$('#error_label').html('<i class="icon iconfont icon-close"></i>发生未知错误，请联系管理员');
+					}
+				});
+			}
+			
+			// 修改申请
+			function abnormal_application_update() {
+				if($('#abnormal_application_content').val() == "") {
+					$('#error_label').html('<i class="icon iconfont icon-close">异常申请内容：不能为空。');
+					return false;
+				}
+				$.ajax({
+					url: 'http://s1.mc.fyi:11453/access_control/' + access_control_id + '/abnormal_application_update/',
+					type: "post",
+					headers: {
+						"Authorization": "JWT " + localStorage.getItem("cache_token")
+					},
+					dataType: "json",
+					data: {
+						"content": $('#abnormal_application_content').val()
+					},
+					success: function(data) {
+						layer.open({
+							content: '操作成功：门禁记录异常申请已修改成功！',
+							skin: 'msg',
+							time: 1
+						});
+						setTimeout('window.location.reload()', 1000);
+					},
+					error: function(jqXHR) {
+						var json_responseText = JSON.parse(jqXHR.responseText);
+						if(json_responseText.content) {
+							$('#error_label').html('<i class="icon iconfont icon-close">异常申请内容：' + json_responseText.content[0]);
+							return false;
+						}
+						if(json_responseText.detail) {
+							$('#error_label').html('<i class="icon iconfont icon-close">' + json_responseText.detail);
+							return false;
+						}
+						$('#error_label').html('<i class="icon iconfont icon-close"></i>发生未知错误，请联系管理员');
+					}
+				});
+			}
+		</script>
+
+		<style type="text/css">
+			dl {
+				border: 1px solid #efeeee;
+				margin-top: -1px
+			}
+			
+			dt {
+				line-height: 2em;
+				cursor: pointer;
+			}
+			
+			dd {
+				border-top: 1px solid #efeeee;
+				display: none;
+				line-height: 1.8em
+			}
+			
+			.userbox {
+				line-height: 2em;
+				background: url(img/s5.jpg) center 40% no-repeat;
+				background-size: cover
+			}
+			
+			.userbox-l img {
+				border: 2px solid #fff;
+			}
+			
+			li {
+				line-height: 2.5em;
+				border-top: 1px solid #F1F1F1;
+				border-bottom: 1px solid #F1F1F1;
+				margin-top: -1px;
+			}
+			
+			li a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.header {
+				padding-bottom: 10%;
+				width: 100%;
+				position: fixed;
+				top: 0px;
+				left: 0px;
+				z-index: 9998;
+			}
+			
+			.main {
+				position: absolute;
+				width: 100%;
+				height: auto;
+				top: 40px;
+				padding-bottom: 60px;
+			}
+		</style>
+
+	</body>
+
+</html>

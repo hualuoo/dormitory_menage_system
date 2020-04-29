@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/animate.css/3.5.2/animate.min.css" />
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+	</head>
+
+	<body class="pb12 fadeIn animated">
+		<div class="p3 f30 f30 w75">
+			<div class="f30 m2 color3">
+				<dl>
+					<dt class="t-c bg-color6 f36">电费情况</dt>
+				</dl>
+				<dl class="p2 pl3 pr3 bg-color7 clearfix">
+					<div class="clearfix col-10">
+						<span class="">宿舍ID：</span>
+						<span class="color2" id="dormitory_number"></span>
+					</div>
+					<div class="clearfix col-10">
+						<span class="">现有电量(度)：</span>
+						<span class="color2" id="have_electricity"></span>
+					</div>
+					<div class="clearfix col-10">
+						<span class="">现有电费(元)：</span>
+						<span class="color2" id="have_electricity_fees"></span>
+					</div>
+					<div class="clearfix col-12">
+						<span class="col-2">备注：</span>
+						<span class="col-10 color2" id="note"></span>
+					</div>
+				</dl>
+			</div>
+
+			<div class="f30 m2 color3">
+				<dl>
+					<dt class="t-c bg-color6 f36">使用情况详细<span class="f28">(只显示最近100条)</span></dt>
+				</dl>
+				<div id="electricity_fees_log"></div>
+			</div>
+		</div>
+		
+		<!-- check-token -->
+		<script src="js/check-token.js"></script>
+		<script>
+			$('dl dt').live('tap', function() {
+				$(this).siblings('dd').toggle();
+				$(this).children('i').toggleClass('icon-fold icon-unfold');
+			});
+
+			// 数据加载
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/electricity_fees/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.data.length != 1) {
+						layer.open({
+							content: '管理员请通过管理员后端进行管理',
+							skin: 'msg',
+							time: 2
+						});
+						setTimeout('location.href = "my.html"', 2000);
+					} else {
+						$('#dormitory_number').html(data.data[0].dormitory_number);
+						$('#have_electricity').html(data.data[0].have_electricity);
+						$('#have_electricity_fees').html(data.data[0].have_electricity_fees);
+						$('#note').html(data.data[0].note);
+					}
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 2
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/electricity_fees_log/",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					var electricity_fees_log_html = "";
+					data.data.map(function(value, index, arr) {
+						if(value.mode == "add") {
+							electricity_fees_log_html += '<dl class="o-h">' +
+								'<dt class="pl3 pr3 f32"><i class="pr1 icon iconfont icon-fold"></i>' + value.add_time + '<font class="fr pr5 color-primary" size="3">+' + value.change_money + '</font></dt>' +
+								'<dd class="p2 pl3 pr3 bg-color7 clearfix">' +
+								'<div class="clearfix col-10">' +
+								'<span class="">操作ID：</span>' +
+								'<span class="color2">' + value.id + '</span>' +
+								'</div>' +
+								'<div class="clearfix col-10">' +
+								'<span class="">变动情况：</span>' +
+								'<span class="color-primary">增加</span>' +
+								'</div>' +
+								'<div class="clearfix col-10">' +
+								'<span class="">变动金额：</span>' +
+								'<span class="color2">' + value.change_money + '元</span>' +
+								'</div>' +
+								'<div class="clearfix col-10">' +
+								'<span class="">操作人：</span>' +
+								'<span class="color2">' + value.operator__first_name + value.operator__last_name + '(' + value.operator__username + ')</span>' +
+								'</div>' +
+								'<div class="clearfix col-12">' +
+								'<span class="col-2">备注：</span>' +
+								'<span class="col-10 color2">' + value.note + '</span>' +
+								'</div>' +
+								'</dd>' +
+								'</dl>';
+						}
+						if(value.mode == "sub") {
+							electricity_fees_log_html += '<dl class="o-h">' +
+								'<dt class="pl3 pr3 f32"><i class="pr1 icon iconfont icon-fold"></i>' + value.add_time + '<font class="fr pr5 color1" size="3">-' + value.change_money + '</font></dt>' +
+								'<dd class="p2 pl3 pr3 bg-color7 clearfix">' +
+								'<div class="clearfix col-10">' +
+								'<span class="">操作ID：</span>' +
+								'<span class="color2">' + value.id + '</span>' +
+								'</div>' +
+								'<div class="clearfix col-10">' +
+								'<span class="">变动情况：</span>' +
+								'<span class="color1">扣除</span>' +
+								'</div>' +
+								'<div class="clearfix col-10">' +
+								'<span class="">变动金额：</span>' +
+								'<span class="color2">' + value.change_money + '元</span>' +
+								'</div>' +
+								'<div class="clearfix col-10">' +
+								'<span class="">操作人：</span>' +
+								'<span class="color2">' + value.operator__first_name + value.operator__last_name + '(' + value.operator__username + ')</span>' +
+								'</div>' +
+								'<div class="clearfix col-12">' +
+								'<span class="col-2">备注：</span>' +
+								'<span class="col-10 color2">' + value.note + '</span>' +
+								'</div>' +
+								'</dd>' +
+								'</dl>';
+						}
+					});
+					$('#electricity_fees_log').html(electricity_fees_log_html);
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 2
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
+		</script>
+
+		<style type="text/css">
+			dl {
+				border: 1px solid #efeeee;
+				margin-top: -1px
+			}
+			
+			dt {
+				line-height: 2em;
+				cursor: pointer;
+			}
+			
+			dd {
+				border-top: 1px solid #efeeee;
+				display: none;
+				line-height: 1.8em
+			}
+			
+			li {
+				line-height: 2.5em;
+				border-top: 1px solid #F1F1F1;
+				border-bottom: 1px solid #F1F1F1;
+				margin-top: -1px;
+			}
+			
+			li a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+
+	</body>
+
+</html>

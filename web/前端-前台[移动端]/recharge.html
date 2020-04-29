@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0,uc-fitscreen=yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>miniMobile</title>
+		<meta name="keywords" content="miniMobile的demo" />
+		<meta name="description" content="miniMobile是一个简单易用的移动框架！" />
+		<!-- miniMObile.css、js -->
+		<link rel="stylesheet" type="text/css" href="css/miniMobile.css" />
+		<script type="text/javascript" src="js/zepto.min.js"></script>
+		<script type="text/javascript" src="js/miniMobile.js"></script>
+		<!-- fonticon -->
+		<link rel="stylesheet" type="text/css" href="plugins/fonticon/iconfont.css" />
+		<!-- animate.css -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/animate.css/3.5.2/animate.min.css" />
+		<!-- layer -->
+		<script type="text/javascript" src="plugins/layer_mobile/layer.js"></script>
+	</head>
+
+	<body class="pb12 fadeIn animated" style="padding-bottom: 65px;">
+		<header class="ui-header clearfix w75 pl3 pr3 h8 f46  color8 bg-color-primary t-c header">
+			<div class="ui-header-l fl w5 mirrorRotateLevel">
+				<a href="dormitory.html" class="icon color8 iconfont icon-arrow-right"></a>
+			</div>
+			<div class="ui-header-c fl f30 w59">
+				水电充值
+			</div>
+			<!--<div class="ui-header-r fr w5">
+				<i class="icon iconfont icon-phone"></i>
+			</div>-->
+		</header>
+		<style>
+			.formheader {
+				line-height: 0.7rem;
+			}
+			
+			.formheader span {
+				display: inline-block;
+			}
+			
+			.formheader input {
+				border: none;
+			}
+			
+			.mirrorRotateLevel {
+				/* 水平镜像翻转 */
+				-moz-transform: scaleX(-1);
+				-webkit-transform: scaleX(-1);
+				-o-transform: scaleX(-1);
+				transform: scaleX(-1);
+				/*兼容IE*/
+				filter: FlipH;
+			}
+		</style>
+		<div class="p3 f30 f30 w75 main">
+			<iframe width="100%" height="626" frameborder="0" name="iframe" id="iframe" frameborder="no" border="0" scrolling="no" allowtransparency="yes" src="recharge_create.html"></iframe>
+		</div>
+		<!-- 底部导航 -->
+		<div class="footer"></div>
+
+		<!-- check-token -->
+		<script src="js/check-token.js"></script>
+		<script>
+			// 获取公共底部
+			$(document).ready(function() {
+				$(".footer").load("footer.html");
+			});
+		</script>
+
+		<style type="text/css">
+			li {
+				line-height: 2.5em;
+				border-top: 1px solid #F1F1F1;
+				border-bottom: 1px solid #F1F1F1;
+				margin-top: -1px;
+			}
+			
+			li a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.demo-bottomNav {
+				line-height: 1.8em;
+				border-top: 1px solid #F1F1F1;
+			}
+			
+			.demo-bottomNav a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.header {
+				padding-bottom: 10%;
+				width: 100%;
+				position: fixed;
+				top: 0px;
+				left: 0px;
+				z-index: 9999;
+			}
+			
+			.main {
+				position: absolute;
+				width: 100%;
+				height: auto;
+				top: 40px;
+				padding-bottom: 60px;
+			}
+		</style>
+
+	</body>
+
+</html>
