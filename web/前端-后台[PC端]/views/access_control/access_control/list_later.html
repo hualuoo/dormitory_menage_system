@@ -147,7 +147,7 @@
 			layui.use('flow', function() {
 				var flow = layui.flow;
 
-				flow_load('http://127.0.0.1:11453/access_control/?limit=12&search_status=later');
+				flow_load('http://s1.mc.fyi:11453/access_control/?limit=12&search_status=later');
 
 				// 模糊查询"搜索"按钮
 				$('#users_search_button').click(function() {
@@ -161,7 +161,7 @@
 					$("#access_control_flow").remove();
 					$("#access_control_flow_div").append("<ul id=\"access_control_flow\"></ul>");
 
-					flow_load('http://127.0.0.1:11453/access_control/?limit=12&search_status=later' + url_value);
+					flow_load('http://s1.mc.fyi:11453/access_control/?limit=12&search_status=later' + url_value);
 				});
 
 				// 模糊查询"清空"按钮
@@ -176,7 +176,7 @@
 					$("#access_control_flow").remove();
 					$("#access_control_flow_div").append("<ul id=\"access_control_flow\"></ul>");
 
-					flow_load('http://127.0.0.1:11453/access_control/?limit=12&search_status=later');
+					flow_load('http://s1.mc.fyi:11453/access_control/?limit=12&search_status=later');
 				});
 
 				//搜索区域DIV回车监听
@@ -210,7 +210,7 @@
 						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
 							var field = data.field; //获取提交的字段
 							$.ajax({
-								url: "http://127.0.0.1:11453/access_control/" + id + "/",
+								url: "http://s1.mc.fyi:11453/access_control/" + id + "/",
 								type: "put",
 								headers: {
 									"Authorization": "JWT " + localStorage.getItem("cache_token")

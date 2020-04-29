@@ -92,7 +92,7 @@
 					elem: '#LAY-dormitories-manage',
 					autoSort: false, //禁用前端自动排序
 					toolbar: '#toolbarDemo',
-					url: 'http://127.0.0.1:11453/dormitories/',
+					url: 'http://s1.mc.fyi:11453/dormitories/',
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
@@ -275,7 +275,7 @@
 							iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
 								var field = data.field; //获取提交的字段
 								$.ajax({
-									url: "http://127.0.0.1:11453/dormitories/",
+									url: "http://s1.mc.fyi:11453/dormitories/",
 									type: "post",
 									headers: {
 										"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -428,7 +428,7 @@
 						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
 							var field = data.field; //获取提交的字段
 							$.ajax({
-								url: "http://127.0.0.1:11453/dormitories/" + id + "/change_note/",
+								url: "http://s1.mc.fyi:11453/dormitories/" + id + "/change_note/",
 								type: "post",
 								headers: {
 									"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -492,7 +492,7 @@
 					layer.confirm('确定删除ID为' + id + '的宿舍吗？如宿舍内还有居住的人将会自动清空。',
 						function(index2) {
 							$.ajax({
-								url: "http://127.0.0.1:11453/dormitories/" + id + "/",
+								url: "http://s1.mc.fyi:11453/dormitories/" + id + "/",
 								type: "delete",
 								headers: {
 									"Authorization": "JWT " + localStorage.getItem("cache_token")

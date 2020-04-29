@@ -7,11 +7,11 @@ if(localStorage.getItem("cache_token") != null) {
 if(cache_token == "") {
 	layer.msg('检测到您未登录，正在跳转到登录页面');
 	setTimeout(function() {
-		location.href = "http://localhost:8020/dist/views/login.html";
+		location.href = "/views/login.html";
 	}, 1000);
 } else {
 	$.ajax({
-		url: "http://127.0.0.1:11453/token-verify/",
+		url: "http://s1.mc.fyi:11453/token-verify/",
 		type: "post",
 		async: false,
 		dataType: "json",
@@ -25,7 +25,7 @@ if(cache_token == "") {
 			localStorage.removeItem("cache_token");
 			layui.layer.msg('检测到您未登录，正在跳转到登录页面');
 			setTimeout(function() {
-				location.href = "http://localhost:8020/dist/views/login.html";
+				location.href = "/views/login.html";
 			}, 1000);
 		}
 	})

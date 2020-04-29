@@ -135,7 +135,7 @@
 
 								$.ajax({
 									method: "post",
-									url: 'http://127.0.0.1:11453/users/' + id + '/set_face/', //用于文件上传的服务器端请求地址
+									url: 'http://s1.mc.fyi:11453/users/' + id + '/set_face/', //用于文件上传的服务器端请求地址
 									headers: {
 										"Authorization": "JWT " + localStorage.getItem("cache_token")
 									},

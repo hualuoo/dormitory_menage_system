@@ -123,7 +123,7 @@
 
 				// 数据加载
 				$.ajax({
-					url: "http://127.0.0.1:11453/users/get_info_self/",
+					url: "http://s1.mc.fyi:11453/users/get_info_self/",
 					type: "get",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -143,7 +143,7 @@
 						if(data.info__avatar) {
 							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="' + data.info__avatar + '" onclick="user_set_avatar(' + data.id + ');">');
 						} else {
-							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:11453/media/users/avatar/default.jpg" onclick="user_set_avatar(' + data.id + ');">');
+							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="http://s1.mc.fyi:11453/media/users/avatar/default.jpg" onclick="user_set_avatar(' + data.id + ');">');
 						}
 						$("#user_remove_avatar_button").attr("onclick", 'user_remove_avatar(' + data.id + ');');
 					},
@@ -159,7 +159,7 @@
 				form.on('submit(update_info)', function(data) {
 					var field = data.field;
 					$.ajax({
-						url: "http://127.0.0.1:11453/users/" + field.id + "/",
+						url: "http://s1.mc.fyi:11453/users/" + field.id + "/",
 						type: "put",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -246,7 +246,7 @@
 			// 重载头像
 			function reload_avatar() {
 				$.ajax({
-					url: "http://127.0.0.1:11453/users/get_info_self/",
+					url: "http://s1.mc.fyi:11453/users/get_info_self/",
 					type: "get",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -256,7 +256,7 @@
 						if(data.info__avatar) {
 							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="' + data.info__avatar + '" onclick="user_set_avatar(' + data.id + ');">');
 						} else {
-							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:11453/media/users/avatar/default.jpg" onclick="user_set_avatar(' + data.id + ');">');
+							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="http://s1.mc.fyi:11453/media/users/avatar/default.jpg" onclick="user_set_avatar(' + data.id + ');">');
 						}
 					},
 					error: function(jqXHR) {
@@ -290,7 +290,7 @@
 			// "移除头像"按钮
 			function user_remove_avatar(id) {
 				$.ajax({
-					url: "http://127.0.0.1:11453/users/" + id + "/remove_avatar/",
+					url: "http://s1.mc.fyi:11453/users/" + id + "/remove_avatar/",
 					type: "post",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -316,7 +316,7 @@
 			// "重新填写"按钮
 			function reload_data() {
 				$.ajax({
-					url: "http://127.0.0.1:11453/users/get_info_self/",
+					url: "http://s1.mc.fyi:11453/users/get_info_self/",
 					type: "get",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -336,7 +336,7 @@
 						if(data.info__avatar) {
 							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="' + data.info__avatar + '" onclick="user_set_avatar(' + data.id + ');">');
 						} else {
-							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:11453/media/users/avatar/default.jpg" onclick="user_set_avatar(' + data.id + ');">');
+							$('#avatar').html('<img style="height:40px;width:40px;border-radius:50%;line-height:50px!important;" src="http://s1.mc.fyi:11453/media/users/avatar/default.jpg" onclick="user_set_avatar(' + data.id + ');">');
 						}
 					},
 					error: function(jqXHR) {

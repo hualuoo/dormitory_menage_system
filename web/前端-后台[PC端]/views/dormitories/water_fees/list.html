@@ -62,7 +62,7 @@
 					elem: '#LAY-water_fees-manage',
 					autoSort: false, //禁用前端自动排序
 					toolbar: '#toolbarDemo',
-					url: 'http://127.0.0.1:11453/water_fees/',
+					url: 'http://s1.mc.fyi:11453/water_fees/',
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
@@ -236,7 +236,7 @@
 					title: '请输入充值的水费(元)'
 				}, function(value, index) {
 					$.ajax({
-						url: "http://127.0.0.1:11453/water_fees/" + id + "/recharge_admin/",
+						url: "http://s1.mc.fyi:11453/water_fees/" + id + "/recharge_admin/",
 						type: "post",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -294,7 +294,7 @@
 						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
 							var field = data.field; //获取提交的字段
 							$.ajax({
-								url: "http://127.0.0.1:11453/water_fees/" + id + "/change_note/",
+								url: "http://s1.mc.fyi:11453/water_fees/" + id + "/change_note/",
 								type: "post",
 								headers: {
 									"Authorization": "JWT " + localStorage.getItem("cache_token")

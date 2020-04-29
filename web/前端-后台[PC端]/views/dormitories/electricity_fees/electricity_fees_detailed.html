@@ -66,7 +66,7 @@
 
 				// 数据加载
 				$.ajax({
-					url: "http://127.0.0.1:11453/electricity_fees/" + electricity_fees_id + "/",
+					url: "http://s1.mc.fyi:11453/electricity_fees/" + electricity_fees_id + "/",
 					type: "get",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -92,7 +92,7 @@
 					elem: '#LAY-electricity_fees_log-manage',
 					autoSort: false, //禁用前端自动排序
 					toolbar: '#toolbarDemo',
-					url: 'http://127.0.0.1:11453/electricity_fees_log/',
+					url: 'http://s1.mc.fyi:11453/electricity_fees_log/',
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},

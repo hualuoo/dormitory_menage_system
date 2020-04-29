@@ -70,7 +70,7 @@
 				form.on("submit(LAY-user-front-submit)", function(data) {
 					var form_data = form.val('layuiadmin-form-useradmin');
 					$.ajax({
-						url: "http://127.0.0.1:11453/users/create_multiple/",
+						url: "http://s1.mc.fyi:11453/users/create_multiple/",
 						type: "post",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")

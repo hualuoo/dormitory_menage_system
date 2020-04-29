@@ -139,7 +139,7 @@
 
 				// 数据加载
 				$.ajax({
-					url: "http://127.0.0.1:11453/access_control/" + access_control_id + "/abnormal_application/",
+					url: "http://s1.mc.fyi:11453/access_control/" + access_control_id + "/abnormal_application/",
 					type: "get",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -178,7 +178,7 @@
 				//门禁记录 识别异常申请 "重载"按钮
 				form.on('submit(abnormal_application_reload_button)', function(data) {
 					$.ajax({
-						url: "http://127.0.0.1:11453/access_control/" + access_control_id + "/abnormal_application/",
+						url: "http://s1.mc.fyi:11453/access_control/" + access_control_id + "/abnormal_application/",
 						type: "get",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -199,7 +199,7 @@
 				//门禁记录 识别异常申请 回复 "重载"按钮
 				form.on('submit(abnormal_application_reply_reload)', function(data) {
 					$.ajax({
-						url: "http://127.0.0.1:11453/access_control/" + access_control_id + "/abnormal_application/",
+						url: "http://s1.mc.fyi:11453/access_control/" + access_control_id + "/abnormal_application/",
 						type: "get",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -224,7 +224,7 @@
 				form.on('submit(abnormal_application_update_button)', function(data) {
 					var field = data.field;
 					$.ajax({
-						url: 'http://127.0.0.1:11453/access_control/' + access_control_id + '/abnormal_application_update/',
+						url: 'http://s1.mc.fyi:11453/access_control/' + access_control_id + '/abnormal_application_update/',
 						type: "post",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -263,7 +263,7 @@
 				form.on('submit(abnormal_application_reply_button)', function(data) {
 					var field = data.field;
 					$.ajax({
-						url: 'http://127.0.0.1:11453/access_control/' + access_control_id + '/abnormal_application_reply/',
+						url: 'http://s1.mc.fyi:11453/access_control/' + access_control_id + '/abnormal_application_reply/',
 						type: "post",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")

@@ -99,7 +99,7 @@
 					elem: '#LAY-users-manage',
 					autoSort: false, //禁用前端自动排序
 					toolbar: '#toolbarDemo',
-					url: 'http://127.0.0.1:11453/users/',
+					url: 'http://s1.mc.fyi:11453/users/',
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
@@ -132,7 +132,7 @@
 									if(d.info__avatar) {
 										return '<div><img style="height:30px;width:30px;border-radius:50%;line-height:50px!important;" src="' + d.info__avatar + '" onclick="user_set_avatar(' + d.id + ');"></div>';
 									}
-									return '<div><img style="height:30px;width:30px;border-radius:50%;line-height:50px!important;" src="http://127.0.0.1:11453/media/users/avatar/default.jpg" onclick="user_set_avatar(' + d.id + ');"></div>';
+									return '<div><img style="height:30px;width:30px;border-radius:50%;line-height:50px!important;" src="http://s1.mc.fyi:11453/media/users/avatar/default.jpg" onclick="user_set_avatar(' + d.id + ');"></div>';
 								}
 							},
 							{
@@ -322,7 +322,7 @@
 						title: '禁用'
 					}, function(index) {
 						$.ajax({
-							url: "http://127.0.0.1:11453/users/set_inactive_multiple/",
+							url: "http://s1.mc.fyi:11453/users/set_inactive_multiple/",
 							type: "post",
 							headers: {
 								"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -378,7 +378,7 @@
 						title: '启用'
 					}, function(index) {
 						$.ajax({
-							url: "http://127.0.0.1:11453/users/set_active_multiple/",
+							url: "http://s1.mc.fyi:11453/users/set_active_multiple/",
 							type: "post",
 							headers: {
 								"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -437,7 +437,7 @@
 						layer.confirm('确定修改吗？',
 							function(index2) {
 								$.ajax({
-									url: "http://127.0.0.1:11453/users/reset_password_multiple/",
+									url: "http://s1.mc.fyi:11453/users/reset_password_multiple/",
 									type: "post",
 									dataType: "json",
 									headers: {
@@ -527,7 +527,7 @@
 						iframeWindow.layui.form.on('submit(' + submitID + ')', function(data) {
 							var field = data.field; //获取提交的字段
 							$.ajax({
-								url: "http://127.0.0.1:11453/users/" + id + "/",
+								url: "http://s1.mc.fyi:11453/users/" + id + "/",
 								type: "put",
 								headers: {
 									"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -628,7 +628,7 @@
 					layer.confirm('确定修改吗？',
 						function(index2) {
 							$.ajax({
-								url: "http://127.0.0.1:11453/users/" + id + "/reset_password/",
+								url: "http://s1.mc.fyi:11453/users/" + id + "/reset_password/",
 								type: "post",
 								headers: {
 									"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -690,7 +690,7 @@
 			// "移除头像"按钮
 			function user_remove_avatar(id) {
 				$.ajax({
-					url: "http://127.0.0.1:11453/users/" + id + "/remove_avatar/",
+					url: "http://s1.mc.fyi:11453/users/" + id + "/remove_avatar/",
 					type: "post",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -716,7 +716,7 @@
 			// "禁用"按钮
 			function user_set_inactive(id) {
 				$.ajax({
-					url: "http://127.0.0.1:11453/users/" + id + "/set_inactive/",
+					url: "http://s1.mc.fyi:11453/users/" + id + "/set_inactive/",
 					type: "post",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -742,7 +742,7 @@
 			// "启用"按钮
 			function user_set_active(id) {
 				$.ajax({
-					url: "http://127.0.0.1:11453/users/" + id + "/set_active/",
+					url: "http://s1.mc.fyi:11453/users/" + id + "/set_active/",
 					type: "post",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")

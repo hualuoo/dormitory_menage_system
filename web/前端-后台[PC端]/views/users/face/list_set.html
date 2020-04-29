@@ -107,7 +107,7 @@
 								lis.push('<div class="layui-col-md2 layui-col-sm4">' +
 									'<div class="cmdlist-container" style="background: #FDF9F9">' +
 									'<a href="javascript:;" onclick="user_set_face(' + item.id + ')">' +
-									'<img src="http://127.0.0.1:11453/media/users/face_photo/default.png">' +
+									'<img src="http://s1.mc.fyi:11453/media/users/face_photo/default.png">' +
 									'</a>' +
 									'<a href="javascript:;">' +
 									'<div class="cmdlist-text">' +
@@ -153,7 +153,7 @@
 			layui.use('flow', function() {
 				var flow = layui.flow;
 
-				flow_load('http://127.0.0.1:11453/users/get_face_list/?limit=18&is_set=true');
+				flow_load('http://s1.mc.fyi:11453/users/get_face_list/?limit=18&is_set=true');
 
 				// 模糊查询"搜索"按钮
 				$('#users_search_button').click(function() {
@@ -167,7 +167,7 @@
 					$("#users_face_flow").remove();
 					$("#users_face_flow_div").append("<ul id=\"users_face_flow\"></ul>");
 
-					flow_load('http://127.0.0.1:11453/users/get_face_list/?limit=18&is_set=true' + url_value);
+					flow_load('http://s1.mc.fyi:11453/users/get_face_list/?limit=18&is_set=true' + url_value);
 				});
 
 				// 模糊查询"清空"按钮
@@ -182,7 +182,7 @@
 					$("#users_face_flow").remove();
 					$("#users_face_flow_div").append("<ul id=\"users_face_flow\"></ul>");
 
-					flow_load('http://127.0.0.1:11453/users/get_face_list/?limit=18&is_set=true');
+					flow_load('http://s1.mc.fyi:11453/users/get_face_list/?limit=18&is_set=true');
 				});
 
 				//搜索区域DIV回车监听

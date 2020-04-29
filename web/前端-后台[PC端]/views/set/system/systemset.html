@@ -154,7 +154,7 @@
 
 				// 数据加载
 				$.ajax({
-					url: "http://127.0.0.1:11453/system_setting/",
+					url: "http://s1.mc.fyi:11453/system_setting/",
 					type: "get",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -195,19 +195,19 @@
 							}
 							if(value.code == "banner1") {
 								form.val("layuiadmin-form-useradmin", {
-									"banner1_input": value.url.replace("http://127.0.0.1:11453", "")
+									"banner1_input": value.url.replace("http://s1.mc.fyi:11453", "")
 								});
 								$('#banner1').html('<img style="height: 170px;" src="' + value.url + '">')
 							}
 							if(value.code == "banner2") {
 								form.val("layuiadmin-form-useradmin", {
-									"banner2_input": value.url.replace("http://127.0.0.1:11453", "")
+									"banner2_input": value.url.replace("http://s1.mc.fyi:11453", "")
 								});
 								$('#banner2').html('<img style="height: 170px;" src="' + value.url + '">')
 							}
 							if(value.code == "banner3") {
 								form.val("layuiadmin-form-useradmin", {
-									"banner3_input": value.url.replace("http://127.0.0.1:11453", "")
+									"banner3_input": value.url.replace("http://s1.mc.fyi:11453", "")
 								});
 								$('#banner3').html('<img style="height: 170px;" src="' + value.url + '">')
 							}
@@ -250,7 +250,7 @@
 					});
 
 					$.ajax({
-						url: "http://127.0.0.1:11453/system_setting/system_setting_update/",
+						url: "http://s1.mc.fyi:11453/system_setting/system_setting_update/",
 						type: "post",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")

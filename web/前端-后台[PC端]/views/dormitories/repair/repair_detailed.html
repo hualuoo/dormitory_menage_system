@@ -221,7 +221,7 @@
 
 				// 数据加载
 				$.ajax({
-					url: "http://127.0.0.1:11453/repair/" + repair_id + "/",
+					url: "http://s1.mc.fyi:11453/repair/" + repair_id + "/",
 					type: "get",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -248,7 +248,7 @@
 					elem: '#LAY-repair_log-manage',
 					autoSort: false, //禁用前端自动排序
 					toolbar: '#toolbarDemo',
-					url: 'http://127.0.0.1:11453/repair_log/',
+					url: 'http://s1.mc.fyi:11453/repair_log/',
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
 					},
@@ -338,7 +338,7 @@
 				form.on('submit(repair_update_button)', function(data) {
 					var field = data.field;
 					$.ajax({
-						url: 'http://127.0.0.1:11453/repair/' + repair_id + '/',
+						url: 'http://s1.mc.fyi:11453/repair/' + repair_id + '/',
 						type: "put",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -390,7 +390,7 @@
 				form.on('submit(repair_log_update_button)', function(data) {
 					var field = data.field;
 					$.ajax({
-						url: 'http://127.0.0.1:11453/repair_log/' + field.repair_log_id + '/',
+						url: 'http://s1.mc.fyi:11453/repair_log/' + field.repair_log_id + '/',
 						type: "put",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -436,7 +436,7 @@
 				form.on('submit(repair_log_create_button)', function(data) {
 					var field = data.field;
 					$.ajax({
-						url: 'http://127.0.0.1:11453/repair_log/',
+						url: 'http://s1.mc.fyi:11453/repair_log/',
 						type: "post",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -492,7 +492,7 @@
 				div.className = '';
 
 				$.ajax({
-					url: "http://127.0.0.1:11453/repair_log/" + id + "/",
+					url: "http://s1.mc.fyi:11453/repair_log/" + id + "/",
 					type: "get",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")

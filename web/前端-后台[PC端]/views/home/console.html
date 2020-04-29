@@ -175,7 +175,7 @@
 		<script>
 			// 获取 "待办事项"
 			$.ajax({
-				url: "http://127.0.0.1:11453/system_setting/get_todo_list/",
+				url: "http://s1.mc.fyi:11453/system_setting/get_todo_list/",
 				type: "get",
 				headers: {
 					"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -247,7 +247,7 @@
 
 			// 获取 "系统概略信息"
 			$.ajax({
-				url: "http://127.0.0.1:11453/system_setting/get_overview_info/",
+				url: "http://s1.mc.fyi:11453/system_setting/get_overview_info/",
 				type: "get",
 				headers: {
 					"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -373,7 +373,7 @@
 			var data_overview_data = [];
 
 			$.ajax({
-				url: "http://127.0.0.1:11453/system_setting/data_overview_date/",
+				url: "http://s1.mc.fyi:11453/system_setting/data_overview_date/",
 				type: "get",
 				headers: {
 					"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -392,7 +392,7 @@
 			});
 
 			$.ajax({
-				url: "http://127.0.0.1:11453/system_setting/data_overview_data/",
+				url: "http://s1.mc.fyi:11453/system_setting/data_overview_data/",
 				type: "get",
 				headers: {
 					"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -565,7 +565,7 @@
 			// 获取 "后端服务器信息"
 			function get_backend_server_info() {
 				$.ajax({
-					url: "http://127.0.0.1:11453/system_setting/get_backend_server_info/",
+					url: "http://s1.mc.fyi:11453/system_setting/get_backend_server_info/",
 					type: "get",
 					headers: {
 						"Authorization": "JWT " + localStorage.getItem("cache_token")
