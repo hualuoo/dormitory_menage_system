@@ -12,12 +12,12 @@ print("GPU计算是否启用：", dlib.DLIB_USE_CUDA)
 mysql_host = "s1.mc.fyi"
 mysql_post = 11452
 mysql_user = "root"
-mysql_password = "Qq111111"
+mysql_password = "##########"
 mysql_db = "attendance_system"
 login_url = "http://s1.mc.fyi:11453/login/"
 login_header = {'Content-Type': 'application/json'}
 login_username = "201635020501"
-login_password = "Qq111111"
+login_password = "##########"
 upload_url = "http://s1.mc.fyi:11453/access_control/"
 # 判断识别阈值，欧式距离小于0.4即可判断为相似，越小越相似
 threshold = 0.4
