@@ -8,11 +8,6 @@
       <change afterPath="$PROJECT_DIR$/api/user_operation/migrations/0012_feesrechargeorder_recharge_number.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/api/user_operation/migrations/0013_auto_20200429_1556.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/user_operation/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/user_operation/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/user_operation/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/attendance_system_web/.project" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/web/前端-前台/.project" beforeDir="false" />
@@ -722,12 +717,12 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Django server.attendance_system" />
       <item itemvalue="Python.clean-migrations" />
       <item itemvalue="Python.start_app" />
-      <item itemvalue="Python.views" />
       <item itemvalue="Python.views (1)" />
       <item itemvalue="Python.views (2)" />
+      <item itemvalue="Python.views" />
+      <item itemvalue="Django server.attendance_system" />
     </list>
     <recent_temporary>
       <list>
