@@ -22,7 +22,7 @@ class WaterFeesLog(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 class FeesRechargeOrder(models.Model):
     """
@@ -44,7 +44,7 @@ class FeesRechargeOrder(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 class ElectricityFeesLog(models.Model):
     """
@@ -62,7 +62,7 @@ class ElectricityFeesLog(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Repair(models.Model):
@@ -81,7 +81,7 @@ class Repair(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class RepairLog(models.Model):
@@ -99,6 +99,6 @@ class RepairLog(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 

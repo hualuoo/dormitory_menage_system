@@ -39,7 +39,7 @@ class WaterFees(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class ElectricityFees(models.Model):
@@ -56,4 +56,4 @@ class ElectricityFees(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)

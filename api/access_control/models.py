@@ -21,7 +21,7 @@ class AccessControl(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 class AccessControlAbnormalApplication(models.Model):
     """
@@ -38,4 +38,4 @@ class AccessControlAbnormalApplication(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
