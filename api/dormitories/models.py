@@ -1,5 +1,6 @@
-from django.db import models
 from datetime import datetime
+
+from django.db import models
 # Create your models here.
 
 
@@ -14,7 +15,7 @@ class Dormitory(models.Model):
     room = models.CharField(verbose_name="房间号", max_length=4)
     allow_live_number = models.IntegerField(verbose_name="允许居住人数")
     now_live_number = models.IntegerField(verbose_name="现已居住人数", default=0)
-    note = models.CharField(verbose_name="备注", max_length=100, blank=True)
+    note = models.CharField(verbose_name="备注", max_length=100, null=True, blank=True)
     add_time = models.DateTimeField(verbose_name="创建时间", default=datetime.now)
 
     class Meta:
@@ -32,7 +33,7 @@ class WaterFees(models.Model):
     dormitory = models.OneToOneField(Dormitory, verbose_name="宿舍", on_delete=models.CASCADE, null=False,
                                   related_name='water_fees')
     have_water_fees = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="现有金额(元)", default=0.00)
-    note = models.CharField(verbose_name="备注", max_length=100, blank=True, null=True)
+    note = models.CharField(verbose_name="备注", max_length=100, null=True, blank=True)
 
     class Meta:
         verbose_name = "宿舍水费"
@@ -49,7 +50,7 @@ class ElectricityFees(models.Model):
     dormitory = models.OneToOneField(Dormitory, verbose_name="宿舍", on_delete=models.CASCADE, null=False,
                                   related_name='electricity_fees')
     have_electricity_fees = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="现有金额(元)", default=0.00)
-    note = models.CharField(verbose_name="备注", max_length=100, blank=True, null=True)
+    note = models.CharField(verbose_name="备注", max_length=100, null=True, blank=True)
 
     class Meta:
         verbose_name = "宿舍电费"

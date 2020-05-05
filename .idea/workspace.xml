@@ -2,7 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/api/access_control/migrations/0009_auto_20200505_2230.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/dormitories/migrations/0012_auto_20200505_2029.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/system_setting/migrations/0009_systemlog.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/system_setting/migrations/0010_auto_20200505_2244.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/user_operation/migrations/0014_auto_20200505_2147.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/users/migrations/0010_auto_20200505_1847.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/users/migrations/0011_auto_20200505_1935.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/access_control/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/access_control/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/access_control/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/dormitories/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/system_setting/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/system_setting/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/system_setting/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user_operation/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user_operation/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user_operation/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/utils/jwt_custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/jwt_custom.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/utils/permission.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/permission.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,118 +83,8 @@
       <recent name="C:\project\attendance_system\api\users\backup" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.views (2)">
-    <configuration name="clean-migrations" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="attendance_system" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/clean-migrations.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="start_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="attendance_system" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/start_app.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="views (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="attendance_system" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/access_control" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/access_control/views.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="views (2)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="attendance_system" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/user_operation" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/user_operation/views.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="views" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="attendance_system" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/system_setting" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/system_setting/views.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="attendance_system" type="Python.DjangoServer" factoryName="Django server">
+  <component name="RunManager">
+    <configuration name="dormitory_menage_system" type="Python.DjangoServer" factoryName="Django server">
       <module name="attendance_system" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -192,23 +108,6 @@
       <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
-    <list>
-      <item itemvalue="Django server.attendance_system" />
-      <item itemvalue="Python.clean-migrations" />
-      <item itemvalue="Python.start_app" />
-      <item itemvalue="Python.views" />
-      <item itemvalue="Python.views (1)" />
-      <item itemvalue="Python.views (2)" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.views (2)" />
-        <item itemvalue="Python.views (1)" />
-        <item itemvalue="Python.views" />
-        <item itemvalue="Python.start_app" />
-        <item itemvalue="Python.clean-migrations" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -265,10 +164,10 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1124" y="429" key="#Inspections/0.0.2560.1400@0.0.2560.1400" timestamp="1582892801919" />
-    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587975716318">
+    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588675377818">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1587975716318" />
+    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1588675377818" />
     <state x="1310" y="664" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582179444313">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -277,36 +176,36 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1586442549849" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1588155801975">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1588689844658">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1588155801975" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1588155801975">
+    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1588689844658" />
+    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1588689844657">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1588155801975" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1588155801975">
+    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1588689844657" />
+    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1588689844657">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1588155801975" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1588155801975">
+    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1588689844657" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1588689844657">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1588155801975" />
+    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1588689844657" />
     <state x="576" y="261" key="SettingsEditor" timestamp="1582024039431">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="576" y="261" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1582024039431" />
     <state x="768" y="351" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1581839323807" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1588156269769">
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1588689710050">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587389021186" />
-    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1588156269769" />
+    <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1588689710050" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/attendance_system$views.coverage" NAME="views Coverage Results" MODIFIED="1587298539517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/system_setting" />

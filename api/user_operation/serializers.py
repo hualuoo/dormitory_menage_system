@@ -1,5 +1,6 @@
-from rest_framework import serializers
 from datetime import datetime
+
+from rest_framework import serializers
 
 from .models import ElectricityFeesLog, Repair, RepairLog, FeesRechargeOrder
 
@@ -90,13 +91,3 @@ class FeesRechargeOrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeesRechargeOrder
         fields = ("price", "type", "object", )
-
-"""class FeesRechargeOrderCheckSerializer(serializers.ModelSerializer):
-    id = serializers.CharField(help_text="充值订单号")
-    price = serializers.IntegerField(help_text="充值金额(元)", max_value=1000, min_value=1)
-    type = serializers.ChoiceField(help_text="充值方式", choices=(("1", "支付宝"), ("2", "QQ钱包"), ("3", "微信支付")))
-    object = serializers.ChoiceField(help_text="充值对象", choices=(("water", "水费"), ("electricity", "电费")))
-
-    class Meta:
-        model = FeesRechargeOrder
-        fields = ("price", "type", "object", )"""

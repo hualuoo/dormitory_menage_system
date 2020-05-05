@@ -341,10 +341,11 @@
 							error: function(jqXHR) {
 								var json_responseText = JSON.parse(jqXHR.responseText);
 								if(json_responseText.ids) {
-									layer.msg(json_responseText.ids[0], {
+									layer.msg('用户ID组出错：' + json_responseText.ids[0], {
 										icon: 2,
 										anim: 6
 									});
+									table.reload('LAY-users-manage');
 									return false;
 								}
 								if(json_responseText.detail) {
@@ -352,8 +353,13 @@
 										icon: 2,
 										anim: 6
 									});
+									table.reload('LAY-users-manage');
 									return false;
 								}
+								layer.msg('未知错误，请联系管理！', {
+									icon: 2,
+									anim: 6
+								});
 								table.reload('LAY-users-manage');
 							}
 						})
@@ -397,10 +403,11 @@
 							error: function(jqXHR) {
 								var json_responseText = JSON.parse(jqXHR.responseText);
 								if(json_responseText.ids) {
-									layer.msg(json_responseText.ids[0], {
+									layer.msg('用户ID组出错：' + json_responseText.ids[0], {
 										icon: 2,
 										anim: 6
 									});
+									table.reload('LAY-users-manage');
 									return false;
 								}
 								if(json_responseText.detail) {
@@ -408,8 +415,13 @@
 										icon: 2,
 										anim: 6
 									});
+									table.reload('LAY-users-manage');
 									return false;
 								}
+								layer.msg('未知错误，请联系管理！', {
+									icon: 2,
+									anim: 6
+								});
 								table.reload('LAY-users-manage');
 							}
 						});
@@ -458,17 +470,19 @@
 									error: function(jqXHR) {
 										var json_responseText = JSON.parse(jqXHR.responseText);
 										if(json_responseText.ids) {
-											layer.msg(json_responseText.ids[0], {
+											layer.msg('用户ID组出错：' + json_responseText.ids[0], {
 												icon: 2,
 												anim: 6
 											});
+											layui.table.reload('LAY-users-manage');
 											return false;
 										}
 										if(json_responseText.password) {
-											layer.msg(json_responseText.password[0], {
+											layer.msg('密码出错：' + json_responseText.password[0], {
 												icon: 2,
 												anim: 6
 											});
+											layui.table.reload('LAY-users-manage');
 											return false;
 										}
 										if(json_responseText.detail) {
@@ -476,8 +490,13 @@
 												icon: 2,
 												anim: 6
 											});
+											layui.table.reload('LAY-users-manage');
 											return false;
 										}
+										layer.msg('未知错误，请联系管理！', {
+											icon: 2,
+											anim: 6
+										});
 										layui.table.reload('LAY-users-manage');
 									}
 								});
@@ -551,7 +570,7 @@
 								error: function(jqXHR) {
 									var json_responseText = JSON.parse(jqXHR.responseText);
 									if(json_responseText.email) {
-										layer.msg(json_responseText.email[0], {
+										layer.msg('邮箱出错：' + json_responseText.email[0], {
 											icon: 2,
 											anim: 6
 										});
@@ -559,7 +578,7 @@
 										return false;
 									}
 									if(json_responseText.info__mobile) {
-										layer.msg(json_responseText.info__mobile[0], {
+										layer.msg('手机出错：' + json_responseText.info__mobile[0], {
 											icon: 2,
 											anim: 6
 										});
@@ -567,7 +586,7 @@
 										return false;
 									}
 									if(json_responseText.first_name) {
-										layer.msg(json_responseText.first_name[0], {
+										layer.msg('姓出错：' + json_responseText.first_name[0], {
 											icon: 2,
 											anim: 6
 										});
@@ -575,7 +594,7 @@
 										return false;
 									}
 									if(json_responseText.last_name) {
-										layer.msg(json_responseText.last_name[0], {
+										layer.msg('名出错：' + json_responseText.last_name[0], {
 											icon: 2,
 											anim: 6
 										});
@@ -583,7 +602,7 @@
 										return false;
 									}
 									if(json_responseText.info__birthday) {
-										layer.msg(json_responseText.info__birthday[0], {
+										layer.msg('出生日期出错：' + json_responseText.info__birthday[0], {
 											icon: 2,
 											anim: 6
 										});
@@ -591,7 +610,7 @@
 										return false;
 									}
 									if(json_responseText.info_gender) {
-										layer.msg(json_responseText.info__gender[0], {
+										layer.msg('性别出错：' + json_responseText.info__gender[0], {
 											icon: 2,
 											anim: 6
 										});
@@ -605,6 +624,10 @@
 										});
 										return false;
 									}
+									layer.msg('未知错误，请联系管理！', {
+										icon: 2,
+										anim: 6
+									});
 								}
 							});
 						});
@@ -648,10 +671,11 @@
 								error: function(jqXHR) {
 									var json_responseText = JSON.parse(jqXHR.responseText);
 									if(json_responseText.password) {
-										layer.msg(json_responseText.password[0], {
+										layer.msg('密码出错：' + json_responseText.password[0], {
 											icon: 2,
 											anim: 6
 										});
+										layui.table.reload('LAY-users-manage');
 										return false;
 									}
 									if(json_responseText.detail) {
@@ -659,8 +683,13 @@
 											icon: 2,
 											anim: 6
 										});
+										layui.table.reload('LAY-users-manage');
 										return false;
 									}
+									layer.msg('未知错误，请联系管理！', {
+										icon: 2,
+										anim: 6
+									});
 									layui.table.reload('LAY-users-manage');
 								}
 							});
@@ -704,7 +733,15 @@
 					},
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
-						layer.msg(json_responseText.detail, {
+						if (json_responseText.detail){
+							layer.msg(json_responseText.detail, {
+								icon: 2,
+								anim: 6
+							});
+							layui.table.reload('LAY-users-manage');
+							return false;
+						}
+						layer.msg('未知错误，请联系管理！', {
 							icon: 2,
 							anim: 6
 						});
@@ -730,7 +767,15 @@
 					},
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
-						layer.msg(json_responseText.detail, {
+						if (json_responseText.detail){
+							layer.msg(json_responseText.detail, {
+								icon: 2,
+								anim: 6
+							});
+							layui.table.reload('LAY-users-manage');
+							return false;
+						}
+						layer.msg('未知错误，请联系管理！', {
 							icon: 2,
 							anim: 6
 						});

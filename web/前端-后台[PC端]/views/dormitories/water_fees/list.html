@@ -256,7 +256,7 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.money) {
-								layer.msg(json_responseText.money[0], {
+								layer.msg('充值水费出错：' + json_responseText.money[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -313,7 +313,7 @@
 								error: function(jqXHR) {
 									var json_responseText = JSON.parse(jqXHR.responseText);
 									if(json_responseText.note) {
-										layer.msg(json_responseText.note[0], {
+										layer.msg('备注出错：' + json_responseText.note[0], {
 											icon: 2,
 											anim: 6
 										});

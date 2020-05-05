@@ -1,4 +1,6 @@
 from random import choice
+from datetime import datetime,timedelta
+
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework import status
@@ -13,23 +15,16 @@ from .serializers import UserSerializer, UserCreateSerializer, UserCreateMultipl
 from .serializers import UserResetPasswordSerializer, UserResetPasswordMultipleSerializer, UserCheckIdsSerializer
 from .serializers import UserFaceListSerializer
 from .serializers import UserChangePasswordAdminSerializer
-
 from .serializers import SecurityCheckOldEmailSerializer, SecurityConfirmOldEmailSerializer, SecurityChangeMobileSerializer, SecuritySendNewEmailCaptchaSerializer
 from .serializers import SecurityChangeEmailSerializer, SecurityChangePasswordSerializer
 from .serializers import SecurityCheckAccountPasswordSerializer, SecuritySendBindEmailCaptchaSerializer, SecurityBindEmailSerializer
-
-from .serializers import VerifyCodeSerializer, ChangeEmailSerializer, ChangePasswordSerializer
-from .serializers import checkUserMailSerializer, sendOldMailCaptchaSerializer, confirmMailCaptchaSerializer, sendNewMailCaptchaSerializer
-
-from datetime import datetime,timedelta
-
+from system_setting.models import SystemLog
 from utils import smtp
 from utils.permission import UserIsSuperUser, UserIsSelf
-
 # Create your views here.
 
 
-class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class UserViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     用户 视图类
     """
@@ -42,12 +37,12 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             return UserSerializer
         if self.action == "retrieve":
             return UserSerializer
+        if self.action == "update":
+            return UserUpdateSerializer
         if self.action == "create":
             return UserCreateSerializer
         if self.action == "create_multiple":
             return UserCreateMultipleSerializer
-        if self.action == "update":
-            return UserUpdateSerializer
         if self.action == "reset_password":
             return UserResetPasswordSerializer
         if self.action == "reset_password_multiple":
@@ -79,6 +74,8 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), UserIsSelf()]
+        if self.action == "update":
+            return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "create":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "create_multiple":
@@ -108,9 +105,9 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         if self.action == "change_password_admin":
             return [IsAuthenticated(), UserIsSuperUser()]
         return []
-
     """
-        显示单个用户信息1
+    def retrieve(self, request, *args, **kwargs):
+        显示单个用户信息
         url: '/users/<pk>/'
         type: 'get'
     """
@@ -263,11 +260,105 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
                 'count': recordsTotal,
                 'data': serializer.data
             })
+    def update(self, request, *args, **kwargs):
+        """
+            用户 修改
+            url: '/users/<pk>/'
+            type: 'put'
+            dataType: 'json'
+            data: {
+                'email': '<email>',
+                'info__mobile': '<info__mobile>',
+                'first_name': '<first_name>',
+                'last_name': '<last_name>',
+                'info__birthday': '<info__birthday>',
+                'info__gender': '<info__gender>'
+            }
+        """
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        system_log = SystemLog.objects.create(content='修改用户信息（用户名：' + instance.username + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        """
+            管理员创建单个用户
+            url: '/users/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'username': '<username>',
+                'password': '<password>'
+            }
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = User.objects.create(username=serializer.validated_data["username"],
+                                   date_joined=datetime.now())
+        user.set_password(serializer.validated_data["password"])
+        user.save()
+        info = UserInfo.objects.create(user=user)
+        info.save()
+
+        system_log = SystemLog.objects.create(content='创建单个用户（用户名：' + serializer.validated_data["username"] + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(methods=['POST'], detail=False)
+    def create_multiple(self, request, *args, **kwargs):
+        """
+            管理员创建批量用户
+            url: '/users/create_multiple/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'first_username': '<first_username>',
+                'create_number': '<create_number>',
+                'password': '<password>'
+            }
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        first_username = serializer.validated_data["first_username"]
+        create_number = serializer.validated_data["create_number"]
+        for username in range(first_username, first_username + create_number):
+            user = User.objects.create(username=username)
+            user.set_password(serializer.validated_data["password"])
+            user.save()
+            info = UserInfo.objects.create(user=user)
+            info.save()
+
+        system_log = SystemLog.objects.create(content='创建批量用户（首用户名：' + str(serializer.validated_data["first_username"]) + '，创建数量：' + str(serializer.validated_data["create_number"]) + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get('REMOTE_ADDR'))
+        system_log.save()
+
+        return Response({
+            "detail": "操作成功：" + str(first_username) + "-" + str(username) + "账户已被创建！"
+        }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
     def reset_password(self, request, *args, **kwargs):
         """
-            重置密码
+            管理员重置单个用户密码
             url: '/users/<pk>/reset_password/'
             type: 'post'
             dataType: 'json'
@@ -282,9 +373,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
-
         instance.set_password(serializer.validated_data["password"])
         instance.save()
+        system_log = SystemLog.objects.create(content='重置单个用户密码（用户名：' + instance.username + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
         return Response({
             "detail": "操作成功：用户" + instance.username + "的密码修改成功！"
         }, status=status.HTTP_200_OK)
@@ -292,7 +387,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
     @action(methods=['POST'], detail=False)
     def reset_password_multiple(self, request, *args, **kwargs):
         """
-            批量重置密码
+            管理员批量重置用户密码
             url: '/users/reset_password_multiple/'
             type: 'post'
             dataType: 'json'
@@ -309,6 +404,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             user = User.objects.filter(id=i).first()
             user.set_password(serializer.validated_data["password"])
             user.save()
+
+        system_log = SystemLog.objects.create(content='批量重置用户密码（用户名组：' + serializer.validated_data["ids"] + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "操作成功：所选用户账户密码已重置！"
         }, status=status.HTTP_200_OK)
@@ -319,6 +421,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             禁用用户
             url: '/users/<pk>/set_inactive/'
             type: 'post'
+            data: None
         """
         if request.user == self.get_object():
             return Response({
@@ -327,6 +430,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         user = self.get_object()
         user.is_active = False
         user.save()
+
+        system_log = SystemLog.objects.create(content='禁用单个用户（用户名：' + user.username + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "操作成功：用户" + user.username + "已被禁用！"
         }, status=status.HTTP_200_OK)
@@ -350,6 +460,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             user = User.objects.filter(id=i).first()
             user.is_active = False
             user.save()
+
+        system_log = SystemLog.objects.create(content='批量禁用用户（用户名组：' + serializer.validated_data["ids"] + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "操作成功：所选用户账户已被禁用！"
         }, status=status.HTTP_200_OK)
@@ -360,14 +477,23 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             启用用户
             url: '/users/<pk>/set_active/'
             type: 'post'
+            data: None
         """
         if request.user == self.get_object():
             return Response({
                 "detail": "操作失败：您无法操作自己！"
             }, status=status.HTTP_400_BAD_REQUEST)
+
         user = self.get_object()
         user.is_active = True
         user.save()
+
+        system_log = SystemLog.objects.create(content='启用单个用户（用户名：' + user.username + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "用户" + user.username + "已被启用！"
         }, status=status.HTTP_200_OK)
@@ -391,37 +517,15 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             user = User.objects.filter(id=i).first()
             user.is_active = True
             user.save()
+
+        system_log = SystemLog.objects.create(content='批量启用用户（用户名组：' + serializer.validated_data["ids"] + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "操作成功：所选用户账户已被启用！"
-        }, status=status.HTTP_200_OK)
-
-    @action(methods=['POST'], detail=False)
-    def create_multiple(self, request, *args, **kwargs):
-        """
-            批量创建用户
-            url: '/users/create_multiple/'
-            type: 'post'
-            dataType: 'json'
-            data: {
-                'first_username': '<first_username>',
-                'create_number': '<create_number>',
-                'password': '<password>'
-            }
-        """
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        first_username = serializer.validated_data["first_username"]
-        create_number = serializer.validated_data["create_number"]
-        for username in range(first_username, first_username+create_number):
-            user = User.objects.create(username=username)
-            user.set_password(serializer.validated_data["password"])
-            user.save()
-            info = UserInfo.objects.create(user=user)
-            info.save()
-
-        return Response({
-            "detail": "操作成功：" + str(first_username) + "-" + str(username) + "账户已被创建！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -430,6 +534,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             上传头像
             url: '/users/<pk>/set_avatar/'
             type: 'post'
+            data: None
         """
         from utils.save_file import save_img_and_crop_1_1
 
@@ -452,6 +557,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         instance = self.get_object()
         instance.info.avatar = flag
         instance.info.save()
+
+        system_log = SystemLog.objects.create(content='设置头像（用户名：' + instance.username + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "code": 0,
             "msg": "操作成功：头像上传成功",
@@ -466,10 +578,18 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             清除头像
             url: '/users/<pk>/remove_avatar/'
             type: 'post'
+            data: None
         """
         instance = self.get_object()
         instance.info.avatar = ""
         instance.info.save()
+
+        system_log = SystemLog.objects.create(content='清除头像（用户名：' + instance.username + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "操作成功：已清理 " + instance.username + " 账户的头像！"
         }, status=status.HTTP_200_OK)
@@ -551,6 +671,7 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
             上传人脸
             url: '/users/<pk>/set_face/'
             type: 'post'
+            data: file
         """
         from utils.save_file import save_img_and_crop_1_1
         from utils import face_recognition
@@ -599,6 +720,13 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
                                            features=json.dumps(face_128d_features_list),
                                            user=instance)
             face.save()
+
+        system_log = SystemLog.objects.create(content='设置人脸（用户名：' + instance.username + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "code": 0,
             "msg": "操作成功：人脸数据设置成功！",
@@ -627,6 +755,17 @@ class UserViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Creat
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        instance = request.user
+        instance.set_password(serializer.validated_data["new_password"])
+        instance.save()
+
+        system_log = SystemLog.objects.create(content='修改密码（用户名：' + instance.username + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response(serializer.data)
 
 
@@ -689,6 +828,10 @@ class SecurityViewset(viewsets.GenericViewSet):
             验证旧邮箱
             url: '/member/security/check_old_email/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'old_email': '<old_email>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -703,6 +846,10 @@ class SecurityViewset(viewsets.GenericViewSet):
             向旧邮箱发送验证码
             url: '/member/security/send_old_email_captcha/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'old_email': '<old_email>'
+            }
         """
         def generate_code():
             """
@@ -738,6 +885,10 @@ class SecurityViewset(viewsets.GenericViewSet):
             校验旧邮箱 验证码
             url: '/member/security/send_old_email_captcha/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'old_captcha': '<old_captcha>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -751,11 +902,23 @@ class SecurityViewset(viewsets.GenericViewSet):
             修改手机
             url: '/member/security/change_mobile/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'old_captcha': '<old_captcha>',
+                'new_mobile': '<new_mobile>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         request.user.info.mobile = serializer.validated_data['new_mobile']
         request.user.info.save()
+
+        system_log = SystemLog.objects.create(content='修改手机（用户名：' + request.user.username + '，新手机：' + serializer.validated_data["new_mobile"] + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "操作成功：手机修改成功！",
             "mobile": serializer.validated_data['new_mobile']
@@ -767,11 +930,23 @@ class SecurityViewset(viewsets.GenericViewSet):
             修改密码
             url: '/member/security/change_password/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'old_captcha': '<old_captcha>',
+                'new_password': '<new_password>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         request.user.set_password(serializer.validated_data['new_password'])
         request.user.save()
+
+        system_log = SystemLog.objects.create(content='修改密码（用户名：' + request.user.username + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "操作成功：账户密码修改成功！"
         }, status=status.HTTP_200_OK)
@@ -782,6 +957,11 @@ class SecurityViewset(viewsets.GenericViewSet):
             向新邮箱发送验证码
             url: '/member/security/send_new_email_captcha/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'old_captcha': '<old_captcha>',
+                'new_email': '<new_email>'
+            }
         """
         def generate_code():
             """
@@ -817,11 +997,23 @@ class SecurityViewset(viewsets.GenericViewSet):
             修改邮箱
             url: '/member/security/change_email/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'new_email': '<new_email>',
+                'new_captcha': '<new_captcha>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         request.user.email = serializer.validated_data['new_email']
         request.user.save()
+
+        system_log = SystemLog.objects.create(content='修改邮箱（用户名：' + request.user.username + '，新邮箱：' + serializer.validated_data['new_email'] + '）',
+                                              category="用户管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "操作成功：邮箱修改成功！",
             "email": serializer.validated_data['new_email']
@@ -833,6 +1025,10 @@ class SecurityViewset(viewsets.GenericViewSet):
             验证账户密码
             url: '/member/security/check_account_password/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'password': '<password>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -846,6 +1042,11 @@ class SecurityViewset(viewsets.GenericViewSet):
             向绑定邮箱发送验证码
             url: '/member/security/send_bind_email_captcha/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'password': '<password>',
+                'bind_email' : '<bind_email>'
+            }
         """
         def generate_code():
             """
@@ -880,150 +1081,25 @@ class SecurityViewset(viewsets.GenericViewSet):
             绑定邮箱
             url: '/member/security/bind_email/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'bind_email' : '<bind_email>',
+                'bind_captcha': '<bind_captcha>',
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         request.user.email = serializer.validated_data['bind_email']
         request.user.save()
+
+        system_log = SystemLog.objects.create(
+            content='绑定邮箱（用户名：' + request.user.username + '，新邮箱：' + serializer.validated_data['bind_email'] + '）',
+            category="用户管理",
+            operator=request.user,
+            ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "操作成功：邮箱绑定成功！",
             "email": serializer.validated_data['bind_email']
-        }, status=status.HTTP_200_OK)
-
-
-"""
-class UsersViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
-    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = UserRegSerializer
-    queryset = UserModel.objects.all()
-
-    def get_permissions(self):
-        if self.action == "create":
-            return []
-        if self.action == "update":
-            return [IsAuthenticated(), UserIsOwner(), ]
-        return []
-
-    def get_serializer_class(self):
-        if self.action == "create":
-            return UserRegSerializer
-        if self.action == "update":
-            return ChangeEmailSerializer
-        return UserRegSerializer
-
-    def put(self, request, pk, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-
-class ChangePasswordViewset(mixins.UpdateModelMixin, viewsets.GenericViewSet):
-    修改密码
-    permission_classes = (IsAuthenticated, UserIsSelf,)
-    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = ChangePasswordSerializer
-    queryset = User.objects.all()
-"""
-
-class confirmOldMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
-    """
-        确认旧邮箱验证码
-        URL:
-            /member/security/confirmOldMailCaptcha/
-        TYPE:
-            POST
-        JSON:
-        {
-            "code": "<code>"
-        }
-    """
-    permission_classes = (IsAuthenticated, UserIsSelf,)
-    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = confirmMailCaptchaSerializer
-
-    def create(self, request, *args, **kwargs):
-        user = self.request.user
-
-        if user.email is None:
-            return Response({
-                "detail": "未绑定邮箱！"
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-        data = request.data.copy()
-        data['email'] = user.email
-
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-
-        return Response({
-            "detail": "验证码正确！"
-        }, status=status.HTTP_200_OK)
-
-
-class sendNewMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
-    """
-        向新邮箱发送验证码
-        URL:
-            /member/security/sendNewMailCaptcha/
-        TYPE:
-            POST
-        JSON:
-            {
-                "email": "<email>"
-            }
-    """
-    permission_classes = (IsAuthenticated, )
-    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = sendNewMailCaptchaSerializer
-
-    def generate_code(self):
-        """
-        生成六位数字的验证码
-        """
-        seeds = "1234567890"
-        random_str = []
-        for i in range(6):
-            random_str.append(choice(seeds))
-        return "".join(random_str)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        email = serializer.validated_data["email"]
-        code = self.generate_code()
-
-        if smtp.code_smtp(email, code) == 1:
-            code_record = CaptchaModel(email=email, code=code)
-            code_record.save()
-            return Response({
-                "detail": "发送成功"
-            }, status=status.HTTP_201_CREATED)
-        else:
-            return Response({
-                "detail": "发送失败"
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-
-class confirmNewMailCaptchaViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
-    """
-        确认新邮箱验证码
-        URL:
-            /member/security/confirmNewMailCaptcha/
-        TYPE:
-            POST
-        JSON:
-            {
-                "email": "<email>",
-                "code": "<code>"
-            }
-    """
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = confirmMailCaptchaSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        return Response({
-            "detail": "验证码正确！"
         }, status=status.HTTP_200_OK)

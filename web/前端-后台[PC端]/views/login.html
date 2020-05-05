@@ -212,19 +212,25 @@
 							localStorage.removeItem("cache_token");
 							localStorage.setItem("cache_username", field.username);
 							localStorage.removeItem("cache_password");
-							if(json_responseText.detail != null) {
+							document.getElementById("login_button").value = "登录";
+							if(json_responseText.detail) {
 								layer.msg(json_responseText.detail[0], {
 									icon: 2,
 									anim: 6
 								});
+								return false;
 							}
-							if(json_responseText.non_field_errors != null) {
+							if(json_responseText.non_field_errors) {
 								layer.msg(json_responseText.non_field_errors[0], {
 									icon: 2,
 									anim: 6
 								});
+								return false;
 							}
-							document.getElementById("login_button").value = "登录";
+							layer.msg('未知错误，请联系管理！', {
+								icon: 2,
+								anim: 6
+							});
 						}
 					});
 				});

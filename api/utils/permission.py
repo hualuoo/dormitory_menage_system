@@ -1,7 +1,5 @@
 from rest_framework.permissions import BasePermission
 
-from users.models import User
-
 
 class UserIsSuperUser(BasePermission):
     def has_permission(self, request, view):

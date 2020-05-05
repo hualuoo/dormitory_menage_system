@@ -275,35 +275,35 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.water_fees) {
-								layer.msg('水费：' + json_responseText.water_fees[0], {
+								layer.msg('水费出错：' + json_responseText.water_fees[0], {
 									icon: 2,
 									anim: 6
 								});
 								return false;
 							}
 							if(json_responseText.electricity_fees) {
-								layer.msg('电费：' + json_responseText.electricity_fees[0], {
+								layer.msg('电费出错：' + json_responseText.electricity_fees[0], {
 									icon: 2,
 									anim: 6
 								});
 								return false;
 							}
 							if(json_responseText.todo_list) {
-								layer.msg('代办事项列表：' + json_responseText.todo_list[0], {
+								layer.msg('代办事项列表出错：' + json_responseText.todo_list[0], {
 									icon: 2,
 									anim: 6
 								});
 								return false;
 							}
 							if(json_responseText.overview_info) {
-								layer.msg('概略信息显示：' + json_responseText.overview_info[0], {
+								layer.msg('概略信息显示出错：' + json_responseText.overview_info[0], {
 									icon: 2,
 									anim: 6
 								});
 								return false;
 							}
 							if(json_responseText.data_overview_start_date) {
-								layer.msg('门禁流量图起始时间：' + json_responseText.data_overview_start_date[0], {
+								layer.msg('门禁流量图起始时间出错：' + json_responseText.data_overview_start_date[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -316,6 +316,10 @@
 								});
 								return false;
 							}
+							layer.msg('未知错误，请联系管理！', {
+								icon: 2,
+								anim: 6
+							});
 						}
 					})
 				});

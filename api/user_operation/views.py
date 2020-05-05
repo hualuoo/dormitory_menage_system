@@ -1,3 +1,7 @@
+import requests
+import json
+from datetime import datetime
+
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework import status
@@ -5,11 +9,7 @@ from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from datetime import datetime
 from rest_framework.decorators import action
-import requests
-from django.conf import settings
-import json
 
 from .models import WaterFeesLog, ElectricityFeesLog
 from .serializers import WaterFeesLogSerializer, ElectricityFeesLogSerializer
@@ -17,12 +17,14 @@ from .models import Repair, RepairLog
 from .serializers import RepairSerializer, RepairCreateSerializer, RepairLogSerializer, RepairLogCreateSerializer
 from .models import FeesRechargeOrder
 from .serializers import FeesRechargeOrderCreateSerializer
-from utils.permission import UserIsSuperUser, FeesLogIsSelf, RepairIsSelf, RepairLogIsSelf
 from users.models import User
-from system_setting.models import SystemSetting
-
+from system_setting.models import SystemSetting, SystemLog
+from utils.permission import UserIsSuperUser, FeesLogIsSelf, RepairIsSelf, RepairLogIsSelf
+from django.conf import settings
 # Create your views here.
-class WaterFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+
+
+class WaterFeesLogViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     水费使用记录 视图类
     """
@@ -31,18 +33,25 @@ class WaterFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, view
     queryset = WaterFeesLog.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return WaterFeesLogSerializer
         if self.action == "retrieve":
+            return WaterFeesLogSerializer
+        if self.action == "list":
             return WaterFeesLogSerializer
         return WaterFeesLogSerializer
 
     def get_permissions(self):
-        if self.action == "list":
-            return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), FeesLogIsSelf()]
+        if self.action == "list":
+            return [IsAuthenticated()]
         return []
+
+    """
+    def retrieve(self, request, *args, **kwargs):
+        显示单个水费使用记录
+        url: '/water_fees_log/<pk>/'
+        type: 'get'
+    """
 
     def list(self, request, *args, **kwargs):
         """
@@ -104,7 +113,7 @@ class WaterFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, view
             })
 
 
-class ElectricityFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class ElectricityFeesLogViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     宿舍电费 视图类
     """
@@ -113,22 +122,29 @@ class ElectricityFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin
     queryset = ElectricityFeesLog.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return ElectricityFeesLogSerializer
         if self.action == "retrieve":
+            return ElectricityFeesLogSerializer
+        if self.action == "list":
             return ElectricityFeesLogSerializer
         return ElectricityFeesLogSerializer
 
     def get_permissions(self):
-        if self.action == "list":
-            return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), FeesLogIsSelf()]
+        if self.action == "list":
+            return [IsAuthenticated()]
         return []
+
+    """
+    def retrieve(self, request, *args, **kwargs):
+        显示单个电费使用记录
+        url: '/electricity_fees_log/<pk>/'
+        type: 'get'
+    """
 
     def list(self, request, *args, **kwargs):
         """
-            显示 电费使用记录 列表
+            电费使用记录 列表
             url: '/electricity_fees_log/'
             type: 'get'
         """
@@ -186,7 +202,7 @@ class ElectricityFeesLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin
             })
 
 
-class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+class RepairViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     宿舍报修单 视图类
     """
@@ -195,9 +211,9 @@ class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upd
     queryset = Repair.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return RepairSerializer
         if self.action == "retrieve":
+            return RepairSerializer
+        if self.action == "list":
             return RepairSerializer
         if self.action == "update":
             return RepairSerializer
@@ -206,19 +222,26 @@ class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upd
         return RepairSerializer
 
     def get_permissions(self):
-        if self.action == "list":
-            return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), RepairIsSelf()]
+        if self.action == "list":
+            return [IsAuthenticated()]
         if self.action == "update":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "create":
             return [IsAuthenticated()]
         return []
 
+    """
+    def retrieve(self, request, *args, **kwargs):
+        显示单个宿舍报修单
+        url: '/repair/<pk>/'
+        type: 'get'
+    """
+
     def list(self, request, *args, **kwargs):
         """
-            显示 宿舍报修单 列表
+            宿舍报修单 列表
             url: '/repair/'
             type: 'get'
         """
@@ -280,10 +303,45 @@ class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upd
                 'data': serializer.data
             })
 
+    def update(self, request, *args, **kwargs):
+        """
+            报修单 修改
+            url: '/repair/<pk>/'
+            type: 'put'
+            dataType: 'json'
+            data: {
+                'title': '<title>',
+                'content': '<content>',
+                'status': '<status>'
+            }
+        """
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        system_log = SystemLog.objects.create(content='修改报修单（编号：' + str(instance.id) + '，标题：' + instance.title + '）',
+                                              category="报修单管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
+        return Response(serializer.data)
+
     def create(self, request, *args, **kwargs):
         """
             报修单 创建
-
+            url: '/repair/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'title': '<title>',
+                'content': '<content>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -296,11 +354,17 @@ class RepairViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upd
                                        dormitory_id=self.request.user.lived_dormitory.id)
         repair.save()
 
+        system_log = SystemLog.objects.create(content='创建报修单（编号：' + str(repair.id) + '，标题：' + serializer.validated_data["title"] + '）',
+                                              category="报修单管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "detail": "创建报修单成功！"
         }, status=status.HTTP_200_OK)
 
-class RepairLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+class RepairLogViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     宿舍报修单 回复 视图类
     """
@@ -330,7 +394,19 @@ class RepairLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             return [IsAuthenticated(), RepairLogIsSelf()]
         return []
 
+    """
+    def retrieve(self, request, *args, **kwargs):
+        显示单个宿舍报修单回复
+        url: '/repair_log/<pk>/'
+        type: 'get'
+    """
+
     def list(self, request, *args, **kwargs):
+        """
+            宿舍报修单回复 列表
+            url: '/repair_log/<pk>/?search_repair_id=<repair_id>'
+            type: 'get'
+        """
         from django.db.models import Q, F
 
         # 获取全部数据
@@ -383,7 +459,46 @@ class RepairLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
                 'data': serializer.data
             })
 
+    def update(self, request, *args, **kwargs):
+        """
+            报修单 修改
+            url: '/repair_log/<pk>/'
+            type: 'put'
+            dataType: 'json'
+            data: {
+                'reply': '<reply>',
+                'reply_type': '<reply_type>'
+            }
+        """
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        system_log = SystemLog.objects.create(content='修改报修单回复（回复编号：' + str(instance.id) + '）',
+                                              category="报修单管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
+        return Response(serializer.data)
+
     def create(self, request, *args, **kwargs):
+        """
+            报修单回复 创建
+            url: '/repair_log/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'main_repair__id': '<main_repair__id>',
+                'reply': '<reply>',
+                'reply_type': '<reply_type>'
+            }
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -401,13 +516,18 @@ class RepairLogViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
                                               reply=serializer.validated_data["reply"],
                                               reply_type=serializer.validated_data["reply_type"],
                                               reply_person=self.request.user)
-
         repair_log.save()
 
         if serializer.validated_data["reply_type"] == "complete":
             main_repair = repair_log.main_repair
             main_repair.status = "complete"
             main_repair.save()
+
+        system_log = SystemLog.objects.create(content='创建报修单回复（回复编号：' + str(repair_log.id) + '）',
+                                              category="报修单管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
 
         return Response({
             "detail": "回复成功！"
@@ -418,17 +538,40 @@ class FeesRechargeOrderViewset(viewsets.GenericViewSet):
     """
     充值 订单
     """
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = FeesRechargeOrderCreateSerializer
     queryset = FeesRechargeOrder.objects.all()
 
     def get_serializer_class(self):
         if self.action == "create_order":
             return FeesRechargeOrderCreateSerializer
+        if self.action == "check_order_water":
+            return
+        if self.action == "check_order_electricity":
+            return
+        return
+
+    def get_permissions(self):
+        if self.action == "create_order":
+            return [IsAuthenticated()]
+        if self.action == "check_order_water":
+            return []
+        if self.action == "check_order_electricity":
+            return []
+        return []
 
     @action(methods=['POST'], detail=False)
     def create_order(self, request, *args, **kwargs):
         """
-            创建订单
+            充值订单 创建
+            url: '/fees_recharge_order/create_order/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'price': '<price>',
+                'type': '<type>',
+                'object': '<object>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

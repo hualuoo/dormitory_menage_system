@@ -177,7 +177,18 @@
 							},
 							error: function(jqXHR) {
 								var json_responseText = JSON.parse(jqXHR.responseText);
-								layer.msg(json_responseText.detail, {
+								if (json_responseText.detail){
+									layer.msg(json_responseText.detail, {
+										icon: 2,
+										anim: 6,
+										btn: ['明白了'],
+										yes: function(index) {
+											window.location.reload();
+										}
+									});
+									return false;
+								}
+								layer.msg('未知错误，请联系管理！', {
 									icon: 2,
 									anim: 6,
 									btn: ['明白了'],
@@ -210,7 +221,7 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.allow_live_number) {
-								layer.msg(json_responseText.allow_live_number[0], {
+								layer.msg('允许居住人数出错：' + json_responseText.allow_live_number[0], {
 									icon: 2,
 									anim: 6,
 									btn: ['明白了'],
@@ -231,6 +242,10 @@
 								});
 								return false;
 							}
+							layer.msg('未知错误，请联系管理！', {
+								icon: 2,
+								anim: 6
+							});
 						}
 					});
 				});

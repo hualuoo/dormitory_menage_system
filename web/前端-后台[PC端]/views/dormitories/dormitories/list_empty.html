@@ -299,7 +299,7 @@
 									error: function(jqXHR) {
 										var json_responseText = JSON.parse(jqXHR.responseText);
 										if(json_responseText.number) {
-											layer.msg(json_responseText.number[0], {
+											layer.msg('编号出错：' + json_responseText.number[0], {
 												icon: 2,
 												anim: 6
 											});
@@ -307,7 +307,7 @@
 											return false;
 										}
 										if(json_responseText.area) {
-											layer.msg(json_responseText.area[0], {
+											layer.msg('区域出错：' + json_responseText.area[0], {
 												icon: 2,
 												anim: 6
 											});
@@ -315,7 +315,7 @@
 											return false;
 										}
 										if(json_responseText.build) {
-											layer.msg(json_responseText.build[0], {
+											layer.msg('宿舍楼出错：' + json_responseText.build[0], {
 												icon: 2,
 												anim: 6
 											});
@@ -323,7 +323,7 @@
 											return false;
 										}
 										if(json_responseText.floor) {
-											layer.msg(json_responseText.floor[0], {
+											layer.msg('楼层出错：' + json_responseText.floor[0], {
 												icon: 2,
 												anim: 6
 											});
@@ -331,7 +331,7 @@
 											return false;
 										}
 										if(json_responseText.room) {
-											layer.msg(json_responseText.room[0], {
+											layer.msg('门牌号出错：' + json_responseText.room[0], {
 												icon: 2,
 												anim: 6
 											});
@@ -339,7 +339,7 @@
 											return false;
 										}
 										if(json_responseText.allow_live_number) {
-											layer.msg(json_responseText.allow_live_number[0], {
+											layer.msg('允许居住的人数出错：' + json_responseText.allow_live_number[0], {
 												icon: 2,
 												anim: 6
 											});
@@ -353,6 +353,10 @@
 											});
 											return false;
 										}
+										layer.msg('未知错误，请联系管理！', {
+											icon: 2,
+											anim: 6
+										});
 									}
 								});
 							});
@@ -448,7 +452,7 @@
 								error: function(jqXHR) {
 									var json_responseText = JSON.parse(jqXHR.responseText);
 									if(json_responseText.note) {
-										layer.msg(json_responseText.note[0], {
+										layer.msg('备注出错：' + json_responseText.note[0], {
 											icon: 2,
 											anim: 6
 										});
@@ -462,6 +466,10 @@
 										});
 										return false;
 									}
+									layer.msg('未知错误，请联系管理！', {
+										icon: 2,
+										anim: 6
+									});
 								}
 							});
 						});
@@ -506,6 +514,13 @@
 									layui.table.reload('LAY-dormitories-manage');
 								},
 								error: function(jqXHR) {
+									if(json_responseText.detail) {
+										layer.msg(json_responseText.detail, {
+											icon: 2,
+											anim: 6
+										});
+										return false;
+									}
 									layer.msg('操作失败：请联系管理员！', {
 										icon: 2,
 										anim: 6

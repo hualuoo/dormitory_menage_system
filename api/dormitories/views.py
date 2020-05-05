@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -10,15 +12,15 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Dormitory, WaterFees, ElectricityFees
 from .serializers import DormitorySerializer, DormitoryCreateSerializer, DormitoryOnChangeTransferSerializer, DormitoryChangeAllowLiveNumberSerializer, DormitoryChangeNoteSerializer
 from .serializers import WaterFeesSerializer, WaterFeesRechargeAdminSerializer, WaterFeesChangeNoteSerializer
-from .serializers import ElectricityFeesSerializer, ElectricityFeesRechargeSerializer, ElectricityFeesChangeNoteSerializer
+from .serializers import ElectricityFeesSerializer, ElectricityFeesRechargeAdminSerializer, ElectricityFeesChangeNoteSerializer
 from users.models import User
 from user_operation.models import WaterFeesLog, ElectricityFeesLog
-from system_setting.models import SystemSetting
+from system_setting.models import SystemSetting, SystemLog
 from utils.permission import UserIsSuperUser, DormitoriesIsSelf, WaterFeesIsSelf, ElectricityFeesIsSelf
 # Create your views here.
 
 
-class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class DormitoryViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """
     宿舍 视图类
     """
@@ -27,28 +29,38 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
     queryset = Dormitory.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return DormitorySerializer
         if self.action == "retrieve":
+            return DormitorySerializer
+        if self.action == "list":
             return DormitorySerializer
         if self.action == "create":
             return DormitoryCreateSerializer
+        if self.action == "destroy":
+            return
+        if self.action == "get_transfer_data":
+            return
+        if self.action == "get_transfer_value":
+            return
         if self.action == "onchange_transfer":
             return DormitoryOnChangeTransferSerializer
         if self.action == "change_allow_live_number":
             return DormitoryChangeAllowLiveNumberSerializer
         if self.action == "change_note":
             return DormitoryChangeNoteSerializer
-        if self.action == "water_fees":
-            return WaterFeesSerializer
         return DormitorySerializer
 
     def get_permissions(self):
-        if self.action == "list":
-            return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), DormitoriesIsSelf()]
+        if self.action == "list":
+            return [IsAuthenticated()]
         if self.action == "create":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "destroy":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "get_transfer_data":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "get_transfer_value":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "onchange_transfer":
             return [IsAuthenticated(), UserIsSuperUser()]
@@ -58,10 +70,17 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             return [IsAuthenticated(), UserIsSuperUser()]
         return []
 
+    """
+    def retrieve(self, request, *args, **kwargs):
+        显示单个宿舍信息
+        url: '/dormitories/<pk>/'
+        type: 'get'
+    """
+
     def list(self, request, *args, **kwargs):
         """
-            显示宿舍列表
-            url: '/dormitories/<pk>/'
+            显示宿舍信息列表
+            url: '/dormitories/'
             type: 'get'
         """
         from django.db.models import Q, F
@@ -135,10 +154,66 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
                 'data': serializer.data
             })
 
+    def create(self, request, *args, **kwargs):
+        """
+            创建宿舍
+            url: '/dormitories/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'number': '<number>',
+                'area': '<area>',
+                'build': '<build>',
+                'floor': '<floor>',
+                'room': '<room>',
+                'allow_live_number': '<allow_live_number>'
+            }
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        dormitory = Dormitory.objects.create(number=serializer.validated_data["number"],
+                                             area=serializer.validated_data["area"],
+                                             build=serializer.validated_data["build"],
+                                             floor=serializer.validated_data["floor"],
+                                             room=serializer.validated_data["room"],
+                                             allow_live_number=serializer.validated_data["allow_live_number"],
+                                             add_time=datetime.now())
+        dormitory.save()
+        water_fees = WaterFees.objects.create(dormitory=dormitory)
+        electricity_fees = ElectricityFees.objects.create(dormitory=dormitory)
+        water_fees.save()
+        electricity_fees.save()
+
+        system_log = SystemLog.objects.create(content='创建宿舍（编号：' + serializer.validated_data["number"] + '）',
+                                              category="宿舍管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, *args, **kwargs):
+        """
+            创建宿舍
+            url: '/dormitories/<pk>/'
+            type: 'delete'
+        """
+        instance = self.get_object()
+
+        system_log = SystemLog.objects.create(content='删除宿舍（编号：' + instance.number + '）',
+                                              category="宿舍管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     @action(methods=['GET'], detail=True)
     def get_transfer_data(self, request, *args, **kwargs):
         """
-            宿舍 居住的用户
+            获取 未居住的用户 和 当前宿舍已居住的用户
             url: '/dormitories/<pk>/get_transfer_data/'
             type: 'get'
         """
@@ -175,9 +250,9 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
     @action(methods=['GET'], detail=True)
     def get_transfer_value(self, request, *args, **kwargs):
         """
-            未住进宿舍的用户
+            获取 当前宿舍已居住的用户 的 ID
             url: '/dormitories/get_transfer_value/'
-            type: 'post'
+            type: 'get'
         """
         users_id_list = []
 
@@ -193,9 +268,14 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
     @action(methods=['POST'], detail=True)
     def onchange_transfer(self, request, *args, **kwargs):
         """
-            调整用户
+            调整 宿舍 住户
             url: '/dormitories/<pk>/onchange_transfer/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'ids': '<ids>',
+                'index': '<index>'
+            }
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -217,12 +297,17 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
                     }, status=status.HTTP_400_BAD_REQUEST)
                 user.lived_dormitory_id = instance
                 user.save()
+                system_log = SystemLog.objects.create(content='安排用户入住（编号：' + instance.number + '，用户名：' + user.username + '）',
+                                                      category="宿舍管理",
+                                                      operator=request.user,
+                                                      ip=request.META.get("REMOTE_ADDR"))
+                system_log.save()
 
             instance.now_live_number += len(ids)
             instance.save()
 
             return Response({
-                "detail": "调整成功！"
+                "detail": "操作成功：安排入住成功！"
             }, status=status.HTTP_200_OK)
 
         if serializer.validated_data["index"] == 1:
@@ -234,12 +319,17 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
                     }, status=status.HTTP_400_BAD_REQUEST)
                 user.lived_dormitory_id = None
                 user.save()
+                system_log = SystemLog.objects.create(content='安排用户退宿（编号：' + instance.number + '，用户名：' + user.username + '）',
+                                                      category="宿舍管理",
+                                                      operator=request.user,
+                                                      ip=request.META.get("REMOTE_ADDR"))
+                system_log.save()
 
             instance.now_live_number -= len(ids)
             instance.save()
 
             return Response({
-                "detail": "调整成功！"
+                "detail": "操作成功：安排退宿成功！"
             }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -248,6 +338,10 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             宿舍 允许居住人数 修改
             url: '/dormitories/<pk>/change_allow_live_number/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'allow_live_number': '<allow_live_number>'
+            }
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -256,8 +350,14 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         instance.allow_live_number = serializer.validated_data["allow_live_number"]
         instance.save()
 
+        system_log = SystemLog.objects.create(content='修改宿舍的允许居住人数（编号：' + instance.number + '）',
+                                              category="宿舍管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
-            "detail": "编辑成功！"
+            "detail": "操作成功：修改允许居住的人数成功！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
@@ -266,6 +366,10 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
             宿舍 备注 修改
             url: '/dormitories/<pk>/change_note/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'note': '<note>'
+            }
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -274,12 +378,18 @@ class DormitoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         instance.note = serializer.validated_data["note"]
         instance.save()
 
+        system_log = SystemLog.objects.create(content='修改宿舍的备注（编号：' + instance.number + '）',
+                                              category="宿舍管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
-            "detail": "编辑成功！"
+            "detail": "操作成功：修改备注成功！"
         }, status=status.HTTP_200_OK)
 
 
-class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class WaterFeesViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     宿舍水费 视图类
     """
@@ -288,9 +398,9 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
     queryset = WaterFees.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return WaterFeesSerializer
         if self.action == "retrieve":
+            return WaterFeesSerializer
+        if self.action == "list":
             return WaterFeesSerializer
         if self.action == "recharge_admin":
             return WaterFeesRechargeAdminSerializer
@@ -299,15 +409,22 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         return WaterFeesSerializer
 
     def get_permissions(self):
-        if self.action == "list":
-            return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), WaterFeesIsSelf()]
+        if self.action == "list":
+            return [IsAuthenticated()]
         if self.action == "recharge_admin":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "change_note":
             return [IsAuthenticated(), UserIsSuperUser()]
         return []
+
+    """
+    def retrieve(self, request, *args, **kwargs):
+        显示单个水费信息
+        url: '/water_fees/<pk>/'
+        type: 'get'
+    """
 
     def list(self, request, *args, **kwargs):
         """
@@ -375,7 +492,13 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
     @action(methods=['POST'], detail=True)
     def recharge_admin(self, request, *args, **kwargs):
         """
-        宿舍水费 管理员充值
+            宿舍水费 管理员充值
+            url: '/water_fees/<pk>/recharge_admin/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'money': '<money>'
+            }
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -392,14 +515,26 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
                                                      note=note)
         water_fees_log.save()
 
+        system_log = SystemLog.objects.create(content='管理员代充水费（宿舍编号：' + instance.dormitory.number + '，充值金额：' + str(serializer.validated_data["money"]) + '）',
+                                              category="水费管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
-            "detail": "充值成功！"
+            "detail": "操作成功：充值成功！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
     def change_note(self, request, *args, **kwargs):
         """
-        宿舍水费 修改备注
+            宿舍水费 修改备注
+            url: '/water_fees/<pk>/change_note/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'note': '<note>'
+            }
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -408,12 +543,18 @@ class WaterFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         instance.note = serializer.validated_data["note"]
         instance.save()
 
+        system_log = SystemLog.objects.create(content='修改宿舍水费备注（宿舍编号：' + instance.dormitory.number + '）',
+                                              category="水费管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
-            "detail": "编辑成功！"
+            "detail": "操作成功：编辑成功！"
         }, status=status.HTTP_200_OK)
 
 
-class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class ElectricityFeesViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     宿舍电费 视图类
     """
@@ -422,26 +563,33 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
     queryset = ElectricityFees.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return ElectricityFeesSerializer
         if self.action == "retrieve":
             return ElectricityFeesSerializer
-        if self.action == "recharge":
-            return ElectricityFeesRechargeSerializer
+        if self.action == "list":
+            return ElectricityFeesSerializer
+        if self.action == "recharge_admin":
+            return ElectricityFeesRechargeAdminSerializer
         if self.action == "change_note":
             return ElectricityFeesChangeNoteSerializer
         return ElectricityFeesSerializer
 
     def get_permissions(self):
-        if self.action == "list":
-            return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), ElectricityFeesIsSelf()]
-        if self.action == "recharge":
+        if self.action == "list":
+            return [IsAuthenticated()]
+        if self.action == "recharge_admin":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "change_note":
             return [IsAuthenticated(), UserIsSuperUser()]
         return []
+
+    """
+    def retrieve(self, request, *args, **kwargs):
+        显示单个水费信息
+        url: '/electricity_fees/<pk>/'
+        type: 'get'
+    """
 
     def list(self, request, *args, **kwargs):
         """
@@ -507,7 +655,16 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
             })
 
     @action(methods=['POST'], detail=True)
-    def recharge(self, request, *args, **kwargs):
+    def recharge_admin(self, request, *args, **kwargs):
+        """
+            宿舍电费 管理员充值
+            url: '/electricity_fees/<pk>/recharge_admin/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'money': '<money>'
+            }
+        """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -523,12 +680,27 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
                                                                  note=note)
         electricity_fees_log.save()
 
+        system_log = SystemLog.objects.create(content='管理员代充水费（宿舍编号：' + instance.dormitory.number + '，充值金额：' + str(serializer.validated_data["money"]) + '）',
+                                              category="电费管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
-            "detail": "充值成功！"
+            "detail": "操作成功：充值成功！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
     def change_note(self, request, *args, **kwargs):
+        """
+            宿舍电费 修改备注
+            url: '/electricity_fees/<pk>/change_note/'
+            type: 'post'
+            dataType: 'json'
+            data: {
+                'note': '<note>'
+            }
+        """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -536,6 +708,12 @@ class ElectricityFeesViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
         instance.note = serializer.validated_data["note"]
         instance.save()
 
+        system_log = SystemLog.objects.create(content='修改宿舍电费备注（宿舍编号：' + instance.dormitory.number + '）',
+                                              category="电费管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
-            "detail": "编辑成功！"
+            "detail": "操作成功：编辑成功！"
         }, status=status.HTTP_200_OK)

@@ -29,10 +29,6 @@ from access_control.views import AccessControlViewset
 from system_setting.views import SystemSettingViewset
 
 router = DefaultRouter()
-# router.register(r'users', UsersViewset, basename="users")
-# router.register(r'code', VerifyCodeViewset, basename="code")
-# router.register(r'changepassword', ChangePasswordViewset, basename="changepassword")
-
 router.register(r'users', UserViewset, basename="users")
 router.register(r'dormitories', DormitoryViewset, basename="dormitories")
 router.register(r'water_fees', WaterFeesViewset, basename="water_fees")

@@ -99,7 +99,7 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.first_username) {
-								layer.msg(json_responseText.first_username[0], {
+								layer.msg('首用户名出错：' + json_responseText.first_username[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -107,7 +107,7 @@
 								return false;
 							}
 							if(json_responseText.create_number) {
-								layer.msg(json_responseText.create_number[0], {
+								layer.msg('创建数量出错：' + json_responseText.create_number[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -115,7 +115,7 @@
 								return false;
 							}
 							if(json_responseText.password) {
-								layer.msg(json_responseText.password[0], {
+								layer.msg('密码出错：' + json_responseText.password[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -129,6 +129,10 @@
 								});
 								return false;
 							}
+							layer.msg('未知错误，请联系管理！', {
+								icon: 2,
+								anim: 6
+							});
 						}
 					});
 				});

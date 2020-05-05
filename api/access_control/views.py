@@ -1,4 +1,6 @@
-from django.shortcuts import render
+import os
+from datetime import datetime, timedelta
+
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -7,16 +9,15 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework import status
-from datetime import datetime, timedelta
-import os
 
 from .models import AccessControl, AccessControlAbnormalApplication
 from .serializers import AccessControlSerializer, AccessControlUpdateSerializer, AccessControlAbnormalApplicationSerializer, AccessControlAbnormalApplicationUpdateSerializer, AccessControlAbnormalApplicationReplySerializer
+from system_setting.models import SystemLog
 from utils.permission import UserIsSuperUser, AccessControlIsSelf
 # Create your views here.
 
 
-class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+class AccessControlViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     门禁记录 视图类
     """
@@ -25,9 +26,9 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
     queryset = AccessControl.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return AccessControlSerializer
         if self.action == "retrieve":
+            return AccessControlSerializer
+        if self.action == "list":
             return AccessControlSerializer
         if self.action == "update":
             return AccessControlUpdateSerializer
@@ -46,10 +47,10 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         return AccessControlSerializer
 
     def get_permissions(self):
-        if self.action == "list":
-            return [IsAuthenticated()]
         if self.action == "retrieve":
             return [IsAuthenticated(), AccessControlIsSelf()]
+        if self.action == "list":
+            return [IsAuthenticated()]
         if self.action == "update":
             return [IsAuthenticated(), UserIsSuperUser()]
         if self.action == "create":
@@ -66,7 +67,19 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
             return [IsAuthenticated(), UserIsSuperUser()]
         return []
 
+    """
+    def retrieve(self, request, *args, **kwargs):
+        显示单个门禁记录
+        url: '/access_control/<pk>/'
+        type: 'get'
+    """
+
     def list(self, request, *args, **kwargs):
+        """
+            显示单个门禁记录
+            url: '/access_control/'
+            type: 'get'
+        """
         from django.db.models import Q,F
         import math
 
@@ -137,6 +150,11 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
             门禁记录 修改
             url: '/access_control/<pk>/'
             type: 'put'
+            dataType: 'json'
+            data: {
+                'status': '<status>',
+                'note': '<note>'
+            }
         """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -146,15 +164,25 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
         instance.note = serializer.validated_data["note"]
         instance.save()
 
+        system_log = SystemLog.objects.create(content='修改门禁记录（编号：' + str(instance.id) + '）',
+                                              category="门禁管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
-            "detail": "修改成功！"
+            "detail": "操作成功：门禁记录修改成功！"
         }, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
+        """
+            门禁记录 创建
+            url: '/access_control/?user_id=<user_id>&euclidean_distance=<euclidean_distance>'
+            type: 'post'
+            dataType: 'json'
+            data: file
+        """
         from utils.save_file import save_img_and_crop_1_1
-        from utils import face_recognition
-        from attendance_system import settings
-        import json
         image = request.FILES.get("file")
         flag = save_img_and_crop_1_1(image, "users/access_control")
         if flag == 0:
@@ -292,6 +320,10 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
             门禁记录 识别异常申请 创建
             url: '/access_control/<pk>/abnormal_application_create/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'content': '<content>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -303,8 +335,14 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
                                                                                               content=serializer.validated_data['content'])
         access_control_abnormal_application.save()
 
+        system_log = SystemLog.objects.create(content='创建门禁异常申请（申请编号：' + str(access_control_abnormal_application.id) + '）',
+                                              category="门禁管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
-            "detail": "门禁记录异常申请已提交！"
+            "detail": "操作成功：门禁记录异常申请已提交！"
         }, status=status.HTTP_200_OK)
 
 
@@ -314,6 +352,10 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
             门禁记录 识别异常申请 修改
             url: '/access_control/<pk>/abnormal_application_update/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'content': '<content>'
+            }
         """
         partial = kwargs.pop('partial', False)
         instance = self.get_object().abnormal_application
@@ -326,6 +368,12 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
+        system_log = SystemLog.objects.create(content='创建门禁异常申请（申请编号：' + str(instance.abnormal_application.id) + '）',
+                                              category="门禁管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response(serializer.data)
 
     @action(methods=['POST'], detail=True)
@@ -334,6 +382,11 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
             门禁记录 识别异常申请 回复
             url: '/access_control/<pk>/abnormal_application_reply/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'result': '<result>',
+                'reply': '<reply>'
+            }
         """
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
@@ -357,5 +410,10 @@ class AccessControlViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
             instance.status = "normal"
             instance.save()
 
-        return Response(serializer.data)
+        system_log = SystemLog.objects.create(content='门禁异常申请回复（申请编号：' + str(instance.abnormal_application.id) + '）',
+                                              category="门禁管理",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
 
+        return Response(serializer.data)

@@ -161,7 +161,21 @@
 									},
 									error: function(jqXHR) {
 										var json_responseText = JSON.parse(jqXHR.responseText);
-										layer.msg(json_responseText.error, {
+										if (json_responseText.error){
+											layer.msg(json_responseText.error, {
+												icon: 2,
+												anim: 6
+											});
+											return false;
+										}
+										if (json_responseText.detail){
+											layer.msg(json_responseText.detail, {
+												icon: 2,
+												anim: 6
+											});
+											return false;
+										}
+										layer.msg('未知错误，请联系管理！', {
 											icon: 2,
 											anim: 6
 										});

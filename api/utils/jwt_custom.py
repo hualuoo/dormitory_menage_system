@@ -1,20 +1,19 @@
 from datetime import datetime
 
-from users.models import User
-
 from rest_framework import serializers
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
-
 from aliyunsdkcore import client
-from utils.aliyun_python_sdk_afs.aliyunsdkafs.request.v20180112 import AuthenticateSigRequest
 from aliyunsdkcore.profile import region_provider
+from utils.aliyun_python_sdk_afs.aliyunsdkafs.request.v20180112 import AuthenticateSigRequest
+
+from users.models import User
+from system_setting.models import SystemLog
 from django.conf import settings
+from utils.smtp import login_smtp
 
 region_provider.add_endpoint('afs', 'cn-hangzhou', 'afs.aliyuncs.com')
 clt = client.AcsClient(settings.ALICLOUD_AFS_ACCESSKEY, settings.ALICLOUD_AFS_ACCESS_SECRET, 'cn-hangzhou')
-
-from utils.smtp import login_smtp
 
 
 class CustomBackend(ModelBackend):
@@ -58,6 +57,11 @@ class CustomBackend(ModelBackend):
         if last_user.check_password(password):
             last_user.last_login = datetime.now()
             last_user.save()
+            system_log = SystemLog.objects.create(content='用户登录（用户名：' + last_user.username + '）',
+                                                  category="登录",
+                                                  operator=request.user,
+                                                  ip=request.META.get("REMOTE_ADDR"))
+            system_log.save()
             if last_user.email is not None:
                 # login_smtp(user, ip)
                 return last_user

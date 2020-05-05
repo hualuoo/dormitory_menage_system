@@ -1,5 +1,6 @@
-from django.db import models
 from datetime import datetime
+
+from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 from dormitories.models import Dormitory
@@ -10,7 +11,7 @@ class User(AbstractUser):
     """
     用户
     """
-    email = models.EmailField(max_length=100, blank=True, verbose_name="邮箱")
+    email = models.EmailField(max_length=100, blank=True, null=True, verbose_name="邮箱")
     lived_dormitory = models.ForeignKey(Dormitory, on_delete=models.SET_NULL, verbose_name="居住宿舍", null=True, related_name='lived_users')
 
     class Meta:
@@ -28,7 +29,7 @@ class UserInfo(models.Model):
     birthday = models.DateField(null=True, blank=True, verbose_name="出生年月")
     gender = models.CharField(max_length=7, choices=(("male", "男"), ("female", "女"), ("unknown", "未知")), default="unknown",
                               verbose_name="性别")
-    mobile = models.CharField(blank=True, max_length=11, verbose_name="电话")
+    mobile = models.CharField(blank=True, null=True, max_length=11, verbose_name="电话")
     avatar = models.ImageField(upload_to="users/avatar/", null=True, blank=True, verbose_name="头像")
     user = models.OneToOneField(User, verbose_name="用户", on_delete=models.CASCADE, related_name="info")
 
@@ -44,8 +45,8 @@ class UserFace(models.Model):
     """
     用户人脸数据
     """
-    photo = models.ImageField(upload_to="users/face_photo/", null=True, blank=True, verbose_name="人脸照片")
-    features = models.TextField(verbose_name="特征数据")
+    photo = models.ImageField(upload_to="users/face_photo/", null=True, verbose_name="人脸照片")
+    features = models.TextField(verbose_name="特征数据", null=True)
     user = models.OneToOneField(User, verbose_name="用户", on_delete=models.CASCADE, related_name="face")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="创建时间")
 
@@ -57,12 +58,11 @@ class UserFace(models.Model):
         return self.user.username
 
 
-
 class CaptchaModel(models.Model):
     """
     邮件验证码
     """
-    email = models.EmailField(max_length=100, null=True, blank=True, verbose_name="邮箱")
+    email = models.EmailField(max_length=100, verbose_name="邮箱")
     code = models.CharField(max_length=10, verbose_name="验证码")
     create_time = models.DateTimeField(default=datetime.now, verbose_name="创建时间")
 
@@ -71,4 +71,4 @@ class CaptchaModel(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.__str__()
+        return self.email

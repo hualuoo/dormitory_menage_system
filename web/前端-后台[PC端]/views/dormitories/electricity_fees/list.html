@@ -236,7 +236,7 @@
 					title: '请输入充值的电费(元)'
 				}, function(value, index) {
 					$.ajax({
-						url: "http://s1.mc.fyi:11453/electricity_fees/" + id + "/recharge/",
+						url: "http://s1.mc.fyi:11453/electricity_fees/" + id + "/recharge_admin/",
 						type: "post",
 						headers: {
 							"Authorization": "JWT " + localStorage.getItem("cache_token")
@@ -256,10 +256,11 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.money) {
-								layer.msg(json_responseText.money[0], {
+								layer.msg('充值电费出错：' + json_responseText.money[0], {
 									icon: 2,
 									anim: 6
 								});
+								layui.table.reload('LAY-electricity_fees-manage');
 								return false;
 							}
 							if(json_responseText.detail) {
@@ -267,8 +268,13 @@
 									icon: 2,
 									anim: 6
 								});
+								layui.table.reload('LAY-electricity_fees-manage');
 								return false;
 							}
+							layer.msg('未知错误，请联系管理！', {
+								icon: 2,
+								anim: 6
+							});
 							layui.table.reload('LAY-electricity_fees-manage');
 						}
 					});
@@ -313,7 +319,7 @@
 								error: function(jqXHR) {
 									var json_responseText = JSON.parse(jqXHR.responseText);
 									if(json_responseText.note) {
-										layer.msg(json_responseText.note[0], {
+										layer.msg('备注出错：' + json_responseText.note[0], {
 											icon: 2,
 											anim: 6
 										});
@@ -327,6 +333,10 @@
 										});
 										return false;
 									}
+									layer.msg('未知错误，请联系管理！', {
+										icon: 2,
+										anim: 6
+									});
 								}
 							});
 						});

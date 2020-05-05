@@ -81,7 +81,6 @@
 					done: function(page, next) { //执行下一页的回调
 						var lis = [];
 						//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-
 						var flow_data = "";
 						$.ajax({
 							method: "get",
@@ -253,6 +252,10 @@
 										});
 										return false;
 									}
+									layer.msg('未知错误，请联系管理！', {
+										icon: 2,
+										anim: 6
+									});
 								}
 							});
 						});

@@ -234,7 +234,7 @@
 							"content": abnormal_application_content.txt.html()
 						},
 						success: function(data) {
-							layer.msg('操作成功：修改成功！', {
+							layer.msg(data.detail, {
 								icon: 1,
 								time: 2000
 							});
@@ -242,7 +242,7 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.content) {
-								layer.msg('申请内容：' + json_responseText.content[0], {
+								layer.msg('申请内容出错：' + json_responseText.content[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -255,6 +255,10 @@
 								});
 								return false;
 							}
+							layer.msg('未知错误，请联系管理！', {
+								icon: 2,
+								anim: 6
+							});
 						}
 					});
 				});
@@ -274,7 +278,7 @@
 							"reply": abnormal_application_reply.txt.html()
 						},
 						success: function(data) {
-							layer.msg('操作成功：回复成功！', {
+							layer.msg(data.detail, {
 								icon: 1,
 								time: 2000
 							});
@@ -282,14 +286,14 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.result) {
-								layer.msg('回复结果：' + json_responseText.result[0], {
+								layer.msg('回复结果出错：' + json_responseText.result[0], {
 									icon: 2,
 									anim: 6
 								});
 								return false;
 							}
 							if(json_responseText.reply) {
-								layer.msg('回复内容：' + json_responseText.reply[0], {
+								layer.msg('回复内容出错：' + json_responseText.reply[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -302,6 +306,10 @@
 								});
 								return false;
 							}
+							layer.msg('未知错误，请联系管理！', {
+								icon: 2,
+								anim: 6
+							});
 						}
 					});
 				});

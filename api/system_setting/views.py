@@ -1,22 +1,21 @@
+from datetime import datetime, timedelta
+
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from django.http import JsonResponse
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from datetime import datetime, timedelta
+from rest_framework.permissions import IsAuthenticated
 
-from .models import SystemSetting
+from .models import SystemSetting, SystemLog
 from .serializers import SystemSettingSerializer, SystemSettingUpdateSerializer
-from utils.permission import UserIsSuperUser
-
 from dormitories.models import Dormitory, WaterFees, ElectricityFees
 from user_operation.models import Repair
 from access_control.models import AccessControl, AccessControlAbnormalApplication
 from users.models import User
+from utils.permission import UserIsSuperUser
 
 
 # Create your views here.
@@ -30,12 +29,53 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
             return SystemSettingSerializer
         if self.action == "system_setting_update":
             return SystemSettingUpdateSerializer
+        if self.action == "get_todo_list":
+            return
+        if self.action == "get_overview_info":
+            return
+        if self.action == "get_backend_server_info":
+            return
+        if self.action == "data_overview_date":
+            return
+        if self.action == "data_overview_data":
+            return
+        if self.action == "get_banner":
+            return
+        if self.action == "upload_banner":
+            return
+        if self.action == "get_fees":
+            return
         return SystemSettingSerializer
 
     def get_permissions(self):
-        # if self.action == "get_setting_all":
-        #    return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "list":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "system_setting_update":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "get_todo_list":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "get_overview_info":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "get_backend_server_info":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "data_overview_date":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "data_overview_data":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "get_banner":
+            return []
+        if self.action == "upload_banner":
+            return [IsAuthenticated(), UserIsSuperUser()]
+        if self.action == "get_fees":
+            return [IsAuthenticated()]
         return []
+
+    """
+    def list(self, request, *args, **kwargs):
+        系统设置 列表
+        url: '/system_setting/'
+        type: 'get'
+    """
 
     @action(methods=['POST'], detail=False)
     def system_setting_update(self, request, *args, **kwargs):
@@ -43,6 +83,16 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
             系统 设置修改
             url: '/system_setting/system_setting_update/'
             type: 'post'
+            dataType: 'json'
+            data: {
+                'water_fees': '<water_fees>',
+                'electricity_fees': '<electricity_fees>',
+                'todo_list': '<todo_list>',
+                'overview_info': '<overview_info>',
+                'data_overview_start_date': '<data_overview_start_date>',
+                'notice_title': '<notice_title>',
+                'notice_content': '<notice_content>'
+            }
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -75,8 +125,14 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         notice_content.content = serializer.validated_data["notice_content"]
         notice_content.save()
 
+        system_log = SystemLog.objects.create(content='管理员修改了系统设置',
+                                              category="系统设置",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
-            "detail": "系统设定已保存！"
+            "detail": "操作成功：系统设定已保存！"
         }, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=False)
@@ -223,7 +279,9 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         """
             系统 更新前台首页Banner
             url: '/system_setting/upload_banner/'
-            type: 'get'
+            type: 'post'
+            dateType: 'json'
+            data: file
         """
         from utils.save_file import save_img
 
@@ -267,5 +325,3 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         queryset = self.filter_queryset(all_result)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-

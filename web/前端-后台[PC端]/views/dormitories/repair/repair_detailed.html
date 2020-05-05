@@ -358,19 +358,19 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.title) {
-								layer.msg('报修单标题：' + json_responseText.title[0], {
+								layer.msg('标题出错：' + json_responseText.title[0], {
 									icon: 2,
 									anim: 6
 								});
 							}
 							if(json_responseText.status) {
-								layer.msg('报修单状态：' + json_responseText.status[0], {
+								layer.msg('状态出错：' + json_responseText.status[0], {
 									icon: 2,
 									anim: 6
 								});
 							}
 							if(json_responseText.content) {
-								layer.msg('报修单内容：' + json_responseText.content[0], {
+								layer.msg('内容出错：' + json_responseText.content[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -410,13 +410,13 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.reply) {
-								layer.msg('回复内容：' + json_responseText.reply[0], {
+								layer.msg('回复内容出错：' + json_responseText.reply[0], {
 									icon: 2,
 									anim: 6
 								});
 							}
 							if(json_responseText.reply_type) {
-								layer.msg('回复类型：' + json_responseText.reply_type[0], {
+								layer.msg('回复类型出错：' + json_responseText.reply_type[0], {
 									icon: 2,
 									anim: 6
 								});
@@ -458,19 +458,19 @@
 						error: function(jqXHR) {
 							var json_responseText = JSON.parse(jqXHR.responseText);
 							if(json_responseText.main_repair__id) {
-								layer.msg('报修单ID：' + json_responseText.main_repair__id[0], {
+								layer.msg('报修单ID出错：' + json_responseText.main_repair__id[0], {
 									icon: 2,
 									anim: 6
 								});
 							}
 							if(json_responseText.reply) {
-								layer.msg('回复内容：' + json_responseText.reply[0], {
+								layer.msg('回复内容出错：' + json_responseText.reply[0], {
 									icon: 2,
 									anim: 6
 								});
 							}
 							if(json_responseText.reply_type) {
-								layer.msg('回复类型：' + json_responseText.reply_type[0], {
+								layer.msg('回复类型出错：' + json_responseText.reply_type[0], {
 									icon: 2,
 									anim: 6
 								});
