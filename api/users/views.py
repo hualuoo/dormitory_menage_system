@@ -307,7 +307,8 @@ class UserViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Updat
         serializer.is_valid(raise_exception=True)
 
         user = User.objects.create(username=serializer.validated_data["username"],
-                                   date_joined=datetime.now())
+                                   date_joined=datetime.now(),
+                                   is_staff=serializer.validated_data["is_staff"])
         user.set_password(serializer.validated_data["password"])
         user.save()
         info = UserInfo.objects.create(user=user)

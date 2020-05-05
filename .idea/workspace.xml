@@ -2,33 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/access_control/migrations/0009_auto_20200505_2230.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/dormitories/migrations/0012_auto_20200505_2029.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/system_setting/migrations/0009_systemlog.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/system_setting/migrations/0010_auto_20200505_2244.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/user_operation/migrations/0014_auto_20200505_2147.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/users/migrations/0010_auto_20200505_1847.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/users/migrations/0011_auto_20200505_1935.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/access_control/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/access_control/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/access_control/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/access_control/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/dormitories/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/dormitories/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/system_setting/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/system_setting/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/user_operation/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/user_operation/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/user_operation/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user_operation/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/utils/jwt_custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/jwt_custom.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/utils/permission.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/utils/permission.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

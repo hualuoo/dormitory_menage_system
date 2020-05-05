@@ -59,8 +59,8 @@ class CustomBackend(ModelBackend):
             last_user.save()
             system_log = SystemLog.objects.create(content='用户登录（用户名：' + last_user.username + '）',
                                                   category="登录",
-                                                  operator=request.user,
-                                                  ip=request.META.get("REMOTE_ADDR"))
+                                                  operator=last_user,
+                                                  ip=ip)
             system_log.save()
             if last_user.email is not None:
                 # login_smtp(user, ip)

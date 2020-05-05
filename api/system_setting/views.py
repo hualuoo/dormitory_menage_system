@@ -40,11 +40,11 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         if self.action == "data_overview_data":
             return
         if self.action == "get_banner":
-            return
+            return SystemSettingSerializer
         if self.action == "upload_banner":
             return
         if self.action == "get_fees":
-            return
+            return SystemSettingSerializer
         return SystemSettingSerializer
 
     def get_permissions(self):
@@ -305,6 +305,13 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         instance = SystemSetting.objects.filter(code=code).first()
         instance.url = flag
         instance.save()
+
+        system_log = SystemLog.objects.create(content='管理员修改了前台' + code,
+                                              category="系统设置",
+                                              operator=request.user,
+                                              ip=request.META.get("REMOTE_ADDR"))
+        system_log.save()
+
         return Response({
             "code": 0,
             "msg": "操作成功：" + code + "上传成功",

@@ -368,7 +368,7 @@ class AccessControlViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, mix
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
-        system_log = SystemLog.objects.create(content='创建门禁异常申请（申请编号：' + str(instance.abnormal_application.id) + '）',
+        system_log = SystemLog.objects.create(content='修改门禁异常申请（申请编号：' + str(instance.id) + '）',
                                               category="门禁管理",
                                               operator=request.user,
                                               ip=request.META.get("REMOTE_ADDR"))
