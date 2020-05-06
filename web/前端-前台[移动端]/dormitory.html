@@ -101,7 +101,7 @@
 					</dd>
 				</dl>
 			</div>
-			<div class="f30 m2 color3">
+			<div class="f30 m2 color3" id="fees_div">
 				<ul class="mt5 mb5 f36 color3">
 					<li class="bg-color8 clearfix">
 						<a onclick="show_water_fees()">
@@ -127,7 +127,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="f30 m2 color3">
+			<div class="f30 m2 color3" id="fees_recharge_div">
 				<ul class="mt5 mb5 f36 color3">
 					<li class="bg-color8 clearfix">
 						<a href="recharge.html">
@@ -168,6 +168,16 @@
 				},
 				dataType: "json",
 				success: function(data) {
+					if(data.data.length == 0) {
+						layer.open({
+							content: '管理员未给您安排入住宿舍，请联系管理员安排入住。',
+							skin: 'msg',
+							time: 2
+						});
+						$('#fees_div').hide();
+						$('#fees_recharge_div').hide();
+						return true;
+					}
 					if(data.data.length != 1) {
 						layer.open({
 							content: '管理员请通过管理员后端进行管理',
@@ -175,6 +185,7 @@
 							time: 2
 						});
 						setTimeout('location.href = "my.html"', 2000);
+						return true;
 					} else {
 						$('#dormitory_id').html(data.data[0].id);
 						$('#dormitory_number').html(data.data[0].number);

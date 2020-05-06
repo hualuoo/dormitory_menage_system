@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import SystemSetting
+from .models import SystemSetting, SystemLog
 
 
 class SystemSettingSerializer(serializers.ModelSerializer):
@@ -32,3 +32,19 @@ class SystemSettingUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SystemSetting
         fields = ("water_fees", "electricity_fees", "todo_list", "overview_info", "data_overview_start_date", "notice_title", "notice_content", )
+
+
+class SystemLogSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(help_text="ID")
+    operator = serializers.SerializerMethodField(help_text="操作人")
+    category = serializers.CharField(help_text="操作种类")
+    content = serializers.CharField(help_text="操作内容")
+    add_time = serializers.DateTimeField(help_text="操作时间", format="%Y-%m-%d %H:%M:%S")
+    ip = serializers.CharField(help_text="操作IP")
+
+    def get_operator(self, obj):
+        return obj.operator.username + '(' + obj.operator.first_name + obj.operator.last_name + ')'
+
+    class Meta:
+        model = SystemLog
+        fields = ("id", "operator", "category", "content", "add_time", "ip", )

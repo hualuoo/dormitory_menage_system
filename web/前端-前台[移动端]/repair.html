@@ -61,12 +61,12 @@
 		<div class="p3 f30 f30 w75 main">
 			<div class="f30 m2 color3">
 				<dl>
-					<dt class="t-c bg-color6 f36">报修单<span class="f28">(只显示最近20条)</span></dt>
+					<dt class="t-c bg-color6 f36"><span id="dormitory_number"></span>报修单<span class="f28">(只显示最近20条)</span></dt>
 				</dl>
 				<div id="repair_html">
 				</div>
 			</div>
-			<div class="f30 m2 color3">
+			<div class="f30 m2 color3" id="repair_create_div">
 				<dl>
 					<dt class="t-c bg-color6 f36">新建报修单</dt>
 				</dl>
@@ -103,6 +103,44 @@
 			});
 
 			// 数据加载
+			$.ajax({
+				url: "http://s1.mc.fyi:11453/dormitories/?page=1&limit=20",
+				type: "get",
+				headers: {
+					"Authorization": "JWT " + localStorage.getItem("cache_token")
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.data.length == 0) {
+						layer.open({
+							content: '管理员未给您安排入住宿舍，请联系管理员安排入住。',
+							skin: 'msg',
+							time: 2
+						});
+						$('#repair_create_div').hide();
+						return true;
+					}
+					if(data.data.length != 1) {
+						layer.open({
+							content: '管理员请通过管理员后端进行管理',
+							skin: 'msg',
+							time: 2
+						});
+						setTimeout('location.href = "my.html"', 2000);
+						return true;
+					} else {
+						$('#dormitory_number').html(data.data[0].number);
+					}
+				},
+				error: function(jqXHR) {
+					layer.open({
+						content: '数据加载错误，请尝试重新登录',
+						skin: 'msg',
+						time: 2
+					});
+					setTimeout('location.href = "login.html"', 2000);
+				}
+			});
 			$.ajax({
 				url: "http://s1.mc.fyi:11453/repair/",
 				type: "get",
@@ -251,7 +289,7 @@
 					},
 					success: function(data) {
 						layer.open({
-							content: '操作成功：' + data.detail,
+							content: data.detail,
 							skin: 'msg',
 							time: 1
 						});
@@ -260,11 +298,11 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.main_repair__id) {
-							$('#error_label').html('<i class="icon iconfont icon-close">标题：' + json_responseText.main_repair__id[0]);
+							$('#error_label').html('<i class="icon iconfont icon-close">标题出错：' + json_responseText.main_repair__id[0]);
 							return false;
 						}
 						if(json_responseText.reply) {
-							$('#error_label').html('<i class="icon iconfont icon-close">内容：' + json_responseText.reply[0]);
+							$('#error_label').html('<i class="icon iconfont icon-close">内容出错：' + json_responseText.reply[0]);
 							return false;
 						}
 						if(json_responseText.detail) {

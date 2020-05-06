@@ -359,7 +359,7 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.old_email != null) {
-							$('#step1_1_error_label').html('<i class="icon iconfont icon-close"></i>' + json_responseText.old_email[0]);
+							$('#step1_1_error_label').html('<i class="icon iconfont icon-close"></i>旧邮箱出错：' + json_responseText.old_email[0]);
 							return false;
 						}
 						if(json_responseText.detail != null) {
@@ -400,7 +400,7 @@
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.old_email != null) {
 							layer.open({
-								content: json_responseText.old_email[0] + '，即将返回第一步！',
+								content: '旧邮箱验证出错：' + json_responseText.old_email[0] + '，即将返回第一步！',
 								skin: 'msg',
 								time: 2
 							});
@@ -457,7 +457,7 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.old_captcha != null) {
-							$('#step1_2_error_label').html('<i class="icon iconfont icon-close"></i>' + json_responseText.old_captcha[0]);
+							$('#step1_2_error_label').html('<i class="icon iconfont icon-close"></i>验证码出错：' + json_responseText.old_captcha[0]);
 							return false;
 						}
 						if(json_responseText.detail != null) {
@@ -513,7 +513,7 @@
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.old_captcha != null) {
 							layer.open({
-								content: json_responseText.old_captcha[0] + '，即将返回第一步！',
+								content: '旧邮箱验证码出错：' + json_responseText.old_captcha[0] + '，即将返回第一步！',
 								skin: 'msg',
 								time: 2
 							});
@@ -521,7 +521,7 @@
 							return false;
 						}
 						if(json_responseText.new_email != null) {
-							$('#step1_3_error_label').html('<i class="icon iconfont icon-close"></i>' + json_responseText.new_email[0]);
+							$('#step1_3_error_label').html('<i class="icon iconfont icon-close"></i>新邮箱出错：' + json_responseText.new_email[0]);
 							$('#new_email_input').focus();
 							return false;
 						}
@@ -578,12 +578,12 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.new_email != null) {
-							$('#step1_3_error_label').html('<i class="icon iconfont icon-close"></i>' + json_responseText.new_email[0]);
+							$('#step1_3_error_label').html('<i class="icon iconfont icon-close"></i>新邮箱出错：' + json_responseText.new_email[0]);
 							$('#new_email_input').focus();
 							return false;
 						}
 						if(json_responseText.new_captcha != null) {
-							$('#step1_3_error_label').html('<i class="icon iconfont icon-close"></i>' + json_responseText.new_captcha[0]);
+							$('#step1_3_error_label').html('<i class="icon iconfont icon-close"></i>新邮箱验证码出错：' + json_responseText.new_captcha[0]);
 							$('#new_email_captcha').focus();
 							return false;
 						}
@@ -629,7 +629,7 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.password != null) {
-							$('#step2_1_error_label').html('<i class="icon iconfont icon-close"></i>' + json_responseText.password[0]);
+							$('#step2_1_error_label').html('<i class="icon iconfont icon-close"></i>密码出错：' + json_responseText.password[0]);
 							return false;
 						}
 						if(json_responseText.detail != null) {
@@ -671,7 +671,7 @@
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.password != null) {
 							layer.open({
-								content: json_responseText.password[0] + '，即将返回第一步！',
+								content: '密码校验出错：' + json_responseText.password[0] + '，即将返回第一步！',
 								skin: 'msg',
 								time: 2
 							});
@@ -721,7 +721,7 @@
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.bind_email != null) {
 							layer.open({
-								content: json_responseText.bind_email[0] + '，即将返回第一步！',
+								content: '绑定邮箱出错：' + json_responseText.bind_email[0] + '，即将返回第一步！',
 								skin: 'msg',
 								time: 2
 							});
@@ -729,7 +729,7 @@
 							return false;
 						}
 						if(json_responseText.bind_captcha != null) {
-							$('#step2_2_error_label').html('<i class="icon iconfont icon-close"></i>' + json_responseText.bind_captcha[0]);
+							$('#step2_2_error_label').html('<i class="icon iconfont icon-close"></i>验证码出错：' + json_responseText.bind_captcha[0]);
 							return false;
 						}
 						if(json_responseText.detail != null) {

@@ -291,15 +291,15 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.main_repair__id) {
-							$('#error_label').html('<i class="icon iconfont icon-close">报修单ID：' + json_responseText.main_repair__id[0]);
+							$('#error_label').html('<i class="icon iconfont icon-close">报修单ID出错：' + json_responseText.main_repair__id[0]);
 							return false;
 						}
 						if(json_responseText.reply) {
-							$('#error_label').html('<i class="icon iconfont icon-close">回复内容：' + json_responseText.reply[0]);
+							$('#error_label').html('<i class="icon iconfont icon-close">回复内容出错：' + json_responseText.reply[0]);
 							return false;
 						}
 						if(json_responseText.reply_type) {
-							$('#error_label').html('<i class="icon iconfont icon-close">回复类型：' + json_responseText.reply_type[0]);
+							$('#error_label').html('<i class="icon iconfont icon-close">回复类型出错：' + json_responseText.reply_type[0]);
 							return false;
 						}
 						if(json_responseText.detail) {

@@ -256,7 +256,7 @@
 					},
 					success: function(data) {
 						layer.open({
-							content: '操作成功：' + data.detail,
+							content: data.detail,
 							skin: 'msg',
 							time: 1
 						});
@@ -265,7 +265,7 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.content) {
-							$('#error_label').html('<i class="icon iconfont icon-close">异常申请内容：' + json_responseText.content[0]);
+							$('#error_label').html('<i class="icon iconfont icon-close">内容出错：' + json_responseText.content[0]);
 							return false;
 						}
 						if(json_responseText.detail) {
@@ -280,7 +280,7 @@
 			// 修改申请
 			function abnormal_application_update() {
 				if($('#abnormal_application_content').val() == "") {
-					$('#error_label').html('<i class="icon iconfont icon-close">异常申请内容：不能为空。');
+					$('#error_label').html('<i class="icon iconfont icon-close">内容出错：不能为空。');
 					return false;
 				}
 				$.ajax({

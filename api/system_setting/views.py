@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import SystemSetting, SystemLog
 from .serializers import SystemSettingSerializer, SystemSettingUpdateSerializer
+from .serializers import SystemLogSerializer
 from dormitories.models import Dormitory, WaterFees, ElectricityFees
 from user_operation.models import Repair
 from access_control.models import AccessControl, AccessControlAbnormalApplication
@@ -332,3 +333,84 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         queryset = self.filter_queryset(all_result)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+class SystemLogViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    serializer_class = SystemSettingSerializer
+    queryset = SystemLog.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return SystemLogSerializer
+
+    def get_permissions(self):
+        if self.action == "list":
+            return [IsAuthenticated(), UserIsSuperUser()]
+
+    def list(self, request, *args, **kwargs):
+        from django.db.models import Q, F
+
+        # 获取全部数据
+        all_result = self.filter_queryset(self.get_queryset())
+
+        # 分页页数
+        page = int(request.GET.get('page', '1'))
+        # 每页条数
+        limit = int(request.GET.get('limit', '10'))
+
+        # 是否只显示管理员操作
+        is_superuser = request.GET.get('is_superuser', '')
+
+        # 排序列名
+        field = request.GET.get('field', '')
+        # 排序类型，升序降序
+        order = request.GET.get('order', '')
+        # 模糊搜索关键词
+        search_operator = request.GET.get('search_operator', '')
+        search_content = request.GET.get('search_content', '')
+        search_add_time = request.GET.get('search_add_time', '')
+        search_ip = request.GET.get('search_ip', '')
+
+        # 是否只显示管理员操作
+        if is_superuser == 'true':
+            all_result = all_result.filter(Q(operator__is_superuser=True))
+        if is_superuser == 'false':
+            all_result = all_result.filter(Q(operator__is_superuser=False))
+
+        # 排序
+        if field:
+            if order == "asc":
+                all_result = all_result.order_by(F(field).asc(nulls_last=True))
+            elif order == "desc":
+                all_result = all_result.order_by(F(field).desc(nulls_last=True))
+
+        # 默认按 添加时间 倒叙
+        all_result = all_result.order_by(F("add_time").desc(nulls_last=True))
+
+        # 搜索
+        if search_operator:
+            all_result = all_result.filter(Q(operator__username__icontains=search_operator))
+        if search_content:
+            all_result = all_result.filter(Q(content__icontains=search_content))
+        if search_add_time:
+            all_result = all_result.filter(Q(add_time__icontains=search_add_time))
+        if search_ip:
+            all_result = all_result.filter(Q(ip__icontains=search_ip))
+
+        # 数据条数
+        recordsTotal = all_result.count()
+
+        # 获取首页的数据
+        if (page != 0) and (limit != 0):
+            all_result = all_result[(page * limit - limit):(page * limit)]
+
+        queryset = self.filter_queryset(all_result)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(
+            {
+                'code': 0,
+                'msg': '',
+                'count': recordsTotal,
+                'data': serializer.data
+            })

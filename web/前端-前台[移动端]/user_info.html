@@ -179,7 +179,7 @@
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.first_name) {
 							layer.open({
-								content: json_responseText.first_name[0],
+								content: '姓出错：' + json_responseText.first_name[0],
 								skin: 'msg',
 								time: 1
 							});
@@ -188,7 +188,7 @@
 						}
 						if(json_responseText.last_name) {
 							layer.open({
-								content: json_responseText.last_name[0],
+								content: '名出错：' + json_responseText.last_name[0],
 								skin: 'msg',
 								time: 1
 							});
@@ -197,7 +197,7 @@
 						}
 						if(json_responseText.info__gender) {
 							layer.open({
-								content: json_responseText.info__gender[0],
+								content: '性别出错：' + json_responseText.info__gender[0],
 								skin: 'msg',
 								time: 1
 							});
@@ -205,7 +205,7 @@
 						}
 						if(json_responseText.info__birthday) {
 							layer.open({
-								content: json_responseText.info__birthday[0],
+								content: '出生日期出错：' + json_responseText.info__birthday[0],
 								skin: 'msg',
 								time: 1
 							});
@@ -214,7 +214,7 @@
 						}
 						if(json_responseText.detail) {
 							layer.open({
-								content: '操作失败：' + json_responseText.detail,
+								content: json_responseText.detail,
 								skin: 'msg',
 								time: 1
 							});

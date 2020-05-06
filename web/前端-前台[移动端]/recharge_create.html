@@ -221,7 +221,7 @@
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.price) {
 							layer.open({
-								content: '充值金额：' + json_responseText.price[0],
+								content: '充值金额出错：' + json_responseText.price[0],
 								skin: 'msg',
 								time: 1
 							});
@@ -230,7 +230,7 @@
 						}
 						if(json_responseText.type) {
 							layer.open({
-								content: '充值方式：' + json_responseText.type[0],
+								content: '充值方式出错：' + json_responseText.type[0],
 								skin: 'msg',
 								time: 1
 							});
@@ -238,7 +238,7 @@
 						}
 						if(json_responseText.object) {
 							layer.open({
-								content: '充值对象：' + json_responseText.object[0],
+								content: '充值对象出错：' + json_responseText.object[0],
 								skin: 'msg',
 								time: 1
 							});
@@ -246,7 +246,7 @@
 						}
 						if(json_responseText.detail) {
 							layer.open({
-								content: '操作失败：' + json_responseText.detail,
+								content: json_responseText.detail,
 								skin: 'msg',
 								time: 1
 							});

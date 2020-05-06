@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 from users.models import User
@@ -25,10 +27,11 @@ class SystemLog(models.Model):
     """
     系统日志
     """
-    content = models.CharField(verbose_name="操作内容", max_length=100)
+    content = models.CharField(verbose_name="操作内容", max_length=1000)
     category = models.CharField(verbose_name="操作种类", max_length=10)
     operator = models.ForeignKey(User, verbose_name="操作人", on_delete=models.CASCADE, null=False, related_name='system_log_s_operator')
     ip = models.CharField(verbose_name="操作IP", max_length=100)
+    add_time = models.DateTimeField(verbose_name="操作时间", default=datetime.now)
 
     class Meta:
         verbose_name = "系统日志"

@@ -268,7 +268,7 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.old_email != null) {
-							$('#step1_1_error_label').html('<i class="icon iconfont icon-close"></i>' + json_responseText.old_email[0]);
+							$('#step1_1_error_label').html('<i class="icon iconfont icon-close"></i>绑定邮箱出错：' + json_responseText.old_email[0]);
 							return false;
 						}
 						if(json_responseText.detail != null) {
@@ -309,7 +309,7 @@
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.old_email != null) {
 							layer.open({
-								content: json_responseText.old_email[0] + '，即将返回第一步！',
+								content: '绑定邮箱校验出错：' + json_responseText.old_email[0] + '，即将返回第一步！',
 								skin: 'msg',
 								time: 2
 							});
@@ -366,7 +366,7 @@
 					error: function(jqXHR) {
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.old_captcha != null) {
-							$('#step1_2_error_label').html('<i class="icon iconfont icon-close"></i>' + json_responseText.old_captcha[0]);
+							$('#step1_2_error_label').html('<i class="icon iconfont icon-close"></i>绑定邮箱验证码出错：' + json_responseText.old_captcha[0]);
 							return false;
 						}
 						if(json_responseText.detail != null) {
@@ -418,7 +418,7 @@
 						var json_responseText = JSON.parse(jqXHR.responseText);
 						if(json_responseText.old_captcha != null) {
 							layer.open({
-								content: json_responseText.old_captcha[0] + '，即将返回第一步！',
+								content: '绑定邮箱验证码校验出错：' + json_responseText.old_captcha[0] + '，即将返回第一步！',
 								skin: 'msg',
 								time: 2
 							});
