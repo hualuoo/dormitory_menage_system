@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from .models import User, UserInfo, UserFace, CaptchaModel
+from .models import User, UserInfo, UserFace, CaptchaModel, QQLoginTokenModel
 from .serializers import UserSerializer, UserCreateSerializer, UserCreateMultipleSerializer, UserUpdateSerializer
 from .serializers import UserResetPasswordSerializer, UserResetPasswordMultipleSerializer, UserCheckIdsSerializer
 from .serializers import UserFaceListSerializer
@@ -1104,3 +1104,112 @@ class SecurityViewset(viewsets.GenericViewSet):
             "detail": "操作成功：邮箱绑定成功！",
             "email": serializer.validated_data['bind_email']
         }, status=status.HTTP_200_OK)
+
+
+class QQLoginViewset(viewsets.GenericViewSet):
+    serializer_class = UserSerializer
+
+    @action(methods=['GET'], detail=False)
+    def login(self, request, *args, **kwargs):
+        import requests, json
+        from django.conf import settings
+        from rest_framework_jwt.settings import api_settings
+        from django.shortcuts import redirect
+
+        code = request.GET.get('code', '')
+        state = request.GET.get('state', '')
+        if code == '' or state == '':
+            return redirect('http://s1.mc.fyi:11455/views/qqlogin.html?error_code=99999')
+        if state == 'bind':
+            return redirect('http://s1.mc.fyi:11455/views/qqlogin.html?code='+code)
+
+        token_result = requests.get(url='https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=' + settings.QQCONNECT_ID + '&client_secret=' + settings.QQCONNECT_KEY + '&code=' + code + '&redirect_uri=http://hl.acgxt.com:11453/user/login_qq/login?code=' + code + '&state=' + state)
+        if 'callback' in token_result.text:
+            token_result_json = json.loads(token_result.text.replace('callback( ', '').replace(' );', ''))
+            return redirect('http://s1.mc.fyi:11455/views/qqlogin.html?error_code=' + token_result_json['error'])
+        else:
+            token_result_json = {}
+            token_result_list = token_result.text.split('&')
+            for i in token_result_list:
+                temp = i.split('=')
+                token_result_json[temp[0]] = temp[1]
+
+        me_result = requests.get(url='https://graph.qq.com/oauth2.0/me?access_token=' + token_result_json['access_token'])
+        me_result_json = json.loads(me_result.text.replace('callback( ', '').replace(' );', ''))
+        if me_result_json['client_id'] != settings.QQCONNECT_ID:
+            return redirect('http://s1.mc.fyi:11455/views/qqlogin.html?error_code=99998')
+
+        if state == 'login':
+            if QQLoginTokenModel.objects.filter(openid=me_result_json['openid']):
+                qq_login_token = QQLoginTokenModel.objects.filter(openid=me_result_json['openid']).first()
+                jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+                jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+                payload = jwt_payload_handler(qq_login_token.user)
+                token = jwt_encode_handler(payload)
+                return redirect('http://s1.mc.fyi:11455/views/qqlogin.html?token=' + token)
+            else:
+                return redirect('http://s1.mc.fyi:11455/views/qqlogin.html?error_code=99997')
+
+    @action(methods=['POST'], detail=False)
+    def bind(self, request, *args, **kwargs):
+        import requests, json
+        from django.conf import settings
+
+        code = request.GET.get('code', '')
+        if code == '':
+            return Response({
+                "error_code": "99999"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        token_result = requests.get(url='https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=' + settings.QQCONNECT_ID + '&client_secret=' + settings.QQCONNECT_KEY + '&code=' + code + '&redirect_uri=http://hl.acgxt.com:11453/user/login_qq/login?code=' + code + '&state=bind')
+        if 'callback' in token_result.text:
+            token_result_json = json.loads(token_result.text.replace('callback( ', '').replace(' );', ''))
+            return Response({
+                "error_code": token_result_json['error']
+            }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            token_result_json = {}
+            token_result_list = token_result.text.split('&')
+            for i in token_result_list:
+                temp = i.split('=')
+                token_result_json[temp[0]] = temp[1]
+
+        me_result = requests.get(url='https://graph.qq.com/oauth2.0/me?access_token=' + token_result_json['access_token'])
+        me_result_json = json.loads(me_result.text.replace('callback( ', '').replace(' );', ''))
+        if me_result_json['client_id'] != settings.QQCONNECT_ID:
+            return Response({
+                "error_code": "99998"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if QQLoginTokenModel.objects.filter(openid=me_result_json['openid']):
+            return Response({
+                "error_code": "99996"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            qq_login_token = QQLoginTokenModel.objects.create(access_token=token_result_json['access_token'],
+                                                              expires_in=token_result_json['expires_in'],
+                                                              refresh_token=token_result_json['refresh_token'],
+                                                              user=request.user,
+                                                              openid=me_result_json['openid'])
+            qq_login_token.save()
+            return Response({
+                "detail": "绑定成功！"
+            }, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def get_bind_info(self, request, *args, **kwargs):
+        import requests, json
+        from django.conf import settings
+
+        if QQLoginTokenModel.objects.filter(user=request.user):
+            qq_login_token = QQLoginTokenModel.objects.filter(user=request.user).first()
+            get_user_info_result = requests.get(url='https://graph.qq.com/user/get_user_info?access_token=' + qq_login_token.access_token + '&oauth_consumer_key=' + settings.QQCONNECT_ID + '&openid=' + qq_login_token.openid)
+            get_user_info_result_json = json.loads(get_user_info_result.text)
+            return Response({
+                'nickname': get_user_info_result_json['nickname'],
+                'figureurl_qq': get_user_info_result_json['figureurl_qq']
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'detail': '该账户未绑定QQ账户！'
+            }, status=status.HTTP_400_BAD_REQUEST)

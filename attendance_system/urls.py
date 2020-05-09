@@ -21,7 +21,7 @@ from rest_framework.routers import DefaultRouter
 from django.views.static import serve
 from attendance_system.settings import MEDIA_ROOT
 
-from users.views import UserViewset, SecurityViewset
+from users.views import UserViewset, SecurityViewset, QQLoginViewset
 
 from dormitories.views import DormitoryViewset, WaterFeesViewset, ElectricityFeesViewset
 from user_operation.views import WaterFeesLogViewset, ElectricityFeesLogViewset, RepairViewset, RepairLogViewset, FeesRechargeOrderViewset
@@ -43,6 +43,7 @@ router.register(r'system_log', SystemLogViewset, basename="system_log")
 router.register(r'fees_recharge_order', FeesRechargeOrderViewset, basename="fees_recharge_order")
 
 router.register(r'member/security', SecurityViewset, basename="security")
+router.register(r'user/login_qq', QQLoginViewset, basename="login_qq")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

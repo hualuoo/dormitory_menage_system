@@ -72,3 +72,21 @@ class CaptchaModel(models.Model):
 
     def __str__(self):
         return self.email
+
+class QQLoginTokenModel(models.Model):
+    """
+    QQ登陆Token
+    """
+    access_token = models.CharField(max_length=32, verbose_name="授权令牌")
+    expires_in = models.IntegerField(verbose_name="授权令牌的有效期，单位为秒")
+    refresh_token = models.CharField(max_length=32, verbose_name="授权续期需要提供的参数")
+    openid = models.CharField(max_length=32, verbose_name="用户OpenID")
+    update_date = models.DateTimeField(verbose_name="更新日期", default=datetime.now)
+    user = models.OneToOneField(User, verbose_name="用户", on_delete=models.CASCADE, related_name="qq_login")
+
+    class Meta:
+        verbose_name = "QQ登陆TOKEN"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.user.username

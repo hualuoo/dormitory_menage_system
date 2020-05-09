@@ -2,23 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51167a3c-fd26-4f4d-aaf8-40295c27e048" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/api/system_setting/migrations/0011_systemlog_add_time.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/system_setting/migrations/0012_auto_20200506_1326.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/users/migrations/0012_qqlogintokenmodel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/users/migrations/0013_auto_20200506_2252.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/system_setting/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/system_setting/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/system_setting/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/system_setting/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/attendance_system/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/attendance_system/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/attendance_system/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/access_control_detailed.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/access_control_detailed.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/change_email.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/change_email.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/change_face.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/change_face.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/change_mobile.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/change_mobile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/change_password.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/change_password.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/dormitory.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/dormitory.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/recharge_create.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/recharge_create.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/repair.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/repair.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/repair_log.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/repair_log.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/前端-前台[移动端]/user_info.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/前端-前台[移动端]/user_info.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,19 +51,19 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\project\attendance_system\api\system_setting" />
-      <recent name="C:\project\attendance_system\api" />
-      <recent name="C:\project\attendance_system\api\dormitory" />
-      <recent name="C:\project\attendance_system\api\rooms" />
-      <recent name="C:\project\attendance_system\api\utils" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\project\attendance_system\media\system\banner" />
       <recent name="C:\project\attendance_system\api\system_setting\migrations" />
       <recent name="C:\project\attendance_system\media\users\access_control" />
       <recent name="C:\project\attendance_system\api\user_operation" />
       <recent name="C:\project\attendance_system\api\users\backup" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\project\attendance_system\api\system_setting" />
+      <recent name="C:\project\attendance_system\api" />
+      <recent name="C:\project\attendance_system\api\dormitory" />
+      <recent name="C:\project\attendance_system\api\rooms" />
+      <recent name="C:\project\attendance_system\api\utils" />
     </key>
   </component>
   <component name="RunManager">
@@ -130,6 +123,8 @@
       <workItem from="1583754811610" duration="12766000" />
       <workItem from="1583855762209" duration="255382000" />
       <workItem from="1587362878582" duration="124726000" />
+      <workItem from="1588757030341" duration="30000" />
+      <workItem from="1588757069362" duration="31341000" />
     </task>
     <servers />
   </component>
@@ -154,10 +149,10 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1124" y="429" key="#Inspections/0.0.2560.1400@0.0.2560.1400" timestamp="1582892801919" />
-    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588675377818">
+    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588766578775">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1588675377818" />
+    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1588766578775" />
     <state x="1310" y="664" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582179444313">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -166,31 +161,31 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1586442549849" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom" timestamp="1588742770412">
+    <state width="2517" height="141" key="GridCell.Tab.0.bottom" timestamp="1588776737644">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1588742770412" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center" timestamp="1588742770411">
+    <state width="2517" height="141" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1588776737644" />
+    <state width="2517" height="141" key="GridCell.Tab.0.center" timestamp="1588776737644">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1588742770411" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left" timestamp="1588742770411">
+    <state width="2517" height="141" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1588776737644" />
+    <state width="2517" height="141" key="GridCell.Tab.0.left" timestamp="1588776737643">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1588742770411" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right" timestamp="1588742770411">
+    <state width="2517" height="141" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1588776737643" />
+    <state width="2517" height="141" key="GridCell.Tab.0.right" timestamp="1588776737644">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="288" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1587390240925" />
-    <state width="2517" height="288" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1588742770411" />
-    <state x="576" y="261" key="SettingsEditor" timestamp="1582024039431">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="2517" height="141" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1588776737644" />
+    <state x="768" y="351" key="SettingsEditor" timestamp="1589028240662">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="576" y="261" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1582024039431" />
-    <state x="768" y="351" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1581839323807" />
+    <state x="768" y="351" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1589028240662" />
     <state x="1250" y="331" width="672" height="678" key="search.everywhere.popup" timestamp="1588742647864">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>

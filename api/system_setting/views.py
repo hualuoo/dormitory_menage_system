@@ -8,6 +8,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_extensions.cache.decorators import cache_response
 
 from .models import SystemSetting, SystemLog
 from .serializers import SystemSettingSerializer, SystemSettingUpdateSerializer
@@ -17,9 +18,9 @@ from user_operation.models import Repair
 from access_control.models import AccessControl, AccessControlAbnormalApplication
 from users.models import User
 from utils.permission import UserIsSuperUser
-
-
 # Create your views here.
+
+
 class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     serializer_class = SystemSettingSerializer
@@ -137,6 +138,7 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         }, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=False)
+    @cache_response(5*60)
     def get_todo_list(self, request, *args, **kwargs):
         """
             系统 获取代办事项
@@ -164,6 +166,7 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Response(todo_list_json, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=False)
+    @cache_response(5 * 60)
     def get_overview_info(self, request, *args, **kwargs):
         """
             系统 获取系统概略信息
@@ -223,13 +226,13 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Response(server_info_json, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=False)
+    @cache_response(60 * 60)
     def data_overview_date(self, request, *args, **kwargs):
         """
-            系统 获取后端服务器情况
+            系统 获取数据概览时间
             url: '/system_setting/data_overview_date/'
             type: 'get'
         """
-
         data_overview_start_date = SystemSetting.objects.filter(code="data_overview_start_date").first().content
         start_date = datetime.strptime(data_overview_start_date, "%Y-%m-%d")
 
@@ -243,9 +246,10 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         }, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=False)
+    @cache_response(5 * 60)
     def data_overview_data(self, request, *args, **kwargs):
         """
-            系统 获取后端服务器情况
+            系统 获取数据概览数据
             url: '/system_setting/data_overview_data/'
             type: 'get'
         """
@@ -262,6 +266,7 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         }, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=False)
+    @cache_response(60 * 60)
     def get_banner(self, request, *args, **kwargs):
         """
         系统 获取前端Banner
@@ -322,6 +327,7 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         }, status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=False)
+    @cache_response(60 * 60)
     def get_fees(self, request, *args, **kwargs):
         """
             系统 获取水电费价格
