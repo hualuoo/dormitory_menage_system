@@ -23,15 +23,22 @@ class SystemSettingUpdateSerializer(serializers.ModelSerializer):
     data_overview_start_date = serializers.DateField(help_text="控制台数据概览起始日期", format="%Y-%m-%d")
     notice_title = serializers.CharField(help_text="首页公告标题")
     notice_content = serializers.CharField(help_text="首页公告内容")
+    normal_access_start_time = serializers.TimeField(help_text="门禁正常通过开始时间", format="%H:%M:%S")
+    normal_access_end_time = serializers.TimeField(help_text="门禁正常通过截止时间", format="%H:%M:%S")
 
     def validate_overview_info(self, overview_info):
         if len(overview_info.split(',')) != 4:
-            raise serializers.ValidationError('概略信息显示只能选择四个选项！')
+            raise serializers.ValidationError("概略信息显示只能选择四个选项！")
         return overview_info
+
+    def validate_normal_access_end_time(self, normal_access_end_time):
+        if self.initial_data["normal_access_start_time"] >  self.initial_data["normal_access_end_time"]:
+            raise serializers.ValidationError("门禁正常通过开始时间不能大于截止时间！")
+        return normal_access_end_time
 
     class Meta:
         model = SystemSetting
-        fields = ("water_fees", "electricity_fees", "todo_list", "overview_info", "data_overview_start_date", "notice_title", "notice_content", )
+        fields = ("water_fees", "electricity_fees", "todo_list", "overview_info", "data_overview_start_date", "notice_title", "notice_content", "normal_access_start_time", "normal_access_end_time", )
 
 
 class SystemLogSerializer(serializers.ModelSerializer):

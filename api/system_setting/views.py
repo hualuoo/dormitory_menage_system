@@ -127,6 +127,14 @@ class SystemSettingViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         notice_content.content = serializer.validated_data["notice_content"]
         notice_content.save()
 
+        notice_content = SystemSetting.objects.filter(code="normal_access_start_time").first()
+        notice_content.content = serializer.validated_data["normal_access_start_time"]
+        notice_content.save()
+
+        notice_content = SystemSetting.objects.filter(code="normal_access_end_time").first()
+        notice_content.content = serializer.validated_data["normal_access_end_time"]
+        notice_content.save()
+
         system_log = SystemLog.objects.create(content='管理员修改了系统设置',
                                               category="系统设置",
                                               operator=request.user,

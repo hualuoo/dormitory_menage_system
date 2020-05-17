@@ -12,7 +12,7 @@ from rest_framework import status
 
 from .models import AccessControl, AccessControlAbnormalApplication
 from .serializers import AccessControlSerializer, AccessControlUpdateSerializer, AccessControlAbnormalApplicationSerializer, AccessControlAbnormalApplicationUpdateSerializer, AccessControlAbnormalApplicationReplySerializer
-from system_setting.models import SystemLog
+from system_setting.models import SystemSetting, SystemLog
 from utils.permission import UserIsSuperUser, AccessControlIsSelf
 # Create your views here.
 
@@ -213,11 +213,17 @@ class AccessControlViewset(mixins.RetrieveModelMixin, mixins.ListModelMixin, mix
                     "detail": "操作成功：五分钟内此人已通过门禁，已自动放行。"
                 }, status=status.HTTP_200_OK)
 
+        now_time = datetime.now().time()
+        if datetime.strptime(SystemSetting.objects.filter(code="normal_access_start_time").first().content, "%H:%M:%S").time() < now_time < datetime.strptime(SystemSetting.objects.filter(code="normal_access_end_time").first().content, "%H:%M:%S").time():
+            access_control_status = "normal"
+        else:
+            access_control_status = "later"
+
         access_control = AccessControl.objects.create(photo=flag,
                                                       accuracy=accuracy,
                                                       add_time=datetime.now(),
                                                       person_id=request.GET.get('user_id', ''),
-                                                      status="normal")
+                                                      status=access_control_status)
         access_control.save()
 
         return Response({
